@@ -38,7 +38,7 @@
                                     </span>
                                 @enderror
                             </div>
-                        </div>                     
+                        </div>                                            
 
                         <div class="form-group row mb-0">
                             <div class="col-md-8 offset-md-4 text-md-center">
@@ -46,6 +46,10 @@
                                     {{ __('Login') }}
                                 </button>                               
                             </div>
+                        </div>
+
+                        <div class="text-center">
+                            <a class="col-md-12 text-md-center text-secondary small" href="{{ route('register') }}"><h5><i>Crear una cuenta</i><h5></a>
                         </div>
                     </form>
                 </div>
