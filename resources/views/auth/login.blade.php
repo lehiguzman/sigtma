@@ -3,7 +3,7 @@
 @section('content')
 <div class="container">
     <div class="row justify-content-left">
-        <img src="{{ asset('/img/logo-alcaldia.png') }}" class="logo">
+        <img src="{{ asset('/img/logo-alcaldia.png') }}" >
         <div class="col-md-6">
             <div class="card-custom">
                 <div class="card-header text-md-center"><h4>{{ __('Login') }}</h4></div>
@@ -13,7 +13,7 @@
                         @csrf
 
                         <div class="form-group row">
-                            <label for="email" class="col-md-5 col-form-label text-md-right"><h5><i>{{ __('E-Mail Address') }}</i></h5></label>
+                            <label for="email" class="col-md-5 col-form-label text-md-right"><h5><i>{{ __('Usuario') }}</i></h5></label>
 
                             <div class="col-md-6">
                                 <input id="email" type="email" class="form-control @error('email') is-invalid @enderror" name="email" value="{{ old('email') }}" required autocomplete="email" autofocus>
