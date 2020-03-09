@@ -83,13 +83,7 @@
                 @if(Auth::user()->roles->first()->rol == 'admin')
                     @include('plantilla.sidebarAdministrador')
                 @endif 
-            </div>
-            
-            <div>
-                @if(Auth::user()->roles->first()->rol == 'admin')
-                    @include('plantilla.sidebarAdministrador')
-                @endif 
-            </div>
+            </div>            
                            
             
         </div>        
