@@ -1,6 +1,7 @@
 <?php
 
 use App\User;
+use App\Role;
 use Illuminate\Database\Seeder;
 
 class UserTableSeeder extends Seeder
@@ -17,5 +18,7 @@ class UserTableSeeder extends Seeder
         $user->email = 'admin@correo.com';
 		$user->password = bcrypt('admin');
         $user->save();
+
+        $user->roles()->attach(Role::where('rol', 'admin')->first());
     }
 }

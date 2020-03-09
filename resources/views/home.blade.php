@@ -1,66 +1,117 @@
-@extends('layouts.app')
+<!DOCTYPE html>
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 
-@section('content')
-<div class="container">
-    <nav class="navbar navbar-expand-md navbar-light navbar-laravel">
-        <div class="container">
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                    <!-- Left Side Of Navbar -->
-                    <ul class="navbar-nav mr-auto">
+    <!-- CSRF Token -->
+    <meta name="csrf-token" content="{{ csrf_token() }}">
 
-                    </ul>
+    <title>{{ config('app.name', 'Sigtma') }}</title>
 
-                    <!-- Right Side Of Navbar -->
-                    <ul class="navbar-nav ml-auto">
-                        <!-- Authentication Links -->
-                        @guest
-                            <li class="nav-item">
-                                <a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a>
-                            </li>
-                            @if (Route::has('register'))
-                                <li class="nav-item">
-                                    <a class="nav-link" href="{{ route('register') }}">{{ __('Register') }}</a>
-                                </li>
-                            @endif
-                        @else
-                            <li class="nav-item dropdown">
-                                <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
-                                    {{ Auth::user()->name }} <span class="caret"></span>
-                                </a>
+    <!-- Styles -->    
 
-                                <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
-                                    <a class="dropdown-item" href="{{ route('logout') }}"
-                                       onclick="event.preventDefault();
-                                                     document.getElementById('logout-form').submit();">
-                                        {{ __('Logout') }}
-                                    </a>
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">        
+    <link href="css/plantilla.css" rel="stylesheet">    
+    <link href="{{ asset('css/app.css') }}" rel="stylesheet"> 
+    <link href="{{ asset('css/estilos.css') }}" rel="stylesheet"> 
+    <link rel="stylesheet" type="text/css" href="css/simple-sidebar.css">
+    
+</head>
 
-                                    <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
-                                        @csrf
-                                    </form>
-                                </div>
-                            </li>
-                        @endguest
-                    </ul>
+<body class="color-body">
+    <div class="container-fluid" id="app">
+        <header class="app-header border-bottom-0 navbar menu-superior">             
+            <ul class="nav navbar-nav d-md-down-none texto-titulo">
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Sistema Integrado de Gestion Tributaria Municipal Avanzada</a>
+                </li>           
+            </ul>
+            <ul class="nav navbar-nav ml-auto d-md-down-none">
+                <li>
+                    <div class="navbar-nav ml-auto">
+                        <div class="hour-text">
+                         <span>{{ now()->format('d-m-Y') }}</span>
+                         <span id="clock" class="clock"></span>
+                         <span id="meridian" class="meridian"></span>
+                        </div>                     
+                    </div>
+                </li>
+            </ul>
+            <ul class="nav navbar-nav ml-auto mr-5">
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
+                        <span class="d-md-down-none user-text"> {{ Auth::user()->name }}</span>
+                        <img src="img/usuario/user.jpg" class="img-avatar" alt="">                        
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-right shadow" aria-labelledby="exampleModalLabel">               
+                        <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">
+                          <i class="fa fa-sign-out fa-lg border-0 ml-2"></i> <span class="user-text">  Cerrar sesión</span> 
+                        </a>
+                    </div>
+                </li>
+            </ul>
+
+                <!-- Modal de cierre de sesión -->
+            <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered" role="document">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h5 class="modal-title" id="exampleModalLabel">¿Seguro de cerrar sesión?</h5>
+                      <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                      </button>
+                    </div>
+                    <div class="modal-body">Seleccioné "Cerrar sesión" si esta seguro de terminar la sesión.</div>
+                    <div class="modal-footer">
+                      <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancelar</button>
+                      <a class="btn btn-primary" href="{{ route('logout') }}" onclick="event.preventDefault();
+                                                                 document.getElementById('logout-form').submit();">Cerrar sesión</a>
+                      <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                        @csrf
+                      </form>
+                    </div>
+                  </div>
                 </div>
-            </div>
-        </nav>
-    <div class="row justify-content-center">
-        <div class="col-md-8">
-            <div class="card">
-                <div class="card-header">Dashboard</div>
+            </div>        
+        </header>   
+    
 
-                <div class="card-body">
-                    @if (session('status'))
-                        <div class="alert alert-success" role="alert">
-                            {{ session('status') }}
-                        </div>
-                    @endif
+        <div class="d-flex flex-row" id="wrapper">
 
-                    You are logged in!
-                </div>
+            <div style="z-index: 4">
+                @if(Auth::user()->roles->first()->rol == 'admin')
+                    @include('plantilla.sidebarAdministrador')
+                @endif 
             </div>
-        </div>
+            
+            <div>
+                @if(Auth::user()->roles->first()->rol == 'admin')
+                    @include('plantilla.sidebarAdministrador')
+                @endif 
+            </div>
+                           
+            
+        </div>        
+    
     </div>
-</div>
-@endsection
+    
+
+        
+            <!-- Contenido Principal -->                      
+                
+
+            <!-- /Fin del contenido principal -->
+        
+    <!-- Fin app -->
+        <!--<footer class="app-footer"> 
+            <span><a><b><i>SIRHTUR</i></b></a> &copy; 2019</span>        
+        </footer>-->
+
+        <!-- Bootstrap and necessary plugins -->
+        <script src="js/app.js"></script> 
+        <script src="js/plantilla.js"></script>
+        <script src="js/clock.js"></script>    
+        <script src="js/menu.js"></script>
+</body>
+</html>

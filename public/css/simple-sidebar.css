@@ -1,0 +1,125 @@
+/*!
+ * Start Bootstrap - Simple Sidebar (https://startbootstrap.com/template-overviews/simple-sidebar)
+ * Copyright 2013-2019 Start Bootstrap
+ * Licensed under MIT (https://github.com/BlackrockDigital/startbootstrap-simple-sidebar/blob/master/LICENSE)
+ */
+body {
+  overflow-x: hidden;
+}
+
+#sidebar-wrapper {
+  min-height: 100vh;
+  margin-left: -15rem;
+  background-color: #f2f4f4;
+  -webkit-transition: margin .25s ease-out;
+  -moz-transition: margin .25s ease-out;
+  -o-transition: margin .25s ease-out;
+  transition: margin .25s ease-out;
+  
+}
+
+#sidebar-wrapper .sidebar-heading {
+  padding: 0.875rem 1.60rem;
+  font-size: 1.5rem;
+}
+
+#sidebar-wrapper .list-group {
+  width: 17rem;  
+}
+
+#page-content-wrapper {
+  min-width: 100vw;
+}
+
+#wrapper.toggled #sidebar-wrapper {
+  margin-left: 0;
+
+}
+
+@media (min-width: 768px) {
+  #sidebar-wrapper {
+    margin-left: 0;
+  }
+
+  #page-content-wrapper {
+    min-width: 0;
+    width: 100%;
+  }
+
+  #wrapper.toggled #sidebar-wrapper {
+    margin-left: -15rem;
+  }
+}
+
+.menu {
+  border-right: 1px solid #E1E2E3;
+  color: #C8C6D2;
+  z-index: 1;
+}
+
+.texto-titulo {
+  font-size: 2em;
+  font-weight: 400;
+  padding-left: 30%;
+}
+
+
+.link-menu {
+  background-color: #f2f4f4;
+  color: #AEADBF;
+  font-family: helvetica;  
+  font-size: 1.2em;
+  font-weight: 100;  
+  letter-spacing: 0.35px;
+  line-height: 22.5px;
+  text-overflow: ellipsis;
+  padding-top: 1.25rem;
+  padding-bottom: 1.25rem;
+}
+
+.list-group-item-action:hover {
+  transition-duration: 2s;  
+  top: -5px;
+  right: -5px;    
+  color: #F95E48;  
+}
+
+.prueba {
+  transition-duration: 2s;  
+  top: -5px;
+  right: -5px;    
+  border-radius: 10px;  
+  background-color: #FBD8D3 !important;
+  color: #F95E48 !important;    
+}
+
+/* menu superior */
+
+.menu-superior {
+  height: 5rem !important;
+  width: 100%;    
+  background-color: #f2f4f4 !important;
+  box-shadow: all;
+  float: right;  
+  //background-color: rgb(255, 255, 255) !important; 
+  box-shadow: rgba(25, 42, 70, 0.13) -8px 12px 18px 0px;
+}
+
+.user-text {
+  font-size: 1.2em;
+  width: 100px;
+  color: #AEADBF;
+  font-family: helvetica, arial;  
+}
+
+.hour-text {
+  position: absolute;    
+  left: 80%;
+  top: 75%;
+  font-size: 1em;
+  font-weight: 600;
+  color: #AEADBF;
+  font-family: helvetica, arial;  
+}
+
+  

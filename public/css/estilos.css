@@ -1,0 +1,37 @@
+div.card 
+{	
+	background: rgba(158, 247, 247, 0.5)	
+}
+
+.color-body {
+	background-color: #f2f4f4;
+}
+
+a {
+    text-decoration: none;
+}
+
+.color-collapse {
+	background-color: #B5C6E9;
+}
+
+.logo-menu {	
+	height: 9em;
+	width: 20em;
+	z-index: 999 !important;
+}
+
+.vertical {
+	vertical-align: middle;
+}
+
+.contenedor-menu .menu ul {
+	display: none;
+}
+
+.list-group div ul {
+	list-style: none;
+	padding-left: 0px;
+	display: none;
+	color: #AEADBF;
+}

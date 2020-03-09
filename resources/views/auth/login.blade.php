@@ -46,11 +46,7 @@
                                     {{ __('Login') }}
                                 </button>                               
                             </div>
-                        </div>
-
-                        <div class="text-center">
-                            <a class="col-md-12 text-md-center text-secondary small" href="{{ route('register') }}"><h5><i>Crear una cuenta</i><h5></a>
-                        </div>
+                        </div>                        
                     </form>
                 </div>
             </div>
