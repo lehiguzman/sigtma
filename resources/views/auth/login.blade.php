@@ -1,10 +1,14 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container">
-    <div class="row justify-content-left">
-        <img src="{{ asset('/img/logo-alcaldia.png') }}" >
-        <div class="col-md-6">
+<div class="container">    
+    <div class="row justify-content-center">
+        <div class="col-md-12">
+            <div class="card-img">
+                <img src="{{ asset('img/logo-alcaldia.png') }}" class="img-style">        
+            </div>
+        </div>      
+        <div class="col-md-12">
             <div class="card-custom">
                 <div class="card-header text-md-center"><h4>{{ __('Login') }}</h4></div>
 
@@ -15,29 +19,24 @@
                         <div class="form-group row">
                             <label for="email" class="col-md-5 col-form-label text-md-right"><h5><i>{{ __('Usuario') }}</i></h5></label>
 
-                            <div class="col-md-6">
-                                <input id="email" type="email" class="form-control @error('email') is-invalid @enderror" name="email" value="{{ old('email') }}" required autocomplete="email" autofocus>
-
-                                @error('email')
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                @enderror
-                            </div>
+                            <div class="form-group col-md-6 mb-3{{$errors->has('username' ? 'is_invalid' : '')}}">
+                                <span class="input-group-addon"><i class="icon-user"></i></span>
+                                <input type="text" value="{{ old('username') }}" name="username" id="username" class="form-control" placeholder="Usuario">
+                                {!! 
+                                  $errors->first('username', '<span class="invalid-feedback">:message</span>') 
+                                !!} 
+                            </div>                            
                         </div>
 
                         <div class="form-group row">
                             <label for="password" class="col-md-5 col-form-label text-md-right"><h5><i>{{ __('Password') }}</i></h5></label>
-
-                            <div class="col-md-6">
-                                <input id="password" type="password" class="form-control @error('password') is-invalid @enderror" name="password" required autocomplete="current-password">
-
-                                @error('password')
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                @enderror
-                            </div>
+                            <div class="form-group col-md-6 mb-4{{$errors->has('password' ? 'is_invalid' : '')}}">
+                                <span class="input-group-addon"><i class="icon-lock"></i></span>
+                                <input type="password" name="password" id="password" class="form-control" placeholder="Password">
+                                {!! 
+                                    $errors->first('password', '<span class="invalid-feedback">:message</span>') 
+                                !!}                 
+                            </div>                            
                         </div>                                            
 
                         <div class="form-group row mb-0">

@@ -10,7 +10,22 @@
     <title>{{ config('app.name', 'Sigtma') }}</title>
 
     <!-- Scripts -->
-    <script src="{{ asset('js/app.js') }}" defer></script>
+    <script src="{{ asset('js/app.js') }}"></script>
+    <script src="{{ asset('js/jquery-3.4.1.min.js') }}"></script>
+    <script src="{{ asset('js/jquery.backstretch.min.js') }}"></script>
+    <script type="text/javascript">
+        $(document).ready(function(e) {                
+            $(".fondos").backstretch([
+                { url: '{{ url('/') }}/img/fondo/fondo1.jpg' },
+                { url: '{{ url('/') }}/img/fondo/fondo2.jpg' },
+                { url: '{{ url('/') }}/img/fondo/fondo3.jpg' },
+                { url: '{{ url('/') }}/img/fondo/fondo4.jpg' }
+                ], {                    
+                    fade: 1500,
+                    duration: 3000
+                });
+        });
+    </script>
 
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
@@ -19,9 +34,10 @@
     <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
     <link href="{{ asset('css/style.css') }}" rel="stylesheet">
+    <link href="{{ asset('css/estilos.css') }}" rel="stylesheet">
 </head>
-<body class="bg-body">
-    <div id="app">        
+<body class="fondos">
+    <div>        
         <main class="py-4">
             @yield('content')
         </main>

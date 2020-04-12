@@ -1,5 +1,5 @@
-$(document).ready( function() {	
-
+$(document).ready( function() {			
+		//Funciones jquery globales
 		$('.list-group div a').click(function(){
 			if($(this).hasClass('prueba')) {
 				$(this).removeClass("prueba");	

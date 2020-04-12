@@ -19,7 +19,18 @@ window.Vue = require('vue');
 // const files = require.context('./', true, /\.vue$/i);
 // files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default));
 
-Vue.component('example-component', require('./components/ExampleComponent.vue').default);
+//Vue.component('example-component', require('./components/ExampleComponent.vue').default);
+Vue.component('usuario', require('./components/Usuario.vue').default);
+Vue.component('tipo_comercio', require('./components/Tipo_comercio.vue').default);
+Vue.component('tipo_inmueble', require('./components/Tipo_inmueble.vue').default);
+Vue.component('comercio', require('./components/Comercio.vue').default);
+Vue.component('inmueble', require('./components/Inmueble.vue').default);
+Vue.component('pago_comercio', require('./components/Pago_comercio.vue').default);
+Vue.component('periodo', require('./components/Periodo.vue').default);
+Vue.component('zona', require('./components/Zona.vue').default);
+Vue.component('regimen', require('./components/Regimen.vue').default);
+Vue.component('calculo_comercio', require('./components/Calculo_comercio.vue').default);
+Vue.component('calculo_inmueble', require('./components/Calculo_inmueble.vue').default);
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to
@@ -30,6 +41,6 @@ Vue.component('example-component', require('./components/ExampleComponent.vue').
 const app = new Vue({
     el: '#app',
     data: {
-    	menu:0
+    	menu:0,    	
     },
 });

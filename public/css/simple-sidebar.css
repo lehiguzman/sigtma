@@ -14,8 +14,7 @@ body {
   -webkit-transition: margin .25s ease-out;
   -moz-transition: margin .25s ease-out;
   -o-transition: margin .25s ease-out;
-  transition: margin .25s ease-out;
-  
+  transition: margin .25s ease-out;  
 }
 
 #sidebar-wrapper .sidebar-heading {
@@ -52,9 +51,15 @@ body {
 }
 
 .menu {
+  height: 100%; /* Full-height: remove this if you want "auto" height */
+  width: 18rem; /* Set the width of the sidebar */
+  position: fixed; /* Fixed Sidebar (stay in place on scroll) */  
   border-right: 1px solid #E1E2E3;
   color: #C8C6D2;
-  z-index: 1;
+  top: 0; /* Stay at the top */
+  left: 0;  
+  overflow-x: hidden; /* Disable horizontal scroll */
+  padding-top: 20px;  
 }
 
 .texto-titulo {
@@ -68,7 +73,7 @@ body {
   background-color: #f2f4f4;
   color: #AEADBF;
   font-family: helvetica;  
-  font-size: 1.2em;
+  font-size: 1em;
   font-weight: 100;  
   letter-spacing: 0.35px;
   line-height: 22.5px;
@@ -96,12 +101,12 @@ body {
 /* menu superior */
 
 .menu-superior {
+  position: fixed;
   height: 5rem !important;
-  width: 100%;    
+  width: 100%;   
   background-color: #f2f4f4 !important;
   box-shadow: all;
-  float: right;  
-  //background-color: rgb(255, 255, 255) !important; 
+  float: right;
   box-shadow: rgba(25, 42, 70, 0.13) -8px 12px 18px 0px;
 }
 
