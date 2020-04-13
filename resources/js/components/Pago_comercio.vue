@@ -25,30 +25,24 @@
                         <thead>
                             <tr class="text-center">
                                 <th width="5%">ID</th>
-                                <th width="10%">Tipo de Act. Económica</th>
-                                <th width="15%">Rif/Cédula</th>   
-                                <th width="20%">Denominación</th>                                
-                                <th width="25%">Dirección</th>
-                                <th width="10%">Teléfono</th>
+                                <th width="10%">Periodo</th>
+                                <th width="15%">Tipo de Declaración</th>   
+                                <th width="10%">Denominación</th>                                
+                                <th width="20%">Monto declarado</th>                                
+                                <th width="25%">Monto impuesto</th>                                
                                 <th class="text-center" width="15%">Registrar Pago</th>                                  
                             </tr>
                         </thead>
                         <tbody>
-                            <tr  class="text-center" v-for="comercio in comercios">
-                                <td>{{ comercio.id }}</td>
-                                <td>
-                                    <div v-for="tipo in tipos">
-                                        <span v-if="comercio.idtipocontribuyentecomercio == tipo.id">
-                                            {{ tipo.denominacion }}        
-                                        </span>                                        
-                                    </div>                                    
-                                </td>
-                                <td>{{ comercio.rif }}</td>                                
-                                <td>{{ comercio.denominacion }}</td>                                
-                                <td>{{ comercio.direccion }}</td>
-                                <td>{{ comercio.telefono }}</td>
+                            <tr  class="text-center" v-for="declaracion in declaraciones">
+                                <td>{{ declaracion.id }}</td>
+                                <td>{{ declaracion.idperiodo }}</td>
+                                <td>{{ declaracion.tipo_declaracion }}</td>                                
+                                <td>{{ declaracion.idcomercio }}</td>
+                                <td>{{ declaracion.monto_declaracion }}</td>                                
+                                <td>{{ declaracion.monto_impuesto }}</td>
                                 <td class="text-center">
-                                    <i class='bx bxs-coin-stack bx-md text-success btn-editar' title="Registrar Pago" @click="registrarPago(comercio)"></i>                                    
+                                    <i class='bx bxs-coin-stack bx-md text-success btn-editar' title="Registrar Pago" @click="verDetalle(declaracion)"></i>
                                 </td>
                             </tr>                            
                         </tbody>                  
@@ -67,76 +61,65 @@
                         <div class="form-row">                           
                             <div class="col-md-3 my-0">
                                 <label class="col-form-label-lg">
-                                    Nombre o Denominación Comercial :
+                                    Nombre o Denominación :
                                 </label>                                 
                             </div>                                
 
-                            <div class="col-md-6 form-group my-0">
+                            <div class="col-md-5 form-group my-0">
                                <label class="col-form-label-lg">
-                                    Nombre
-                                </label>                                  
-                            </div>
-
-                            <div class="col-md-1 form-group my-0">
-                               <label class="col-form-label-lg">
-                                    Cédula :
+                                    {{ comercio.denominacion }}
                                 </label>                                  
                             </div>
 
                             <div class="col-md-2 form-group my-0">
                                <label class="col-form-label-lg">
-                                    1236336363
+                                    Rif :
                                 </label>                                  
                             </div>
-                        </div>
-                        <div class="form-row my-0">                           
-                            <div class="col-md-3">
-                                <label class="col-form-label-lg">
-                                    Direccion :
-                                </label>                                 
-                            </div>                                
 
-                            <div class="col-md-9 form-group my-0">
+                            <div class="col-md-2 form-group my-0">
                                <label class="col-form-label-lg">
-                                    Direccion de prueba
+                                    {{ comercio.rif }}
                                 </label>                                  
                             </div>
-                        </div>
+                        </div>                        
                         <div class="form-row">                           
-                            <div class="col-md-3 my-0">
+                            <div class="col-md-2 my-0">
                                 <label class="col-form-label-lg">
-                                    Teléfono
-                                </label>                                 
-                            </div>                                
-
-                            <div class="col-md-6 form-group my-0">
-                               <label class="col-form-label-lg">
-                                    041452522671
-                                </label>                                  
-                            </div>
-
-                             <div class="col-md-1 my-0">
-                                <label class="col-form-label-lg">
-                                    Licencia
+                                    Periodo:
                                 </label>                                 
                             </div>                                
 
                             <div class="col-md-2 form-group my-0">
                                <label class="col-form-label-lg">
-                                    041452522671
+                                    {{ periodo.periodo }}
                                 </label>                                  
                             </div>
-                        </div>  
 
-                        <div class="border-top my-3"></div>                      
+                             <div class="col-md-2 my-0">
+                                <label class="col-form-label-lg">
+                                    Monto Declarado
+                                </label>                                 
+                            </div>                                
 
-                        <div class="col-md-10 text-right">
-                            <button type="button" @click="agregarDetalle()" class="btn btn-primary btn-lg btn-registrar">
-                                <div class="form-control-position has-icon-left">
-                                    <i class='bx bx-plus bx-sm'></i>Agregar fila
-                                </div>                                
-                            </button>
-                        </div>
+                            <div class="col-md-2 form-group my-0">
+                               <label class="col-form-label-lg">
+                                    {{ declaracion.monto_declaracion }}
+                                </label>                                  
+                            </div>
+
+                            <div class="col-md-2 my-0">
+                                <label class="col-form-label-lg">
+                                    Monto Impuesto
+                                </label>                                 
+                            </div>                                
+
+                            <div class="col-md-2 form-group my-0">
+                               <label class="col-form-label-lg">
+                                    {{ declaracion.monto_impuesto }}
+                                </label>                                  
+                            </div>
+                        </div>                          
 
                         <div class="border-top my-3"></div>
 
@@ -144,66 +127,70 @@
 
                         <div class="border-top my-3"></div>
 
-                        <div class="form-row justify-content-between my-2 border-bottom" v-for="(detalle,index) in arrayDetalle" :key="detalle.id">                          
-                            <div class="col-md-1">
-                                <label><strong>Año</strong></label>
-                                <input v-model="detalle.anio" type="number" value="3" class="form-control">
-                            </div>                                
+                        <div class="form-row text-center bg-light border-bottom">                          
+                            <div class="col-md-2">
+                                <label><strong>Tipo de Pago</strong></label>                                 
+                            </div> 
 
-                            <div class="col-md-1 form-group">
-                               <label><strong>Mes</strong></label>
-                               <input v-model="detalle.mes" type="number" value="3" class="form-control">
-                            </div>
+                             <div class="col-md-2 form-group">
+                               <label><strong>Número de Referencia</strong></label>                               
+                            </div>                               
 
                             <div class="col-md-2 form-group">
-                               <label><strong>Concepto</strong></label>
-                               <input v-model="detalle.concepto" type="number" value="3" class="form-control">
+                               <label><strong>Banco</strong></label>                               
                             </div>
 
-                            <div class="col-md-1 form-group">
-                               <label><strong>Dias</strong></label>
-                               <input v-model="detalle.dia" type="number" value="2" class="form-control">
-                            </div>
+                            <div class="col-md-4 form-group">
+                               <label><strong>Fecha pago</strong></label>                               
+                            </div>              
 
                             <div class="col-md-2 form-group">
-                               <label><strong>Deuda</strong></label>
-                               <input type="number" value="2" class="form-control">
-                            </div>
-
-                            <div class="col-md-2 form-group">
-                               <label><strong>Tasa</strong></label>
-                               <input type="number" value="2" class="form-control">
-                            </div>
-
-                            <div class="col-md-2 form-group">
-                               <label><strong>Intereses</strong></label>
-                               <input type="number" value="2" class="form-control">
-                            </div>
-
-                            <div class="col-md-1 form-group">                                
-                               <button @click="eliminarDetalle(index)" type="button" class="btn btn-danger btn-md mt-lg-4">
-                                        <i class='bx bx-trash bx-lg'></i>
-                               </button>
-                            </div>
+                               <label><strong>Monto</strong></label>                               
+                            </div>           
                         </div>
+                        <div class="form-row mt-2">
+                            <div class="col-md-2">
+                                <select class="form-control" v-model="tipoPago" value="tipoPago" required>
+                                   <option value="" selected disabled>Tipo de Pago</option>
+                                   <option value="1">Cheque</option>
+                                   <option value="2">Transferencia</option>
+                                </select>
+                            </div>
 
-                        <div v-if="cantidadFilas == 0" class="bg-info text-center sin-filas">
-                            <span> 
-                                <strong>No hay registros</strong>
-                            </span>
-                        </div>                              
+                            <div class="col-md-2">
+                                <input v-model="referencia" type="referencia" value="3" class="form-control" required>
+                            </div>
+
+                            <div class="col-md-2">
+                                <input v-model="banco" type="text" value="3" class="form-control" required>
+                            </div>
+
+                            <div class="col-md-4">
+                                <div class="position-relative has-icon-left">
+                                    <datepicker name="fecha_pago" v-model="fecha_pago" bootstrap-styling format="dd/MM/yyyy" placeholder="Fecha de pago" required>
+                                    </datepicker>                                    
+                                    <div class="valid-feedback">
+                                      <i>¡Correcto!</i>
+                                    </div>
+                                    <div class="invalid-feedback">
+                                      ¡Introduzca fecha de pago!
+                                    </div>
+                                    <div class="form-control-position">
+                                        <i class='bx bxs-calendar-star bx-sm' ></i>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-2">
+                                <input v-model="monto_pago" type="text" value="3" class="form-control" required>
+                            </div>
+                        </div>                                             
 
                         <div class="form-row mt-5">                            
                             
                             <div class="col-md-6 d-flex justify-content-center" v-if="boton == 'registro'" >
                                 <button type="button" @click="validarFormulario( 'registro' )" name="registro" class="btn btn-primary btn-registrar">                                       
                                     <span class="align-middle ml-25">Registrar</span>
-                                </button>
-                            </div>
-
-                            <div class="col-md-6 d-flex justify-content-center" v-if="boton == 'edicion'" >
-                                <button type="button" @click="validarFormulario('edicion')" name="registro" class="btn btn-primary btn-registrar">                                       
-                                    <span class="align-middle ml-25">Actualizar</span>
                                 </button>
                             </div>
 
@@ -222,77 +209,95 @@
 <style scoped>
     /* Se importan los estilos del modulo */
     @import "../../../public/css/usuario.css";
-    @import "../../../public/css/switch.css";
+    
 </style>    
 
 <script type="text/javascript">
 
     import datatable from 'datatables';
+    import Datepicker from 'vuejs-datepicker';   
 
     export default {
         data() {
             return {
                 //Vista de listado de contribuyente de actividad económica
                 vista: 'listado',
-                titulo: 'Agregar Nuevo Contribuyente',
-                comercios: [],
-                tipos: [],
+                titulo: 'Agregar Nuevo Pago de contribuyente',
+                declaraciones: [],
+                declaracion: [],
+                comercio: [],
+                periodo: [],
+                //tipos: [],
                 boton: 'registro',                
                 tabla: '',
 
-                //Vista de registro de contribuyente de actividad económica
+                //Vista de registro de pago de contribuyente Actividad Ecónomica
                 id: 0,
-                tipo: '',
-                denominacion: '',                
-                rif:'',
-                direccion: '',
-                telefono: '',
-
-                ///Arreglo de pagos
-                arrayDetalle: [],
-                cantidadFilas: 1,
+                denominacion: '',
+                tipoPago: '',
+                referencia: '',
+                banco: '',
+                rif: '',
+                fecha_pago: '',                
+                monto_declarado: 0, 
+                monto_impuesto: 0,
+                monto_pago: ''          
             }            
         },
 
         //Aqui se inyectan los componentes importados
         components: {
-            datatable            
+            datatable,
+            Datepicker       
         },
 
         methods: {
             cambiarVista( opcion ) {                
                 this.vista = opcion;                
-
-                //if(this.vista == "registro") {
-                    //this.listarTipos();
-                //} else {
-                    this.listarComercios();
-                //}
+                this.listarDeclaraciones();                
             },
 
-///////////////////////////* Listado de contribuyente de actividad económica *//////////////////////////////////////////            
+///////////////////////////* Listado de contribuyente de actividad económica ///////////////////
+            validarFormulario( accion ) {
+                let me=this;
+            
+             var forms = document.getElementsByClassName('needs-validation');
+                // Loop over them and prevent submission
+                var validation = Array.prototype.filter.call(forms, function(form) {
+                    //form.addEventListener('submit', function(event) {
+                        if (form.checkValidity() === false) {
+                          event.preventDefault();
+                          event.stopPropagation();                           
+                        } else {
+                           if( accion == 'registro' ) { 
+                                console.log(accion);
+                                me.agregarRegistro(); 
+                            } else { 
+                                me.actualizarRegistro(); 
+                            }
+                        }
+                        form.classList.add('was-validated');
+                    //}, false);
+                });
+            },
 
-            listarComercios(){
-
-                this.listarTipos();
+            listarDeclaraciones(){
 
                 let me = this;
 
-                var url = '/comercio';
+                var url = '/declaracion_comercio';
 
                 axios.get(url).then(function (response) {
                 // handle success                                      
                 var respuesta = response.data;                                    
-                me.comercios = respuesta.comercios.data;
-                console.log("Comercios : ", me.comercios);
-                if( me.comercios.length == 0 ) {
+                me.declaraciones = respuesta.declaraciones_comercio.data;
+                console.log("Comercios sa : ", me.declaraciones);
+                if( me.declaraciones.length == 0 ) {
                     me.limpiarCampos();
-                    me.tablaComercios();
+                    me.tablaDeclaraciones();
                 } else {
-                    me.tablaComercios();    
-                }
-                
-                console.log("Numero de registro : ", me.comercios.length);
+                    me.tablaDeclaraciones();    
+                }                
               })
               .catch(function (error) {
                 // handle error
@@ -303,7 +308,7 @@
               });
             },
 
-            tablaComercios() {
+            tablaDeclaraciones() {
                 $(function() {
                     this.tabla = $('#dataTable').DataTable(
                     {   
@@ -326,72 +331,84 @@
                 $(function() {                    
                     $('#dataTable').dataTable().fnFilter($('#mySearchText').val());
                 });
-            },
-
-            listarTipos() {
-                let me = this;
-
-                var url = '/tipo_comercio';
-
-                axios.get(url).then(function (response) {
-                    // handle success                    
-                    var respuesta = response.data;                    
-                    me.tipos = respuesta.tipos_comercio.data;     
-                    console.log("Response : ", me.tipos);                    
-                  })
-                  .catch(function (error) {
-                    // handle error
-                    console.log(error);
-                  })
-                  .finally(function () {
-                    // always executed
-                  });
-            },
+            },         
      
 
 ////////////////////////* Registro de Pago *////////////////////////////////////////            
-            registrarPago( data ) {
-                this.vista = "registro";
+            agregarRegistro() {
+
+                const alerta = Swal.mixin({
+                  customClass: {
+                    confirmButton: 'btn btn-success',
+                    cancelButton: 'btn btn-danger'
+                  },
+                 buttonsStyling: false,
+                });
+
+                let me = this;                  
+
+                axios.post('/pago/registrar', {
+                        'tipo_pago': me.tipoPago,
+                        'referencia': me.referencia,
+                        'banco': me.banco,
+                        'fecha_pago': me.fecha_pago,
+                        'monto_pago': me.monto_pago,
+                        'tipo_contribuyente': "Actividad economica",
+
+                    }).then(function (response) {                        
+                        alerta.fire(
+                            'Registro!',
+                            'Registro exitoso.',
+                            'success'
+                        );
+                        me.limpiarCampos();
+                        me.cambiarVista( "listado" );                        
+
+                    }).catch(function (error) {
+                    // handle error
+                    console.log(error);
+                    });
             },
 
-            agregarDetalle() {
+            verDetalle( declaracion ) {
                 let me = this;
-                //if(me.idproducto==0 || me.cantidad==0 || me.precio==0){                    
-                //} else {
-                    /*if(me.encuentra(me.idproducto))
-                    {
-                        console.log("prueba");
-                        swal.fire({
-                            type: 'error',
-                            title: 'Error...',
-                            text: 'Ese producto ya fue agregado'
-                        });
-                    } else { */
-                        me.arrayDetalle.push({ 
-                        anio: me.anio,
-                        mes: me.mes,
-                        concepto: me.concepto,
-                        dia: me.dia
-                        });
-                        me.anio= '';
-                        me.mes = 0;
-                        me.concepto = 0;
-                        me.dia = 0;
-                        me.cantidadFilas = me.arrayDetalle.length;
-                    //}
-                //}                
+
+                this.vista = "registro";
+
+                var url = '/declaracion/'+declaracion.id;
+
+                axios.get(url).then(function (response) {                
+                // handle success                                      
+                var respuesta = response.data;                                    
+                console.log("Respuesta : ", respuesta);
+                me.declaracion = respuesta.declaracion;
+                me.comercio = respuesta.comercio;
+                me.periodo = respuesta.periodo;
+              })
+              .catch(function (error) {
+                // handle error
+                console.log(error);
+              })
+              .finally(function () {
+                // always executed
+              });
             },
 
-            eliminarDetalle(index) {
-                let me = this;                
-                me.arrayDetalle.splice(index, 1);
-                me.cantidadFilas = me.arrayDetalle.length;
-            },       
+            limpiarCampos() {                
+                this.comercios = [];
+                this.id = 0;
+                this.referencia = '',
+                this.denominacion = '',
+                this.tipo_pago = '';
+                this.banco = '';
+                this.fecha_pago = '';                
+                this.boton = 'registro';
+                this.titulo = 'Agregar Nuevo Pago';
+            },               
         },       
 
         mounted() {
-            this.listarComercios();            
-            this.agregarDetalle();
+            this.listarDeclaraciones();                        
             console.log('Component mounted.')
         }
     }

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\DeclaracionComercio;
 use App\Periodo;
+use App\Comercio;
 
 class DeclaracionComercioController extends Controller
 {
@@ -48,12 +49,13 @@ class DeclaracionComercioController extends Controller
                 $declaracionComercio->monto_declaracion = $codigo['monto'];
                 $declaracionComercio->tipo_declaracion = $request->tipo_declaracion;
                 $declaracionComercio->monto_impuesto = $codigo['monto_impuesto'];
+                $declaracionComercio->estado = "calculado";
                 $declaracionComercio->save();
             }
          
     }
 
-    public function selectDeclaracion(Request $request, $id) {
+    public function selectDeclaracionComercio(Request $request, $id) {
 
         $date = new \DateTime('now');  
 
@@ -101,7 +103,20 @@ class DeclaracionComercioController extends Controller
     	}    	
 
     	return $datos;
-    }      
+    }
+
+    public function selectDeclaracion(Request $request, $id) {
+
+        $declaracion = DeclaracionComercio::find($id);
+        $comercio = Comercio::find($declaracion->idcomercio);
+        $periodo = Periodo::find($declaracion->idperiodo);
+
+        return $datos = [
+            'declaracion' => $declaracion,
+            'comercio' => $comercio,
+            'periodo' => $periodo
+        ];
+    }
 
     /**
      * Remove the specified resource from storage.

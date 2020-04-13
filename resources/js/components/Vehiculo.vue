@@ -5,7 +5,7 @@
                 <div class="row">
                     <div class="col-12">
                         <h3 class="float-left pr-1">
-                            <b>Contribuyente -> Actividad económica</b>
+                            <b>Contribuyente -> Vehiculo</b>
                         </h3>
                     </div>
                 </div>
@@ -14,7 +14,7 @@
         <template v-if="vista=='listado'">    
             <div class="p-5 bg-white rounded shadow-container">        
                 <div class="ml-5 mb-5">                    
-                    <input type="button" value="Nueva Contribuyente" v-on:click="cambiarVista('registro')" class="btn btn-primary btn-nuevo">                
+                    <input type="button" value="Nuevo Contribuyente" v-on:click="cambiarVista('registro')" class="btn btn-primary btn-nuevo">                
                 </div>                         
                 <div class="float-right mb-0 input-search">
                     <span>Buscar : </span>
@@ -25,23 +25,27 @@
                         <thead>
                             <tr class="text-center">
                                 <th width="5%">ID</th>                                
-                                <th width="10%">Licencia</th>   
-                                <th width="25%">Denominación</th>                                
-                                <th width="10%">Rif</th>
-                                <th width="10%">Fecha de Inscripción</th>
+                                <th width="10%">Placa</th>
+                                <th width="10%">Serial</th>
+                                <th width="20%">Nombre Propietario</th>
+                                <th width="10%">Cédula Propietario</th>
+                                <th width="25%">Dirección</th>
+                                <th width="10%">Teléfono</th>
                                 <th class="text-center" width="10%">Acción</th>                                  
                             </tr>
                         </thead>
                         <tbody>
-                            <tr  class="text-center" v-for="comercio in comercios">
-                                <td>{{ comercio.id }}</td>                                
-                                <td>{{ comercio.licencia }}</td>                                
-                                <td>{{ comercio.denominacion }}</td>
-                                <td>{{ comercio.rif }}</td>
-                                <td>{{ comercio.fecha_inscripcion }}</td>
+                            <tr  class="text-center" v-for="vehiculo in vehiculos">
+                                <td>{{ vehiculo.id }}</td>                                                                
+                                <td>{{ vehiculo.placa }}</td>
+                                <td>{{ vehiculo.serial }}</td>
+                                <td>{{ vehiculo.denominacion }}</td>
+                                <td>{{ vehiculo.rif }}</td>
+                                <td>{{ vehiculo.direccion }}</td>
+                                <td>{{ vehiculo.telefono }}</td>
                                 <td class="text-center">
-                                    <i class='bx bxs-edit bx-sm mr-4 text-success btn-editar' title="Editar" @click="editarRegistro(comercio)"></i>
-                                    <i class='bx bxs-trash bx-sm text-danger btn-eliminar' title="Eliminar" @click="eliminarRegistro(comercio)"></i>
+                                    <i class='bx bxs-edit bx-sm mr-4 text-success btn-editar' title="Editar" @click="editarRegistro(vehiculo)"></i>
+                                    <i class='bx bxs-trash bx-sm text-danger btn-eliminar' title="Eliminar" @click="eliminarRegistro(vehiculo)"></i>
                                 </td>
                             </tr>                            
                         </tbody>                  
@@ -61,39 +65,39 @@
                         <div class="form-row">
                             <div class="col-md-1"></div>
 
-                                <label for="denominacion" class="col-md-3 col-form-label-lg">
-                                    Actividad Económica
+                                <label for="tipo" class="col-md-3 col-form-label-lg">
+                                    Tipo de Vehiculo
                                 </label> 
 
                             <div class="col-md-4 form-group">
                                 <div class="position-relative has-icon-left">
-                                    <select class="form-control" v-model="tipoArray" value="tipoArray" multiple required>
-                                       <option value="" selected disabled>Seleccione Tipo</option>
-                                       <option v-for="tipo in tipos" :key="tipo.id" :value="tipo.id" v-text="tipo.denominacion"></option>
+                                    <select class="form-control" v-model="tipo" value="tipo" required>
+                                       <option value="" selected disabled>Seleccione Tipo de Vehiculo</option>
+                                       <option v-for="tipo in tipos" :key="tipo.id" :value="tipo.id" v-text="tipo.tipo"></option>
                                     </select>                                    
                                     <div class="valid-feedback">
                                       <i>¡Correcto!</i>
                                     </div>
                                     <div class="invalid-feedback">
-                                      ¡Seleccione Tipo de Actividad comercial!
+                                      ¡Seleccione Tipo de Vehiculo!
                                     </div>
                                     <div class="form-control-position">
                                         <i class='bx bx-id-card bx-sm' ></i>
                                     </div>                                    
                                 </div>                                    
                             </div>
-                        </div> 
+                        </div>
 
                         <div class="form-row">
                             <div class="col-md-1"></div>
 
-                                <label for="licencia" class="col-md-3 col-form-label-lg">
-                                    Licencia
+                                <label for="placa" class="col-md-3 col-form-label-lg">
+                                    Placa 
                                 </label>                                
 
                             <div class="col-md-4 form-group">
                                 <div class="position-relative has-icon-left">
-                                    <input type="text" name="licencia" v-model="licencia" class="form-control" placeholder="Licencia" required >
+                                    <input type="text" name="placa" v-model="placa" class="form-control" placeholder="Placa" required >
                                     <div class="form-control-position">
                                         <i class='bx bx-id-card bx-sm'></i>
                                     </div>
@@ -101,22 +105,45 @@
                                       <i>¡Correcto!</i>
                                     </div> 
                                     <div class="invalid-feedback">
-                                      ¡Introduzca licencia!
+                                      ¡Introduzca Placa!
                                     </div>                                                                
                                 </div>                                    
                             </div>
-                        </div>          
-                            
+                        </div>  
+
+                        <div class="form-row">
+                            <div class="col-md-1"></div>
+
+                                <label for="serial" class="col-md-3 col-form-label-lg">
+                                    Serial de Vehiculo
+                                </label>                                
+
+                            <div class="col-md-4 form-group">
+                                <div class="position-relative has-icon-left">
+                                    <input type="text" name="serial" v-model="serial" class="form-control" placeholder="Serial de Vehiculo" required >
+                                    <div class="form-control-position">
+                                        <i class='bx bx-id-card bx-sm'></i>
+                                    </div>
+                                    <div class="valid-feedback">
+                                      <i>¡Correcto!</i>
+                                    </div> 
+                                    <div class="invalid-feedback">
+                                      ¡Introduzca Serial de Vehiculo!
+                                    </div>                                                                
+                                </div>                                    
+                            </div>
+                        </div>  
+
                         <div class="form-row">
                             <div class="col-md-1"></div>
 
                                 <label for="denominacion" class="col-md-3 col-form-label-lg">
-                                    Denominación
+                                    Nombre de Propietario
                                 </label>                                
 
                             <div class="col-md-4 form-group">
                                 <div class="position-relative has-icon-left">
-                                    <input type="text" name="denominacion" v-model="denominacion" class="form-control" placeholder="Denominación" required >
+                                    <input type="text" name="denominacion" v-model="denominacion" class="form-control" placeholder="Nombre de Propietario" required >
                                     <div class="form-control-position">
                                         <i class='bx bx-id-card bx-sm'></i>
                                     </div>
@@ -124,76 +151,34 @@
                                       <i>¡Correcto!</i>
                                     </div> 
                                     <div class="invalid-feedback">
-                                      ¡Introduzca denominación!
+                                      ¡Introduzca Nombre de Propietario!
                                     </div>                                                                
                                 </div>                                    
                             </div>
-                        </div>                        
+                        </div>   
 
                         <div class="form-row">
-                            <div class="col-md-1"></div>                               
-                                                               
+                            <div class="col-md-1"></div>
+
                                 <label for="rif" class="col-md-3 col-form-label-lg">
-                                    Rif
+                                    Cédula de Propietario
                                 </label>                                
 
                             <div class="col-md-4 form-group">
                                 <div class="position-relative has-icon-left">
-                                    <input type="text" name="rif" v-model="rif" class="form-control" placeholder="Rif" required>
+                                    <input type="text" name="rif" v-model="rif" class="form-control" placeholder="Cédula de Propietario" required >
+                                    <div class="form-control-position">
+                                        <i class='bx bx-id-card bx-sm'></i>
+                                    </div>
                                     <div class="valid-feedback">
                                       <i>¡Correcto!</i>
-                                    </div>
+                                    </div> 
                                     <div class="invalid-feedback">
-                                      ¡Introduzca Rif o Cédula!
-                                    </div>
-                                    <div class="form-control-position">
-                                        <i class='bx bxs-lock bx-sm' ></i>
-                                    </div>
-                                </div>                                                              
+                                      ¡Introduzca Cédula de Propietario!
+                                    </div>                                                                
+                                </div>                                    
                             </div>
-                        </div>
-
-                        <div class="form-row">
-                            <div class="col-md-1"></div>                               
-                                                               
-                                <label for="fecha_inscripcion" class="col-md-3 col-form-label-lg">
-                                    Fecha inscripción
-                                </label>                                
-
-                            <div class="col-md-4 form-group">
-                                <div class="position-relative has-icon-left">
-                                    <datepicker name="fecha_inscripcion" v-model="fecha_inscripcion" bootstrap-styling format="dd/MM/yyyy" placeholder="Fecha de inscripción" required>
-                                    </datepicker>
-                                    
-                                    <div class="valid-feedback">
-                                      <i>¡Correcto!</i>
-                                    </div>
-                                    <div class="invalid-feedback">
-                                      ¡Introduzca fecha de inscripción!
-                                    </div>
-                                    <div class="form-control-position">
-                                        <i class='bx bxs-calendar-star bx-sm' ></i>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    
-                        <div class="form-row">
-                            <div class="col-md-1"></div>                               
-                                                               
-                                <label for="cedula" class="col-md-3 col-form-label-lg">
-                                    Cédula
-                                </label>                                
-
-                            <div class="col-md-4 form-group">
-                                <div class="position-relative has-icon-left">
-                                    <input type="text" name="cedula" v-model="cedula" class="form-control" placeholder="Cédula de Representante Legal">                                    
-                                    <div class="form-control-position">
-                                        <i class='bx bxs-lock bx-sm' ></i>
-                                    </div>
-                                </div>                                                              
-                            </div>
-                        </div>
+                        </div>              
 
                         <div class="form-row">
                             <div class="col-md-1"></div>                               
@@ -227,7 +212,7 @@
                                     </div>
                                 </div>                                                              
                             </div>
-                        </div>                        
+                        </div>                         
 
                         <div class="form-row mt-5">
                             <div class="col-md-1"></div>
@@ -273,19 +258,19 @@
                 //Vista de listado de contribuyente de actividad económica
                 vista: 'listado',
                 titulo: 'Agregar Nuevo Contribuyente',
-                comercios: [],
+                vehiculos: [],
                 tipos: [],
                 boton: 'registro',                
                 tabla: '',
 
-                //Vista de registro de contribuyente de actividad económica
+                //Vista de registro de contribuyente Vehiculo
                 id: 0,
-                tipoArray: [],
-                licencia: '',
-                rif:'',
+                tipo: '',
                 denominacion: '',
-                fecha_inscripcion: '',                
-                cedula: '',
+                placa: '',           
+                modelo: '',                
+                serial: '',                
+                rif:'',                
                 direccion: '',
                 telefono: ''
             }            
@@ -302,35 +287,31 @@
                 this.vista = opcion;                
 
                 if(this.vista == "registro") {
-                    this.listarTipos();
+                    this.listarTipos();                    
                 } else {
-                    this.listarComercios();
+                    this.listarVehiculos();
                 }
             },
 
-///////////////////////////* Listado de contribuyente de actividad económica *//////////////////////////////////////////            
+//////////////////////////* Listado de contribuyente de actividad económica */////////////////////////////////              
 
-            listarComercios(){
-
-                this.listarTipos();
+            listarVehiculos(){                
 
                 let me = this;
 
-                var url = '/comercio';
+                var url = '/vehiculo';
 
                 axios.get(url).then(function (response) {
                 // handle success                                      
                 var respuesta = response.data;                                    
-                me.comercios = respuesta.comercios.data;
-                console.log("Comercios : ", me.comercios);
-                if( me.comercios.length == 0 ) {
-                    me.limpiarCampos();
-                    me.tablaComercios();
-                } else {
-                    me.tablaComercios();    
-                }
+                me.vehiculos = respuesta.vehiculos.data;
                 
-                console.log("Numero de registro : ", me.comercios.length);
+                if( me.vehiculos.length == 0 ) {
+                    me.limpiarCampos();
+                    me.tablaVehiculos();
+                } else {
+                    me.tablaVehiculos();    
+                }                
               })
               .catch(function (error) {
                 // handle error
@@ -341,7 +322,7 @@
               });
             },
 
-            tablaComercios() {
+            tablaVehiculos() {
                 $(function() {
                     this.tabla = $('#dataTable').DataTable(
                     {   
@@ -379,13 +360,13 @@
             listarTipos() {
                 let me = this;
 
-                var url = '/tipo_comercio';
+                var url = '/tipo_vehiculo';
 
                 axios.get(url).then(function (response) {
                     // handle success                    
                     var respuesta = response.data;                    
-                    me.tipos = respuesta.tipos_comercio.data;     
-                    console.log("Response : ", me.tipos);                    
+                    me.tipos = respuesta.tipos_vehiculo.data;     
+                    console.log("Vehiculos : ", me.tipos);                    
                   })
                   .catch(function (error) {
                     // handle error
@@ -394,7 +375,7 @@
                   .finally(function () {
                     // always executed
                   });
-            },
+            },            
             
             validarFormulario( accion ) {
                 let me=this;
@@ -422,8 +403,6 @@
 
             agregarRegistro() {
 
-                console.log("Tipos : ", this.tipoArray);
-
                 const alerta = Swal.mixin({
                   customClass: {
                     confirmButton: 'btn btn-success',
@@ -432,22 +411,18 @@
                  buttonsStyling: false,
                 })                
 
-                let me=this;
-                console.log("Array de tipo ", me.tipoArray);               
+                let me=this;                               
                 
-                axios.post('/comercio/registrar', {
-                        'licencia': me.licencia,
+                axios.post('/vehiculo/registrar', {
+                        'placa': me.placa,
                         'denominacion': me.denominacion,
-                        'cedula': me.cedula,
-                        'fecha_inscripcion': me.fecha_inscripcion,
+                        'modelo': me.modelo,
+                        'serial': me.serial,                        
                         'rif': me.rif,
-                        'direccion':me.direccion,
-                        'telefono':me.telefono,
-                        'tipos': me.tipoArray
-
-                    }).then(function (response) {   
-
-                        console.log("Respuesta : ", response);
+                        'telefono': me.telefono,
+                        'direccion': me.direccion,
+                        'tipo': me.tipo
+                    }).then(function (response) {                           
                         alerta.fire(
                             'Registro!',
                             'Registro exitoso.',
@@ -466,22 +441,22 @@
 
                 let me=this;
                 me.id = data.id;                 
-                var url = '/comercio?id='+me.id;
+                var url = '/vehiculo?id='+me.id;
 
                  axios.get(url).then(function (response) {
                     // handle success                            
                     var respuesta = response.data;                     
-                    var comercio = respuesta.comercios;                    
-                                                
-                    me.tipo = comercio.idtipocontribuyentecomercio;
-                    me.licencia = comercio.licencia
-                    me.denominacion = comercio.denominacion;                    
-                    me.fecha_inscripcion = comercio.fecha_inscripcion;
-                    me.rif = comercio.rif;
-                    me.cedula = comercio.cedula;
-                    me.direccion = comercio.direccion;
-                    me.telefono = comercio.telefono;
-                    me.titulo = 'Editar contribuyente';
+                    var vehiculo = respuesta.vehiculos;
+
+                    me.tipo = vehiculo.idtipocontribuyentevehiculo;
+                    me.placa = vehiculo.placa;
+                    me.denominacion = vehiculo.denominacion;                    
+                    me.modelo = vehiculo.modelo;
+                    me.serial = vehiculo.serial;                    
+                    me.rif = vehiculo.rif;
+                    me.telefono = vehiculo.telefono;
+                    me.direccion = vehiculo.direccion;
+                    me.titulo = 'Editar Vehiculo';
                     me.boton = "edicion";
                   })
                   .catch(function (error) {
@@ -507,16 +482,16 @@
 
                 let me=this;
                 
-                axios.put('/comercio/actualizar', {
+                axios.put('/vehiculo/actualizar', {
                         'id': me.id,
-                        'tipo': me.tipo,    
-                        'licencia': me.licencia,                        
-                        'denominacion': me.denominacion,                        
-                        'cedula': me.cedula,
-                        'fecha_inscripcion': me.fecha_inscripcion,
+                        'placa': me.placa,
+                        'denominacion': me.denominacion,
+                        'modelo': me.modelo,
+                        'serial': me.serial,                        
                         'rif': me.rif,
-                        'direccion':me.direccion,
-                        'telefono':me.telefono,
+                        'telefono': me.telefono,
+                        'direccion': me.direccion,
+                        'tipo': me.tipo
                     }).then(function (response) {                        
                         alerta.fire(
                             'Actualizado!',
@@ -542,7 +517,7 @@
                 })
 
                 alerta.fire({
-                  title: '¿Estás seguro de eliminar el Objetivo?',
+                  title: '¿Estás seguro de eliminar el Vehiculo?',
                   text: '',                  
                   showCancelButton: true,
                   confirmButtonText: '<i class="fa fa-check fa-2x"></i>Aceptar',
@@ -552,14 +527,14 @@
                   if (result.value) {
 
                     let me=this;
-                        axios.delete('/comercio/eliminar/'+data.id).then(function (response) {  
+                        axios.delete('/vehiculo/eliminar/'+data.id).then(function (response) {  
                                 //console.log( response );                                
                                 alerta.fire(
                                     'Eliminado!',
                                     'Registro eliminado.',
                                     'success'
                                 );
-                                me.comercios = [];                                
+                                me.vehiculos = [];                                
                                 me.cambiarVista("listado");                                
                             }).catch(function (error) {
                             // handle error
@@ -579,23 +554,24 @@
             },
 
             limpiarCampos() {                
-                this.comercios = [];
+                this.vehiculos = [];
                 this.id = 0;
-                this.licencia = '',
+                this.codigo_catastral = '',
                 this.tipo = '';
                 this.denominacion = '';
-                this.fecha_inscripcion;                
-                this.rif = '';
-                this.cedula = '';
+                this.placa = '';
+                this.serial='';
+                this.modelo = '';               
+                this.rif = '';                
                 this.direccion = '';
                 this.telefono = '';
                 this.boton = 'registro';
-                this.titulo = 'Agregar Nuevo Contribuyente';
+                this.titulo = 'Agregar Nuevo Vehiculo';
             },
         },
 
         mounted() {
-            this.listarComercios();                 
+            this.listarVehiculos();                 
             console.log('Component mounted.')
         }
     }

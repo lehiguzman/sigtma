@@ -23,14 +23,21 @@ window.Vue = require('vue');
 Vue.component('usuario', require('./components/Usuario.vue').default);
 Vue.component('tipo_comercio', require('./components/Tipo_comercio.vue').default);
 Vue.component('tipo_inmueble', require('./components/Tipo_inmueble.vue').default);
+Vue.component('tipo_vehiculo', require('./components/Tipo_vehiculo.vue').default);
 Vue.component('comercio', require('./components/Comercio.vue').default);
 Vue.component('inmueble', require('./components/Inmueble.vue').default);
+Vue.component('vehiculo', require('./components/Vehiculo.vue').default);
 Vue.component('pago_comercio', require('./components/Pago_comercio.vue').default);
 Vue.component('periodo', require('./components/Periodo.vue').default);
 Vue.component('zona', require('./components/Zona.vue').default);
 Vue.component('regimen', require('./components/Regimen.vue').default);
 Vue.component('calculo_comercio', require('./components/Calculo_comercio.vue').default);
 Vue.component('calculo_inmueble', require('./components/Calculo_inmueble.vue').default);
+Vue.component('calculo_vehiculo', require('./components/Calculo_vehiculo.vue').default);
+
+Vue.component('pago_comercio', require('./components/Pago_comercio.vue').default);
+//Vue.component('pago_inmueble', require('./components/Pago_inmueble.vue').default);
+//Vue.component('pago_vehiculo', require('./components/Pago_vehiculo.vue').default);
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to

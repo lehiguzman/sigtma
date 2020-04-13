@@ -47,6 +47,12 @@ Route::post('/tipo_inmueble/registrar', 'TipoInmuebleController@store');
 Route::put('/tipo_inmueble/actualizar', 'TipoInmuebleController@update');
 Route::delete('/tipo_inmueble/eliminar/{id}', 'TipoInmuebleController@destroy');
 
+//tipos_contribuyente_vehiculo
+Route::get('/tipo_vehiculo', 'TipoVehiculoController@index');
+Route::post('/tipo_vehiculo/registrar', 'TipoVehiculoController@store');
+Route::put('/tipo_vehiculo/actualizar', 'TipoVehiculoController@update');
+Route::delete('/tipo_vehiculo/eliminar/{id}', 'TipoVehiculoController@destroy');
+
 //comercios
 Route::get('/comercio', 'ComercioController@index');
 Route::post('/comercio/registrar', 'ComercioController@store');
@@ -60,6 +66,12 @@ Route::post('/inmueble/registrar', 'InmuebleController@store');
 Route::put('/inmueble/actualizar', 'InmuebleController@update');
 Route::delete('/inmueble/eliminar/{id}', 'InmuebleController@destroy');
 
+//vehiculos
+Route::get('/vehiculo', 'VehiculoController@index');
+Route::post('/vehiculo/registrar', 'VehiculoController@store');
+Route::put('/vehiculo/actualizar', 'VehiculoController@update');
+Route::delete('/vehiculo/eliminar/{id}', 'VehiculoController@destroy');
+
 //periodos
 Route::get('/periodo', 'PeriodoController@index');
 Route::post('/periodo/registrar', 'PeriodoController@store');
@@ -72,15 +84,34 @@ Route::post('/zona/registrar', 'ZonaController@store');
 Route::put('/zona/actualizar', 'ZonaController@update');
 Route::delete('/zona/eliminar/{id}', 'ZonaController@destroy');
 
-//zonas
+//regimen
 Route::get('/regimen', 'RegimenController@index');
 Route::post('/regimen/registrar', 'RegimenController@store');
 Route::put('/regimen/actualizar', 'RegimenController@update');
 Route::delete('/regimen/eliminar/{id}', 'RegimenController@destroy');
 
-//declaraciones
+//declaraciones Comercio
 Route::get('/declaracion_comercio', 'DeclaracionComercioController@index');
 Route::post('/declaracion_comercio/registrar', 'DeclaracionComercioController@store');
 Route::delete('/declaracion_comercio/eliminar/{id}', 'DeclaracionComercioController@destroy');
-Route::get('/declaracion_comercio/{id}', 'DeclaracionComercioController@selectDeclaracion');
+Route::get('/declaracion_comercio/{id}', 'DeclaracionComercioController@selectDeclaracionComercio');
+
+Route::get('/declaracion/{id}', 'DeclaracionComercioController@selectDeclaracion');
+
+//declaraciones Inmuebles
+Route::get('/declaracion_inmueble', 'DeclaracionInmuebleController@index');
+Route::post('/declaracion_inmueble/registrar', 'DeclaracionInmuebleController@store');
+Route::delete('/declaracion_inmueble/eliminar/{id}', 'DeclaracionInmuebleController@destroy');
+Route::get('/declaracion_inmueble/{id}', 'DeclaracionInmuebleController@selectDeclaracion');
+
+//declaraciones Vehiculos
+Route::get('/declaracion_vehiculo', 'DeclaracionVehiculoController@index');
+Route::post('/declaracion_vehiculo/registrar', 'DeclaracionVehiculoController@store');
+Route::delete('/declaracion_vehiculo/eliminar/{id}', 'DeclaracionVehiculoController@destroy');
+Route::get('/declaracion_vehiculo/{id}', 'DeclaracionVehiculoController@selectDeclaracion');
+
+//pagos
+Route::get('/pago', 'PagoController@index');
+Route::post('/pago/registrar', 'PagoController@store');
+Route::delete('/pago/eliminar/{id}', 'PagoController@destroy');
 

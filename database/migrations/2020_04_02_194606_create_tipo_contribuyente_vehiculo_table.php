@@ -14,8 +14,7 @@ class CreateTipoContribuyenteVehiculoTable extends Migration
     public function up()
     {
         Schema::create('tipo_contribuyente_vehiculo', function (Blueprint $table) {
-            $table->increments('id');
-            $table->integer('codigo');
+            $table->increments('id');            
             $table->string('tipo');
             $table->string('descripcion');
             $table->float('monto_ut');

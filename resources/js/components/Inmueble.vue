@@ -690,7 +690,7 @@
                     // always executed
                   });
 
-                this.vista = "registro";                 
+                this.cambiarVista("registro");                 
             },
 
             actualizarRegistro() {                
