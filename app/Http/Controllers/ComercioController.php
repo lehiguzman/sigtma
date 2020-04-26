@@ -7,6 +7,8 @@ use Illuminate\Support\Facades\DB;
 use App\Comercio;
 use App\Comerciotipo;
 use App\TipoContribuyenteComercio;
+use App\Bitacora;
+use Auth;
 
 class ComercioController extends Controller
 {
@@ -24,13 +26,22 @@ class ComercioController extends Controller
             ->select('comercios.id', 'comercios.licencia', 'comercios.denominacion', 'comercios.rif', 'comercios.direccion', 'comercios.fecha_inscripcion', 'comercios.telefono', 'tipo_contribuyente_comercio.denominacion as tipo')
             ->orderBy('comercios.id', 'desc')->paginate(10); */
         $comercios = Comercio::orderBy('ID', 'DESC')->paginate();
+
+        $datos = [
+                'comercios' => $comercios,
+            ];
         
         if($request->id) {
-            $comercios = Comercio::find($request->id);            
-        }    
-        return [ 
-            'comercios' => $comercios
-        ];
+            $comercio = Comercio::find($request->id);    
+            $tipos = Comerciotipo::where('idcomercio', '=', $request->id)->get();
+            
+            $datos = [
+                'comercios' => $comercio,
+                'tipos' => $tipos,
+            ];
+        } 
+
+        return $datos;            
     }
 
     /**
@@ -42,7 +53,7 @@ class ComercioController extends Controller
     public function store(Request $request)
     {
         //if(!$request->ajax()) return redirect('/');
-
+        $iduser = Auth::user()->id;
         try{
             DB::beginTransaction();
             $comercio = new Comercio();     
@@ -70,7 +81,13 @@ class ComercioController extends Controller
                 $comercioTipo->idcomercio = $comercio->id;
                 
                 $comercioTipo->save();
-            }            
+            }
+
+            $accion = 'Agrega Nuevo Contribuyente';
+                Bitacora::create([
+                    'accion' => $accion,
+                    'iduser' => $iduser,            
+                ]);    
 
             DB::commit();
 
@@ -87,7 +104,7 @@ class ComercioController extends Controller
 
         foreach ($tipos_comercio as $key => $tipo) {
             $tipoComercio[] = TipoContribuyenteComercio::find($tipo->idtipo);                  
-        }
+        }        
 
         return $tipoComercio;
     }
@@ -103,8 +120,10 @@ class ComercioController extends Controller
     {
         //if(!$request->ajax()) return redirect('/');
 
-        $comercio = Comercio::findOrFail($request->id);        
-        $comercio->idtipocontribuyentecomercio = $request->tipo;
+        try{
+            DB::beginTransaction();
+
+        $comercio = Comercio::findOrFail($request->id);                
         $comercio->licencia = $request->licencia;
         $comercio->denominacion = $request->denominacion;
         $comercio->rif = $request->rif;
@@ -113,6 +132,36 @@ class ComercioController extends Controller
         $comercio->direccion = $request->direccion;
         $comercio->telefono = $request->telefono;      
         $comercio->save();
+
+        $tipos_comercio = $request->tipos;//Array de Tipos de comercio
+
+            foreach($tipos_comercio as $ep=>$tipo)
+            {                
+                $comercioTipo = Comerciotipo::where("idcomercio", "=", $request->id)->where("idtipo", '=', $tipo)->get();
+                
+                if(count($comercioTipo)==0) {
+                    $comercioTipoAdd = new Comerciotipo();
+                    $comercioTipoAdd->idtipo = $tipo;
+                    $comercioTipoAdd->idcomercio = $comercio->id;
+                    $comercioTipoAdd->save();
+                }                
+            }  
+
+            $iduser = Auth::user()->id;
+            $accion = 'Actualiza Contribuyente: '. $request->denominacion;
+                Bitacora::create([
+                    'accion' => $accion,
+                    'iduser' => $iduser,            
+                ]);  
+
+            DB::commit();
+
+        } catch (Exception $e){
+
+            DB::rollBack();
+        }
+
+        return $comercioTipo;
     }
 
     /**
@@ -123,9 +172,16 @@ class ComercioController extends Controller
      */
     public function destroy(Request $request, $id)
     {        
-        if(!$request->ajax()) return redirect('/');              
+        if(!$request->ajax()) return redirect('/'); 
+        $comercio = Comercio::findOrFail($id);
+        $iduser = Auth::user()->id;
+            $accion = 'Elimina Contribuyente: '. $comercio->denominacion;
+                Bitacora::create([
+                    'accion' => $accion,
+                    'iduser' => $iduser,            
+                ]);  
 
-        $comercio = Comercio::findOrFail($id);   
+           
         $comercio->delete();
     }
 }

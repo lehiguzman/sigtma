@@ -17,7 +17,7 @@ class CreateTipoContribuyenteVehiculoTable extends Migration
             $table->increments('id');            
             $table->string('tipo');
             $table->string('descripcion');
-            $table->float('monto_ut');
+            $table->float('monto_ut', 12, 2);
             $table->timestamps();
         });
     }

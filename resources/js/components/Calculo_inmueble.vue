@@ -145,11 +145,20 @@
 
                     <div class="border-top my-3"></div>
 
-                    <div class="font-weight-bold text-center bg-light">Registro de detalle a pagar</div>
+                    <div class="font-weight-bold text-center bg-light" v-if="periodos">Registro de detalle a pagar</div>
+                    <div class="form-row text-center bg-light border my-5" v-else>
+                        <div class="col-md-12 form-group my-5">                               
+                           <label><strong>No hay Impuestos por calcular</strong></label>
+                        </div>
+                        <div class="col-md-12 d-flex justify-content-center">
+                            <i class='bx bx-cancel bx-sm'></i>
+                            <input type="button" name="cancelar" @click="cancelarRegistro()" class="btn btn-warning" value="Salir">
+                        </div>
+                    </div>
 
                     <div class="border-top my-3"></div>
 
-                    <form class="needs-validation" novalidate>
+                    <form class="needs-validation" novalidate v-if="periodos">
 
                         <div class="form-row text-center bg-light border">
                             <div class="col-md-1">
@@ -178,9 +187,9 @@
                             </div>
                         </div>
 
-                        <div class="form-row text-center mt-3 border-bottom">
+                        <div class="form-row text-center mt-3 border-bottom" v-for="periodo in periodos">
                             <div class="col-md-1 form-group">                               
-                               <label><strong>{{ anio }}</strong></label>
+                               <label><strong>{{ periodo.periodo }}</strong></label>
                             </div>
                             <div class="col-md-2 form-group">                               
                                <label><strong>{{ area_terreno }}</strong></label>
@@ -192,7 +201,7 @@
                                <label><strong>{{ alicuota }}</strong></label>
                             </div>
                             <div class="col-md-1 form-group">                               
-                               <label><strong>{{ valor_fiscal }}</strong></label>
+                               <label><strong>{{ valor_fiscal=((periodo.unidad_tributaria * alicuota)/100).toFixed(2) }}</strong></label>
                             </div>
                             <div class="col-md-2 form-group">                               
                                <label><strong>{{ valor_mt }}</strong></label>
@@ -201,7 +210,7 @@
                                <label><strong>{{ valor_total.toFixed(2) }}</strong></label>
                             </div>
                             <div class="col-md-2 form-group">                               
-                               <label><strong>{{ monto_impuesto.toFixed(2) }}</strong></label>
+                               <label><strong>{{ periodo.monto_impuesto=(valor_fiscal * valor_total).toFixed(2) }}</strong></label>
                             </div>                            
                         </div>                               
                         
@@ -211,7 +220,7 @@
                                 <h5> Total de impuestos : </h5>
                             </div>
                             <div class="col-md-3 bg-light">
-                                {{ monto_impuesto.toFixed(2) }}
+                                {{ total=calcularTotal.toFixed(2) }}
                             </div>                                                   
                         </div>                        
 
@@ -227,7 +236,7 @@
                                 <input type="button" name="cancelar" @click="cancelarRegistro()" class="btn btn-danger btn-cancelar" value="Cancelar">
                             </div>
                         </div>   
-                    </form>
+                    </form>                                     
                 </div>
             </div>
         </template>        
@@ -251,6 +260,7 @@
                 vista: 'listado',
                 titulo: 'Agregar Nueva Declaración Inmueble',                
                 boton: 'registro',
+                periodos: [],
                 inmuebles: [],                
                 tabla: '',
 
@@ -276,13 +286,27 @@
                 valor_total: 0,
                 monto_impuesto: 0,
                 ultimo: 0,
+                total: 0
             }            
         },
 
         //Aqui se inyectan los componentes importados
         components: {
             datatable            
-        },        
+        },
+
+         computed: {
+            calcularTotal: function() {
+                var resultado = 0;
+
+                for (var i = 0; i < this.periodos.length; i++) {
+                    
+                    resultado = resultado+(parseFloat(this.periodos[i].monto_impuesto));
+
+                }            
+                return resultado;
+            }
+        },   
 
         methods: {
             cambiarVista( opcion ) {                
@@ -377,18 +401,20 @@
                  buttonsStyling: false,
                 });
 
-                let me = this;                  
+                let me = this;    
+
+                console.log("Periodos : ", me.periodos);
 
                 axios.post('/declaracion_inmueble/registrar', {                        
                         'idinmueble': me.idinmueble,
-                        'idperiodo': me.idperiodo,
+                        'periodos': me.periodos,
                         'idzona': me.idzona,
                         'tipo_vivienda': me.tipo_vivienda,
                         'idregimen': me.idregimen,
                         'area_construccion': me.area_construccion,
                         'area_terreno': me.area_terreno,
                         'valor_total': me.valor_total,
-                        'monto_impuesto': me.monto_impuesto,
+                        'monto_impuesto': me.total,
                     }).then(function (response) {                        
                         alerta.fire(
                             'Registro!',
@@ -419,9 +445,7 @@
 
                 console.log("Respuesta : ", respuesta);
 
-                me.idinmueble = respuesta.inmueble.id;
-                me.idperiodo = respuesta.periodo.id;
-                me.anio = respuesta.periodo.periodo;                 
+                me.idinmueble = respuesta.inmueble.id;                
                 me.denominacion = respuesta.inmueble.denominacion;
                 me.idzona = respuesta.inmueble.idzona;
                 me.zona = respuesta.zona.nombre;
@@ -432,8 +456,10 @@
                 me.area_terreno = respuesta.inmueble.area_terreno;  
                 me.area_construccion = respuesta.inmueble.area_construccion;
                 me.idregimen = respuesta.inmueble.idregimen;    
-                me.alicuota = respuesta.regimen.alicuota;  
+                me.alicuota = respuesta.regimen.alicuota;                  
                 me.valor_fiscal = respuesta.regimen.valor_fiscal;
+                me.periodos = respuesta.periodo.data;
+                console.log("periodos : ", me.periodos);
 
                 if(me.tipo_vivienda == "c1") { me.valor_mt = respuesta.zona.c1; };   
                 if(me.tipo_vivienda == "c2") { me.valor_mt = respuesta.zona.c2; };   

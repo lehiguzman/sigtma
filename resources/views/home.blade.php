@@ -83,6 +83,12 @@
         @if(Auth::user()->roles->first()->rol == 'admin')
             @include('plantilla.sidebarAdministrador')
         @endif
+        @if(Auth::user()->roles->first()->rol == 'gerente')
+            @include('plantilla.sidebarGerente')
+        @endif
+        @if(Auth::user()->roles->first()->rol == 'agente')
+            @include('plantilla.sidebarAgente')
+        @endif
         <!-- Contenido Principal -->
 
         <div>        

@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use App\DeclaracionComercio;
 use App\Periodo;
 use App\Comercio;
+use App\Comerciotipo;
+use App\TipoContribuyenteComercio;
 
 class DeclaracionComercioController extends Controller
 {
@@ -18,7 +20,10 @@ class DeclaracionComercioController extends Controller
     {
         //if(!$request->ajax()) return redirect('/');
         
-        $declaracionesComercio = DeclaracionComercio::orderBy('ID', 'DESC')->paginate();
+        $declaracionesComercio = DeclaracionComercio::join("comercios", "declaracion_comercio.idcomercio", "=", "comercios.id")
+        ->selectRaw("comercios.denominacion, comercios.rif, comercios.direccion, declaracion_comercio.id, declaracion_comercio.tipo_declaracion, declaracion_comercio.monto_declaracion, declaracion_comercio.monto_impuesto")->where('declaracion_comercio.estado', '=', 'calculado')
+        ->orderBy('declaracion_comercio.ID', 'DESC')
+        ->get();
          
         return [ 
             'declaraciones_comercio' => $declaracionesComercio
@@ -38,17 +43,38 @@ class DeclaracionComercioController extends Controller
         //$declaracionComercio = new DeclaracionComercio(); 
 
         $codigos = $request->codigos;
+        $hayPagada = '0';
 
+        $declaracionEstimada = DeclaracionComercio::where('idperiodo', '=', $request->idperiodo)->where('tipo_declaracion', '=', 1)->where('idcomercio', '=', $request->idcomercio)->where('estado', '=', 'calculado')->get();
+
+        foreach ($declaracionEstimada as $key => $decEstimada) {
+            $declaracionAct = DeclaracionComercio::find($decEstimada->id);                
+            $declaracionAct->estado = "no_pagado";
+            $declaracionAct->save();
+        }
+
+        $declaracionPagada = DeclaracionComercio::where('idperiodo', '=', $request->idperiodo)->where('tipo_declaracion', '=', 1)->where('idcomercio', '=', $request->idcomercio)->where('estado', '=', 'pagado')->get();       
+            
+        
         foreach($codigos as $ep=>$codigo)
             {
                 $declaracionComercio = new DeclaracionComercio();
+                $montoImpuesto = 0;
+
+                if($declaracionPagada) {
+                foreach ($declaracionPagada as $key => $montoPag) {
+                        if($montoPag['idtipo'] == $codigo['id']) {
+                            $montoImpuesto = $codigo['monto_impuesto'] - $montoPag['monto_impuesto'];
+                        }
+                    }
+                }
 
                 $declaracionComercio->idcomercio = $request->idcomercio;
                 $declaracionComercio->idperiodo = $request->idperiodo;
                 $declaracionComercio->idtipo = $codigo['id'];
                 $declaracionComercio->monto_declaracion = $codigo['monto'];
                 $declaracionComercio->tipo_declaracion = $request->tipo_declaracion;
-                $declaracionComercio->monto_impuesto = $codigo['monto_impuesto'];
+                $declaracionComercio->monto_impuesto = $montoImpuesto;
                 $declaracionComercio->estado = "calculado";
                 $declaracionComercio->save();
             }
@@ -64,44 +90,54 @@ class DeclaracionComercioController extends Controller
     	if(!$declaracionComercio) {
             $periodo = Periodo::orderBy('ID', 'ASC')->first();
     		$datos = [
-    		'anio' => "2018",
+    		'anio' => $periodo->periodo,
     		'tipoDeclaracion' => 1,
             'periodo' => $periodo,
             'estado_declaracion' => 'estimada_inicial'
     		];
     		return $datos;
     	} else {
+
             $periodo = Periodo::find($declaracionComercio->idperiodo);
             $anioActual = $date->format('Y');
-    		$ultimoPeriodoDeclarado = $periodo->periodo;
+            $ultimoPeriodoDeclarado = $periodo->periodo;
             $tipoDeclaracion = $declaracionComercio->tipo_declaracion;
 
-            if( $tipoDeclaracion == 1 ) {                
-                $datos = [
-                'anio' => $ultimoPeriodoDeclarado,
+            if($declaracionComercio->estado == "calculado" && $declaracionComercio->tipo_declaracion == "2") {
+               $datos = [
+                'anio' => $periodo->periodo,
                 'tipoDeclaracion' => 2,
                 'periodo' => $periodo,
-                'estado_declaracion' => 'definitiva'
+                'estado_declaracion' => 'deuda',
                 ];
             } else {
-                if($anioActual == $ultimoPeriodoDeclarado) {
-                    return false;
-                } else {
 
-                    $declaracionAnioAnterior = DeclaracionComercio::selectRaw('idtipo, sum(monto_declaracion) as monto_declaracion')->groupBy('idtipo')->where("idperiodo", '=', $declaracionComercio->idperiodo)->get();
-
-                    $periodoNuevo = $ultimoPeriodoDeclarado + 1;
+                if( $tipoDeclaracion == 1 ) {                
                     $datos = [
-                        'anio' => $periodoNuevo,
-                        'tipoDeclaracion' => 1,
-                        'periodo' => $periodo,
-                        'estado_declaracion' => 'estimada',
-                        'ultimaDeclaracion' => $declaracionAnioAnterior
+                    'anio' => $ultimoPeriodoDeclarado,
+                    'tipoDeclaracion' => 2,
+                    'periodo' => $periodo,
+                    'estado_declaracion' => 'definitiva'
                     ];
-                }
-            }
-    	}    	
+                } else {
+                    if($anioActual == $ultimoPeriodoDeclarado) {
+                        return false;
+                    } else {
 
+                        $declaracionAnioAnterior = DeclaracionComercio::selectRaw('idtipo, sum(monto_declaracion) as monto_declaracion')->groupBy('idtipo')->where("idperiodo", '=', $declaracionComercio->idperiodo)->get();
+
+                        $periodoNuevo = $ultimoPeriodoDeclarado + 1;
+                        $datos = [
+                            'anio' => $periodoNuevo,
+                            'tipoDeclaracion' => 1,
+                            'periodo' => $periodo,
+                            'estado_declaracion' => 'estimada',
+                            'ultimaDeclaracion' => $declaracionAnioAnterior
+                        ];
+                    }
+                }
+    	   }    	
+        }
     	return $datos;
     }
 
@@ -117,6 +153,67 @@ class DeclaracionComercioController extends Controller
             'periodo' => $periodo
         ];
     }
+
+    /**
+     * Genera el estado de cuenta de comercio
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function edoCtaComercio(Request $request)
+    {        
+        //if(!$request->ajax()) return redirect('/');
+
+        $saldo = 0;
+        
+        $comercio = Comercio::find($request->idcomercio);
+        $tipos = Comerciotipo::where("idcomercio", "=", $request->idcomercio)->get();
+
+        foreach ($tipos as $key => $tipo) {
+                    $ramas[] = tipoContribuyenteComercio::find($tipo->idtipo);
+                }        
+
+        $declaracionEstatus = DeclaracionComercio::where("idcomercio", "=", $request->idcomercio)->get();
+
+        foreach ($declaracionEstatus as $key => $declaracion) {
+            if( $declaracion->estado == "calculado" ) {
+                $declaracionComercio = DeclaracionComercio::join('periodos', 'declaracion_comercio.idperiodo', '=', 'periodos.id')
+                                    ->join('comercios', 'declaracion_comercio.idcomercio', '=', 'comercios.id')
+                                    ->selectRaw('periodos.periodo, comercios.id as idcomercio, comercios.rif, comercios.denominacion, comercios.direccion, comercios.licencia, declaracion_comercio.idcomercio, declaracion_comercio.estado, declaracion_comercio.monto_impuesto as monto_impuesto')
+                                    ->where("declaracion_comercio.id", "=", $declaracion->id)->first();
+
+                    $saldo = $saldo + $declaracionComercio->monto_impuesto;
+
+                $declaracionObj[] = [
+                    "periodo" => $declaracionComercio->periodo,
+                    "estado" => $declaracion->estado,
+                    "tipo" => "abono",
+                    "saldo" => $saldo,
+                    "monto_impuesto" => $declaracionComercio->monto_impuesto
+                ];
+            } elseif($declaracion->estado == "pagado") {
+
+                $declaracionComercio = DeclaracionComercio::join('periodos', 'declaracion_comercio.idperiodo', '=', 'periodos.id')
+                                    ->join('pagos', 'declaracion_comercio.idpago', '=', 'pagos.id')
+                                    ->join('comercios', 'declaracion_comercio.idcomercio', '=', 'comercios.id')
+                                    ->selectRaw('periodos.periodo, comercios.id as idcomercio, comercios.rif, comercios.denominacion, comercios.direccion, comercios.licencia, declaracion_comercio.estado, pagos.monto as monto_impuesto, pagos.referencia, pagos.banco')
+                                    ->where("declaracion_comercio.id", "=", $declaracion->id)->first();
+
+                    $saldo = $saldo + $declaracionComercio->monto_impuesto;
+
+                $declaracionObj[] = [
+                    "periodo" => $declaracionComercio->periodo,
+                    "estado" => $declaracion->estado,
+                    "tipo" => "abono",
+                    "saldo" => $saldo,
+                    "monto_impuesto" => $declaracionComercio->monto_impuesto
+                ];
+            }
+        }
+         $pdf = \PDF::loadView('pdf.edoCtaComercio', ['comercio' => $comercio , 'declaracionObj' => $declaracionObj, 'ramas' => $ramas ]);
+                return $pdf->download('EstadoCta Comercio.pdf');
+    }
+
 
     /**
      * Remove the specified resource from storage.

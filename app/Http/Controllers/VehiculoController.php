@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Vehiculo;
+use App\Bitacora;
+use Auth;
 
 class VehiculoController extends Controller
 {
@@ -46,7 +48,14 @@ class VehiculoController extends Controller
         $vehiculo->rif = $request->rif;
         $vehiculo->telefono = $request->telefono;
         $vehiculo->direccion = $request->direccion;
-        $vehiculo->save();        
+        $vehiculo->save();
+
+        $iduser = Auth::user()->id;
+        $accion = 'Agrega Nuevo Contribuyente';
+                Bitacora::create([
+                    'accion' => $accion,
+                    'iduser' => $iduser,            
+                ]);   
     } 
 
      /**
@@ -69,7 +78,14 @@ class VehiculoController extends Controller
         $vehiculo->rif = $request->rif;
         $vehiculo->telefono = $request->telefono;
         $vehiculo->direccion = $request->direccion;
-        $vehiculo->save();      
+        $vehiculo->save(); 
+
+        $iduser = Auth::user()->id;
+            $accion = 'Actualiza Contribuyente: '. $request->denominacion;
+                Bitacora::create([
+                    'accion' => $accion,
+                    'iduser' => $iduser,            
+                ]);   
     }
 
     /**
@@ -82,7 +98,13 @@ class VehiculoController extends Controller
     {        
         if(!$request->ajax()) return redirect('/');              
 
-        $vehiculo = Vehiculo::findOrFail($id);   
+        $vehiculo = Vehiculo::findOrFail($id); 
+
+        $accion = 'Elimina Contribuyente: '. $vehiculo->denominacion;
+                Bitacora::create([
+                    'accion' => $accion,
+                    'iduser' => $iduser,            
+                ]);  
         $vehiculo->delete();
     }
 }

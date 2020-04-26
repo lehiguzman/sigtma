@@ -40,8 +40,9 @@
                                 <td>{{ comercio.rif }}</td>
                                 <td>{{ comercio.fecha_inscripcion }}</td>
                                 <td class="text-center">
-                                    <i class='bx bxs-edit bx-sm mr-4 text-success btn-editar' title="Editar" @click="editarRegistro(comercio)"></i>
-                                    <i class='bx bxs-trash bx-sm text-danger btn-eliminar' title="Eliminar" @click="eliminarRegistro(comercio)"></i>
+                                    <i class='bx bxs-edit bx-sm mr-2 text-success btn-editar' title="Editar" @click="editarRegistro(comercio)"></i>
+                                    <i class='bx bxs-trash bx-sm mr-2 text-danger btn-eliminar' title="Eliminar" @click="eliminarRegistro(comercio)"></i>
+                                    <i class='bx bxs-report bx-sm mr-2 text-primary btn-eliminar' title="Estado de cuenta" @click="imprimirEdoCta(comercio)"></i>
                                 </td>
                             </tr>                            
                         </tbody>                  
@@ -471,10 +472,11 @@
                  axios.get(url).then(function (response) {
                     // handle success                            
                     var respuesta = response.data;                     
-                    var comercio = respuesta.comercios;                    
-                                                
-                    me.tipo = comercio.idtipocontribuyentecomercio;
-                    me.licencia = comercio.licencia
+                    var comercio = respuesta.comercios;            
+                    var tipoArray = respuesta.tipos;
+                    console.log("Comercio data : ", respuesta.tipos); 
+                    
+                    me.licencia = comercio.licencia;
                     me.denominacion = comercio.denominacion;                    
                     me.fecha_inscripcion = comercio.fecha_inscripcion;
                     me.rif = comercio.rif;
@@ -506,10 +508,11 @@
                 })                
 
                 let me=this;
+
+                console.log("Arreglo de tipos : ", me.tipoArray);
                 
                 axios.put('/comercio/actualizar', {
-                        'id': me.id,
-                        'tipo': me.tipo,    
+                        'id': me.id,                          
                         'licencia': me.licencia,                        
                         'denominacion': me.denominacion,                        
                         'cedula': me.cedula,
@@ -517,7 +520,10 @@
                         'rif': me.rif,
                         'direccion':me.direccion,
                         'telefono':me.telefono,
-                    }).then(function (response) {                        
+                        'tipos': me.tipoArray
+                    }).then(function (response) {
+
+                        console.log("Respuesta actualizar :", response);
                         alerta.fire(
                             'Actualizado!',
                             'Registro actualizado.',
@@ -571,6 +577,14 @@
                   ) {                    
                   }
                 })
+            },
+
+            imprimirEdoCta( comercio ) {
+
+                console.log("Comerio : ", comercio.id);
+
+                window.open('http://127.0.0.1:8000/edoCtaComercio?idcomercio=' + comercio.id,'_blank');
+
             },
 
             cancelarRegistro() {

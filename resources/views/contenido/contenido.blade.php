@@ -1,6 +1,10 @@
 @extends('home') <!-- extiendo la vista home -->
 
 @section('contenido')
+
+	<template v-if="menu==0">
+		<chart></chart>
+	</template>
 	<template v-if="menu==1">
 		<usuario></usuario>
 	</template>	
@@ -38,12 +42,12 @@
 	<template v-if="menu==11">
 		<pago_comercio></pago_comercio>
 	</template>
-	<!--<template v-if="menu==12">
+	<template v-if="menu==12">
 		<pago_inmueble></pago_inmueble>
-	</template>
-	<template v-if="menu==10">
+	</template> 
+	<template v-if="menu==13">
 		<pago_vehiculo></pago_vehiculo>
-	</template> -->
+	</template>
 
 	<template v-if="menu==14">
 		<periodo></periodo>
@@ -54,4 +58,13 @@
 	<template v-if="menu==16">
 		<regimen></regimen>
 	</template>	
+
+	<!-- Reportes -->
+	<template v-if="menu==17">
+		<reporte_usuarios></reporte_usuarios>
+	</template>
+	<template v-if="menu==18">
+		<bitacora></bitacora>
+	</template>
+
 @endsection

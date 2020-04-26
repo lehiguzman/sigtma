@@ -56,7 +56,7 @@ class PeriodoController extends Controller
 
         $periodo = Periodo::findOrFail($request->id);        
         $periodo->periodo = $request->periodo;        
-        $periodo->codigo = $request->unidad_tributaria;             
+        $periodo->unidad_tributaria = $request->unidad_tributaria;             
         $periodo->save();
     }
 

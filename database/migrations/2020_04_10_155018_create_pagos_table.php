@@ -19,8 +19,9 @@ class CreatePagosTable extends Migration
             $table->string('referencia');            
             $table->string('banco')->nullable();
             $table->date('fecha_pago'); 
-            $table->float('monto'); 
+            $table->float('monto', 12, 2); 
             $table->string('tipo_contribuyente'); 
+            $table->unsignedInteger('user_id');
             $table->timestamps();
         });
     }

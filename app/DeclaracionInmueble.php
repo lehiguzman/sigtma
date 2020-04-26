@@ -13,6 +13,6 @@ class DeclaracionInmueble extends Model
      * @var array
      */
     protected $fillable = [
-        'idinmueble', 'idperiodo', 'idzona', 'tipo_vivienda', 'idregimen', 'area_terreno', 'area_construccion', 'valor_total', 'monto_impuesto'
+        'idinmueble', 'idperiodo', 'idzona', 'tipo_vivienda', 'idregimen', 'area_terreno', 'area_construccion', 'tipo_declaracion', 'valor_total', 'monto_impuesto'
     ];
 }

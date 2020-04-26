@@ -14,6 +14,6 @@ class Regimen extends Model
      * @var array
      */
     protected $fillable = [
-        'regimen', 'alicuota', 'valor_fiscal'
+        'regimen', 'alicuota'
     ];
 }

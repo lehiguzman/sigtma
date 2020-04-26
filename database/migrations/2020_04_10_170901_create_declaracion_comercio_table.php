@@ -25,6 +25,7 @@ class CreateDeclaracionComercioTable extends Migration
             $table->float('monto_declaracion');
             $table->float('monto_impuesto');
             $table->string('estado');
+            $table->unsignedInteger('idpago')->nullable();
             $table->timestamps();
         });
     }

@@ -1,57 +1,148 @@
-<div class="sidebar">
-    <nav class="sidebar-nav" style="background-color: #9FD5E4;">
-        <ul class="nav">
-            <li @click="menu=0" class="nav-item">
-                <a class="nav-link active" href="#"><i class="icon-speedometer"></i><font color="#372FB4"> Dashboard</font></a>
-            </li>
-            <li class="nav-title">
-                <font color="#372FB4">Menú</font>
-            </li>           
-
-            <li @click="menu=6" class="nav-item">
-                <a class="nav-link" href="#"><i class="fa fa-building"></i><font color="#372FB4">Empleados</font></a>
-            </li>
-
-            <li @click="menu=5" class="nav-item">
-                <a class="nav-link" href="#"><i class="fa fa-briefcase"></i><font color="#372FB4">Cargos</font></a>
-            </li> 
-
-            <li @click="menu=8" class="nav-item">
-                <a class="nav-link" href="#"><i class="fa fa-bullseye"></i><font color="#372FB4">Objetivos</a>
-            </li> 
-
-            <li @click="menu=9" class="nav-item">
-                <a class="nav-link" href="#"><i class="fa fa-book"></i><font color="#372FB4">Cursos</font></a>
-            </li> 
-
-            <li @click="menu=7" class="nav-item">
-                <a class="nav-link" href="#"><i class="fa fa-times-circle"></i><font color="#372FB4">Ausencias</font></a>
-            </li>            
-
-            <li @click="menu=10" class="nav-item">
-                <a class="nav-link" href="#"><i class="fa fa-list-ol"></i><font color="#372FB4">Cuestionarios</font></a>
-            </li> 
-
-            <li @click="menu=12" class="nav-item">
-                <a class="nav-link" href="#"><i class="fa fa-user"></i><font color="#372FB4">Tipo nominas</font></a>
-            </li>
-
-            <li @click="menu=13" class="nav-item">
-                <a class="nav-link" href="#"><i class="fa fa-user"></i><font color="#372FB4">Nominas</font></a>
-            </li> 
-
-            <li @click="menu=14" class="nav-item">
-                <a class="nav-link" href="#"><i class="fa fa-table"></i><font color="#372FB4">Encuesta</font></a>
-            </li> 
-
-            <li @click="menu=15" class="nav-item">
-                <a class="nav-link" href="#"><i class="fa fa-user"></i><font color="#372FB4">Evaluar encuesta</font></a>
-            </li> 
-
-            <li @click="menu=11" class="nav-item">
-                <a class="nav-link" href="#"><i class="fa fa-user"></i><font color="#372FB4">Usuarios</font></a>
-            </li>            
-        </ul>
-    </nav>
-    <button class="sidebar-minimizer brand-minimizer" type="button"></button>
+<div class="menu" id="sidebar-wrapper">
+  <div class="mb-5">
+    <img src="{{ asset('/img/samat.png') }}" class="logo-menu" >
+  </div>
+  <div class="list-group">
+    <div href="#" class="mb-4 ml-5 border-0">
+        <h6>MENU</h6>
+    </div> 
+    <div>
+      <a href="#" @click="menu=1" class="list-group-item list-group-item-action border-0 link-menu">          
+          <i class="fa fa-user-circle fa-lg mx-3 vertical"></i>                    
+          <span class="vertical">Usuarios</span>                    
+      </a>
+    </div>    
+    <div>
+      <a href="#" class="list-group-item list-group-item-action border-0 link-menu">
+          <!-- <i class="fa fa-user fa-lg mx-3 my-2"></i> -->
+            <i class="fa fa-address-book fa-lg mx-3 vertical"></i> 
+              <span class="vertical">Actividad Ecónomica</span>
+            <i class="fa fa-chevron-right fa-md mx-1 vertical"></i>    
+      </a>
+      <ul>
+        <li>
+          <a href="#" @click="menu=2" class="list-group-item list-group-item-action border-0 link-menu">          
+            <i class="fa fa-building fa-lg mx-3 vertical"></i> <span class="vertical">Tipo</span>            
+          </a>
+        </li>
+        <li>
+          <a href="#" @click="menu=5" class="list-group-item list-group-item-action border-0 link-menu">          
+            <i class="fa fa-building fa-lg mx-3 vertical"></i> <span class="vertical">Contribuyente</span>            
+          </a>
+        </li>
+         <li>
+          <a href="#" @click="menu=8" class="list-group-item list-group-item-action border-0 link-menu">          
+            <i class="fa fa-building fa-lg mx-3 vertical"></i> <span class="vertical">Declaración</span>            
+          </a>
+        </li>
+        <li>
+          <a href="#" @click="menu=11" class="list-group-item list-group-item-action border-0 link-menu">          
+            <i class="fa fa-building fa-lg mx-3 vertical"></i> <span class="vertical">Registrar Pago</span>            
+          </a>
+        </li>                
+      </ul>       
+    </div>
+    <div>
+      <a href="#" class="list-group-item list-group-item-action border-0 link-menu">
+          <!-- <i class="fa fa-user fa-lg mx-3 my-2"></i> -->
+            <i class="fa fa-address-card fa-lg mx-3 vertical"></i> 
+              <span class="vertical">Inmueble</span>
+            <i class="fa fa-chevron-right fa-md mx-1 vertical"></i>    
+      </a>
+      <ul>  
+        <li>
+          <a href="#" @click="menu=3" class="list-group-item list-group-item-action border-0 link-menu">          
+            <i class="bx bx-home bx-sm mx-3 vertical"></i> <span class="vertical">Tipo</span>            
+          </a>
+        </li>      
+        <li>
+          <a href="#" @click="menu=6" class="list-group-item list-group-item-action border-0 link-menu">          
+            <i class="fa fa-home mx-3 fa-lg vertical"></i> <span class="vertical">Contribuyente</span>            
+          </a>
+        </li>
+        <li>
+          <a href="#" @click="menu=9" class="list-group-item list-group-item-action border-0 link-menu">          
+            <i class="fa fa-home mx-3 fa-lg vertical"></i> <span class="vertical">Declaracion</span>            
+          </a>
+        </li>
+         <li>
+          <a href="#" @click="menu=12" class="list-group-item list-group-item-action border-0 link-menu">          
+            <i class="fa fa-home mx-3 fa-lg vertical"></i> <span class="vertical">Registrar Pago</span>            
+          </a>
+        </li>             
+      </ul>       
+    </div>
+    <div>
+      <a href="#" class="list-group-item list-group-item-action border-0 link-menu">          
+            <i class="fa fa-paypal fa-lg mx-3 vertical"></i> 
+            <span class="vertical">Vehiculo</span>
+            <i class="fa fa-chevron-right fa-md mx-1 vertical"></i>           
+      </a>
+      <ul>
+        <li>
+          <a href="#" @click="menu=4" class="list-group-item list-group-item-action border-0 link-menu">          
+            <i class="fa fa-car mx-3 fa-lg vertical"></i> <span class="vertical">Tipo</span>            
+          </a>
+        </li>
+        <li>
+          <a href="#" @click="menu=7" class="list-group-item list-group-item-action border-0 link-menu">          
+            <i class="fa fa-car mx-3 fa-lg vertical"></i> <span class="vertical">Contribuyente</span>            
+          </a>
+        </li>        
+        <li>
+          <a href="#" @click="menu=10" class="list-group-item list-group-item-action border-0 link-menu">          
+            <i class="fa fa-car mx-3 fa-lg vertical"></i> <span class="vertical">Declaración</span>            
+          </a>
+        </li> 
+         <li>
+          <a href="#" @click="menu=13" class="list-group-item list-group-item-action border-0 link-menu">          
+            <i class="fa fa-car mx-3 fa-lg vertical"></i> <span class="vertical">Registrar Pago</span>  
+          </a>
+        </li>        
+      </ul> 
+    </div>    
+    <div>
+      <a href="#" class="list-group-item list-group-item-action border-0 link-menu">          
+        <i class="fa fa-paypal fa-lg mx-3 vertical"></i> 
+          <span class="vertical">Configuraciones</span>
+        <i class="fa fa-chevron-right fa-md mx-1 vertical"></i>           
+      </a>
+      <ul>
+        <li>
+          <a href="#" @click="menu=14" class="list-group-item list-group-item-action border-0 link-menu">          
+            <i class="fa fa-building fa-lg mx-3 vertical"></i> <span class="vertical">Periodo</span> 
+          </a>
+        </li>
+        <li>
+          <a href="#" @click="menu=15" class="list-group-item list-group-item-action border-0 link-menu">          
+            <i class="fa fa-building fa-lg mx-3 vertical"></i> <span class="vertical">Zonas</span> 
+          </a>
+        </li>
+        <li>
+          <a href="#" @click="menu=16" class="list-group-item list-group-item-action border-0 link-menu">          
+            <i class="fa fa-building fa-lg mx-3 vertical"></i> <span class="vertical">Régimen inmuebles</span> 
+          </a>
+        </li>          
+      </ul> 
+    </div>
+    <div>
+      <a href="#" class="list-group-item list-group-item-action border-0 link-menu">          
+        <i class="fa fa-paypal fa-lg mx-3 vertical"></i> 
+          <span class="vertical">Reportes</span>
+        <i class="fa fa-chevron-right fa-md mx-1 vertical"></i>           
+      </a>
+      <ul>
+        <li>
+          <a href="#" @click="menu=17" class="list-group-item list-group-item-action border-0 link-menu">          
+            <i class="fa fa-building fa-lg mx-3 vertical"></i> <span class="vertical">Pagos por usuario</span> 
+          </a>
+        </li>                      
+      </ul> 
+    </div>  
+    
+    <!-- <a href="#" class="list-group-item list-group-item-action bg-blue border-0">Events</a>
+    <a href="#" class="list-group-item list-group-item-action bg-blue border-0">Profile</a>
+    <a href="#" class="list-group-item list-group-item-action bg-blue border-0">Status</a>
+    <a href="#" class="list-group-item list-group-item-action bg-blue border-0">close</a> -->
+  </div>  
 </div>

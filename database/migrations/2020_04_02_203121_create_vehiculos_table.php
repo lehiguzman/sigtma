@@ -23,7 +23,7 @@ class CreateVehiculosTable extends Migration
             $table->string('serial')->nullable();            
             $table->integer('rif');
             $table->string('direccion')->nullable();
-            $table->integer('telefono')->nullable();
+            $table->string('telefono')->nullable();
             $table->timestamps();
         });
     }

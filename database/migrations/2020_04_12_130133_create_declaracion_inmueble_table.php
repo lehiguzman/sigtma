@@ -24,11 +24,13 @@ class CreateDeclaracionInmuebleTable extends Migration
             $table->string('tipo_vivienda');
             $table->unsignedInteger('idregimen');
             $table->foreign('idregimen')->references('id')->on('regimen');
-            $table->float('area_terreno');
-            $table->float('area_construccion');
-            $table->float('valor_total');
-            $table->float('monto_impuesto');
+            $table->float('area_terreno', 12, 2);
+            $table->float('area_construccion', 12,2);
+            $table->integer('tipo_declaracion');
+            $table->float('valor_total', 12, 2);
+            $table->float('monto_impuesto', 12, 2);
             $table->string('estado');
+            $table->unsignedInteger('idpago')->nullable();
             $table->timestamps();
         });
     }

@@ -4,7 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Pago extends Model
+class Bitacora extends Model
 {
     /**
      * The attributes that are mass assignable.
@@ -12,6 +12,6 @@ class Pago extends Model
      * @var array
      */
     protected $fillable = [
-        'tipo_pago', 'referencia', 'banco', 'fecha_pago', 'tipo_contribuyente', 'user_id'
+        'accion', 'iduser',
     ];
 }

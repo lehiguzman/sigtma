@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Inmueble;
+use App\Bitacora;
+use Auth;
 
 class InmuebleController extends Controller
 {
@@ -51,7 +53,14 @@ class InmuebleController extends Controller
         $inmueble->rif = $request->rif;
         $inmueble->telefono = $request->telefono;
         $inmueble->direccion = $request->direccion;
-        $inmueble->save();        
+        $inmueble->save();   
+
+        $iduser = Auth::user()->id;
+        $accion = 'Agrega Nuevo Contribuyente';
+                Bitacora::create([
+                    'accion' => $accion,
+                    'iduser' => $iduser,            
+                ]);     
     } 
 
      /**
@@ -79,7 +88,14 @@ class InmuebleController extends Controller
         $inmueble->rif = $request->rif;
         $inmueble->telefono = $request->telefono;
         $inmueble->direccion = $request->direccion;
-        $inmueble->save();    
+        $inmueble->save();   
+
+        $iduser = Auth::user()->id;
+            $accion = 'Actualiza Contribuyente: '. $request->denominacion;
+                Bitacora::create([
+                    'accion' => $accion,
+                    'iduser' => $iduser,            
+                ]);   
     }
 
     /**
@@ -93,6 +109,12 @@ class InmuebleController extends Controller
         if(!$request->ajax()) return redirect('/');              
 
         $inmueble = Inmueble::findOrFail($id);   
+
+        $accion = 'Elimina Contribuyente: '. $inmueble->denominacion;
+                Bitacora::create([
+                    'accion' => $accion,
+                    'iduser' => $iduser,            
+                ]);  
         $inmueble->delete();
     }
 }

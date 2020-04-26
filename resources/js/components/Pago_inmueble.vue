@@ -5,7 +5,7 @@
                 <div class="row">
                     <div class="col-12">
                         <h3 class="float-left pr-1">
-                            <b>Pago Contribuyente -> Actividad económica</b>
+                            <b>Pago Contribuyente -> Inmueble</b>
                         </h3>
                     </div>
                 </div>
@@ -23,23 +23,26 @@
                 <div>
                     <table class="table table-hover table-striped table-bordered my-5" id="dataTable" width="100%" cellspacing="0">
                         <thead>
-                            <tr class="text-center">
-                                <th width="10%">Codigo</th>                                                                
-                                <th width="30%">Denominación</th>  
-                                <th width="30%">Tipo de declaración</th>                          
-                                <th width="20%">Rif</th>
-                                <th width="20%">Dirección</th>
-                                <th class="text-center" width="20%">Registrar Pago</th>                                  
+                            <tr class="text-center">                                
+                                <th width="20%">Propietario</th>
+                                <th width="10%">Cédula</th>
+                                <th width="10%">Código Catastral</th>
+                                <th width="25%">Dirección</th>
+                                <th width="10%">Area Construcción</th>
+                                <th width="10%">Area Terreno</th>
+                                <th width="10%">Monto impuesto</th>                                
+                                <th class="text-center" width="15%">Registrar Pago</th>                                  
                             </tr>
                         </thead>
                         <tbody>
-                            <tr class="text-center" v-for="declaracion in declaraciones">
-                                <td>{{ declaracion.id }}</td>
-                                <td>{{ declaracion.denominacion }}</td>                               
-                                <td v-if="declaracion.tipo_declaracion == 1">Estimada</td>                                
-                                <td v-if="declaracion.tipo_declaracion == 2">Definitiva</td>                                
+                            <tr  class="text-center" v-for="declaracion in declaraciones">                                
+                                <td>{{ declaracion.denominacion }}</td>
                                 <td>{{ declaracion.rif }}</td>
+                                <td>{{ declaracion.codigo_catastral }}</td>
                                 <td>{{ declaracion.direccion }}</td>                                
+                                <td>{{ declaracion.area_construccion }}</td>
+                                <td>{{ declaracion.area_terreno }}</td>
+                                <td>{{ declaracion.monto_impuesto }}</td>
                                 <td class="text-center">
                                     <i class='bx bxs-coin-stack bx-md text-success btn-editar' title="Registrar Pago" @click="verDetalle(declaracion)"></i>
                                 </td>
@@ -60,50 +63,50 @@
                         <div class="form-row">                           
                             <div class="col-md-3 my-0">
                                 <label class="col-form-label-lg">
-                                    Nombre o Denominación :
+                                    Nombre Propietario :
                                 </label>                                 
                             </div>                                
 
                             <div class="col-md-5 form-group my-0">
                                <label class="col-form-label-lg">
-                                    {{ comercio.denominacion }}
+                                    {{ declaracion.denominacion }}
                                 </label>                                  
                             </div>
 
                             <div class="col-md-2 form-group my-0">
                                <label class="col-form-label-lg">
-                                    Rif :
+                                    Cédula :
                                 </label>                                  
                             </div>
 
                             <div class="col-md-2 form-group my-0">
                                <label class="col-form-label-lg">
-                                    {{ comercio.rif }}
+                                    {{ declaracion.rif }}
                                 </label>                                  
                             </div>
                         </div>                        
                         <div class="form-row">                           
                             <div class="col-md-2 my-0">
                                 <label class="col-form-label-lg">
-                                    Periodo:
+                                    Código Catastral:
                                 </label>                                 
                             </div>                                
 
                             <div class="col-md-2 form-group my-0">
                                <label class="col-form-label-lg">
-                                    {{ declaracion.periodo }}
+                                    {{ declaracion.codigo_catastral }}
                                 </label>                                  
                             </div>
 
                              <div class="col-md-2 my-0">
                                 <label class="col-form-label-lg">
-                                    Monto Declarado
+                                    Monto impuesto
                                 </label>                                 
                             </div>                                
 
                             <div class="col-md-2 form-group my-0">
                                <label class="col-form-label-lg">
-                                    {{ declaracion.monto_declaracion }}
+                                    {{ declaracion.monto_impuesto }}
                                 </label>                                  
                             </div>
 
@@ -224,8 +227,7 @@
                 titulo: 'Agregar Nuevo Pago de contribuyente',
                 declaraciones: [],
                 declaracion: [],
-                comercio: [],
-                periodo: [],
+                comercio: [],                
                 //tipos: [],
                 boton: 'registro',                
                 tabla: '',
@@ -284,13 +286,12 @@
 
                 let me = this;
 
-                var url = '/declaracion_comercio';
+                var url = '/declaracion_inmueble';
 
                 axios.get(url).then(function (response) {
                 // handle success                                      
-                var respuesta = response.data;     
-                console.log("Respuesta : ", respuesta);
-                me.declaraciones = respuesta.declaraciones_comercio;                
+                var respuesta = response.data;                                    
+                me.declaraciones = respuesta.declaraciones_inmueble.data;                
                 if( me.declaraciones.length == 0 ) {
                     me.limpiarCampos();
                     me.tablaDeclaraciones();
@@ -361,8 +362,8 @@
                         'banco': me.banco,
                         'fecha_pago': me.fecha_pago,
                         'monto_pago': me.monto_pago,
-                        'tipo_contribuyente': "comercio",
-                        'idcomercio': me.declaracion.idcomercio
+                        'tipo_contribuyente': "inmueble",
+                        'idinmueble': me.declaracion.idinmueble
                     }).then(function (response) {                        
                         alerta.fire(
                             'Registro!',
@@ -383,14 +384,12 @@
                 
                 this.vista = "registro";
 
-                var url = '/declaracion/'+declaracion.id;
+                var url = '/impuesto_inmueble/'+declaracion.idinmueble;
 
                 axios.get(url).then(function (response) {                
                 // handle success                                      
-                var respuesta = response.data;                                    
-                console.log("Respuesta ss: ", respuesta);
-                me.declaracion = respuesta.declaracion;
-                me.comercio = respuesta.comercio;                
+                var respuesta = response.data;                
+                me.declaracion = respuesta;                
               })
               .catch(function (error) {
                 // handle error

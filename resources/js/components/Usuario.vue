@@ -25,8 +25,9 @@
                         <thead>
                             <tr class="text-center">
                                 <th width="5%">ID</th>
-                                <th width="20%">Nombre</th>
-                                <th width="20%">Usuario</th>
+                                <th width="10%">Sede</th>
+                                <th width="15%">Nombre</th>
+                                <th width="15%">Usuario</th>
                                 <th width="30%">Correo Electrónico</th>
                                 <th width="15%">Estatus</th>
                                 <th class="text-center" width="10%">Acción</th>                                  
@@ -35,6 +36,7 @@
                         <tbody>
                             <tr  class="text-center" v-for="usuario in usuarios">
                                 <td>{{ usuario.id }}</td>
+                                <td>{{ usuario.sede }}</td>
                                 <td>{{ usuario.name }}</td>
                                 <td>{{ usuario.username }}</td>
                                 <td>{{ usuario.email }}</td>                                
@@ -61,7 +63,36 @@
                     <h4 class="card-text">{{ titulo }}</h4>
                 </div>
                 <div class="card-body mt-5">
-                    <form class="needs-validation" novalidate>                       
+                    <form class="needs-validation" novalidate>      
+
+                        <div class="form-row">
+                            <div class="col-md-2"></div>
+                                                         
+                                <label class="col-md-2 col-form-label-lg">
+                                    Sede
+                                </label>                                
+
+                            <div class="col-md-4 form-group">
+                                <div class="position-relative has-icon-left">
+                                    <select class="form-control" v-model="sede" value="sede" required>
+                                       <option value="" selected="selected">Seleccione Sede</option>
+                                       <option value="Sede 1" selected="selected">Sede 1</option>
+                                       <option value="Sede 2" selected="selected">Sede 2</option>
+                                       <option value="Sede 3" selected="selected">Sede 3</option>
+                                       <option value="Sede 4" selected="selected">Sede 4</option>
+                                    </select>                                    
+                                    <div class="valid-feedback">
+                                      <i>¡Correcto!</i>
+                                    </div>
+                                    <div class="invalid-feedback">
+                                      ¡Seleccione una Sede!
+                                    </div>
+                                    <div class="form-control-position">
+                                        <i class='bx bx-building bx-sm' ></i>
+                                    </div>                                    
+                                </div>                                    
+                            </div>
+                        </div>                 
                             
                         <div class="form-row">
                             <div class="col-md-2"></div>
@@ -254,6 +285,7 @@
                 password: '',  
                 rol: '',
                 status: 0,
+                sede: '',
             }            
         },
 
@@ -386,6 +418,7 @@
                         'name': me.name,
                         'username': me.username,
                         'email': me.email,
+                        'sede': me.sede,
                         'password':me.password,
                         'status':me.status,
                         'rol': me.rol
@@ -420,6 +453,7 @@
                     me.name = usuario.name;
                     me.email = usuario.email;
                     me.username = usuario.username;
+                    me.sede = usuario.sede,
                     me.status = usuario.status;
                     me.rol = rol.id;
                     me.titulo = 'Editar Usuario';
@@ -454,6 +488,7 @@
                         'name': me.name,
                         'username': me.username,
                         'email': me.email,
+                        'sede': me.sede,
                         'password':me.password,
                         'status':me.status,
                         'rol': me.rol
@@ -527,6 +562,7 @@
                 this.email= '';
                 this.username = '';
                 this.password = '';
+                this.sede = '';
                 this.status = 0;
                 this.rol = '';
                 this.boton = 'registro';

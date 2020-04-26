@@ -12,13 +12,26 @@ div.card-custom
 
 div.card-img {	
 	position: fixed;
-	top: 5%;
-	left: 40%;
+	top: 25%;
+	left: 10%;
 	width: 20%;			
 	background: rgba(250, 245, 237, 0.5);
 }
 
+div.card-img-2 {	
+	position: fixed;
+	top: 25%;
+	left: 70%;
+	width: 20%;	
+	background: rgba(250, 245, 237, 0.5);
+}
+
 img.img-style {
+	width: 100%;
+  	height: auto;
+}
+
+img.img-style-2 {
 	width: 100%;
   	height: auto;
 }
@@ -32,7 +45,9 @@ img.img-style {
 }
 
 .logo-menu {	
-	height: 9em;
+	height: 12em;
+	padding-left: 1em;
+	padding-right: 1em;
 	width: 20em;
 	z-index: 999 !important;
 }

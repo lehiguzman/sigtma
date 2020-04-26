@@ -17,7 +17,6 @@ Route::get('/', function () {
 
 Auth::routes();
 
-
 //Vista que se llama al hacer login contenido/contenido.blade.php, esta vista extiende al home
 Route::get('/main', function () {
     return view('contenido/contenido');
@@ -103,15 +102,24 @@ Route::get('/declaracion_inmueble', 'DeclaracionInmuebleController@index');
 Route::post('/declaracion_inmueble/registrar', 'DeclaracionInmuebleController@store');
 Route::delete('/declaracion_inmueble/eliminar/{id}', 'DeclaracionInmuebleController@destroy');
 Route::get('/declaracion_inmueble/{id}', 'DeclaracionInmuebleController@selectDeclaracion');
+Route::get('/impuesto_inmueble/{id}', 'DeclaracionInmuebleController@selectDeclaracionInmueble');
 
 //declaraciones Vehiculos
 Route::get('/declaracion_vehiculo', 'DeclaracionVehiculoController@index');
 Route::post('/declaracion_vehiculo/registrar', 'DeclaracionVehiculoController@store');
 Route::delete('/declaracion_vehiculo/eliminar/{id}', 'DeclaracionVehiculoController@destroy');
 Route::get('/declaracion_vehiculo/{id}', 'DeclaracionVehiculoController@selectDeclaracion');
+Route::get('/impuesto_vehiculo/{id}', 'DeclaracionVehiculoController@selectDeclaracionVehiculo');
 
 //pagos
 Route::get('/pago', 'PagoController@index');
 Route::post('/pago/registrar', 'PagoController@store');
 Route::delete('/pago/eliminar/{id}', 'PagoController@destroy');
+
+//Reportes
+Route::get('/reportePagos', 'PagoController@reportePagos');
+Route::get('/bitacora', 'PagoController@bitacora');
+Route::get('/edoCtaComercio', 'DeclaracionComercioController@edoCtaComercio');
+Route::get('/edoCtaInmueble', 'DeclaracionInmuebleController@edoCtaInmueble');
+Route::get('/edoCtaVehiculo', 'DeclaracionVehiculoController@edoCtaVehiculo');
 

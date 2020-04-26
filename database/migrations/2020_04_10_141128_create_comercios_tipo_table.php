@@ -16,7 +16,7 @@ class CreateComerciosTipoTable extends Migration
         Schema::create('comercios_tipo', function (Blueprint $table) {
             $table->increments('id');
             $table->unsignedInteger('idcomercio');
-            $table->foreign('idcomercio')->references('id')->on('comercios');
+            $table->foreign('idcomercio')->references('id')->on('comercios')->onDelete('cascade');
             $table->unsignedInteger('idtipo');
             $table->foreign('idtipo')->references('id')->on('tipo_contribuyente_comercio');
             $table->timestamps();

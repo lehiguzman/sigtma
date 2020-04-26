@@ -25,18 +25,16 @@
                         <thead>
                             <tr class="text-center">
                                 <th width="5%">ID</th>
-                                <th width="30%">Régimen</th>
-                                <th width="25%">Alicuota</th>
-                                <th width="30%">Valor Fiscal</th>                                
-                                <th class="text-center" width="10%">Acción</th>                                  
+                                <th width="40%">Régimen</th>
+                                <th width="40%">Alicuota</th>                                
+                                <th class="text-center" width="15%">Acción</th>                                  
                             </tr>
                         </thead>
                         <tbody>
                             <tr  class="text-center" v-for="regimen in regimenes">
                                 <td>{{ regimen.id }}</td>
                                 <td>{{ regimen.regimen }}</td>
-                                <td>{{ regimen.alicuota }}</td>
-                                <td>{{ regimen.valor_fiscal }}</td>                                
+                                <td>{{ regimen.alicuota }}</td>                                                              
                                 <td class="text-center">
                                     <i class='bx bxs-edit bx-sm mr-4 text-success btn-editar' title="Editar" @click="editarRegistro(regimen)"></i>
                                     <i class='bx bxs-trash bx-sm text-danger btn-eliminar' title="Eliminar" @click="eliminarRegistro(regimen)"></i>
@@ -101,31 +99,7 @@
                                                                                                           
                                 </div>                                    
                             </div>
-                        </div>
-
-                        <div class="form-row">
-                            <div class="col-md-1"></div>
-
-                                <label for="valor_fiscal" class="col-md-3 col-form-label-lg">
-                                    Valor Fiscal
-                                </label>                                
-
-                            <div class="col-md-4 form-group">
-                                <div class="position-relative has-icon-left">
-                                    <input type="text" name="valor_fiscal" v-model="valor_fiscal" class="form-control" placeholder="Valor Fiscal" required>
-                                    <div class="form-control-position">
-                                        <i class='bx bx-code bx-sm'></i>
-                                    </div>
-                                    <div class="valid-feedback">
-                                      <i>¡Correcto!</i>
-                                    </div>
-                                    <div class="invalid-feedback">
-                                      ¡Introduzca Valor Fiscal!
-                                    </div>
-                                                                                                          
-                                </div>                                    
-                            </div>
-                        </div>                        
+                        </div>                                             
 
                         <div class="form-row mt-5">
                             <div class="col-md-1"></div>
@@ -178,8 +152,7 @@
                 //Vista de registro de contribuyente de actividad económica
                 id: 0,
                 regimen: '',
-                alicuota: '',
-                valor_fiscal: '',                
+                alicuota: ''                
             }            
         },
 
@@ -283,8 +256,7 @@
                 
                 axios.post('/regimen/registrar', {                                                
                         'regimen': me.regimen,
-                        'alicuota': me.alicuota,
-                        'valor_fiscal': me.valor_fiscal,                        
+                        'alicuota': me.alicuota,                        
                     }).then(function (response) {                        
                         alerta.fire(
                             'Registro!',
@@ -312,8 +284,7 @@
                     var regimen = respuesta.regimenes;                    
                                                 
                     me.regimen = regimen.regimen;
-                    me.alicuota = regimen.alicuota;
-                    me.valor_fiscal = regimen.valor_fiscal;                    
+                    me.alicuota = regimen.alicuota;                    
                     me.titulo = 'Editar Régimen de Inmueble';
                     me.boton = "edicion";
 
@@ -344,8 +315,7 @@
                 axios.put('/regimen/actualizar', {
                         'id': me.id,                      
                         'regimen': me.regimen,
-                        'alicuota': me.alicuota,
-                        'valor_fiscal': me.valor_fiscal                        
+                        'alicuota': me.alicuota,                        
                     }).then(function (response) {                        
                         alerta.fire(
                             'Actualizado!',
@@ -411,8 +381,7 @@
                 this.regimenes = [];
                 this.id = 0;
                 this.regimen = 0;
-                this.alicuota = '';
-                this.valor_fiscal = '';                
+                this.alicuota = '';                
                 this.boton = 'registro';
                 this.titulo = 'Agregar Nuevo Régimen';
             },

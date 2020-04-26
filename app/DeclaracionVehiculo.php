@@ -15,6 +15,6 @@ class DeclaracionVehiculo extends Model
      * @var array
      */
     protected $fillable = [
-        'idvehiculo', 'idperiodo', 'monto_impuesto'
+        'idvehiculo', 'idperiodo', 'tipo_declaracion', 'monto_impuesto'
     ];
 }

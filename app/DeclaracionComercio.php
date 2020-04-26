@@ -14,6 +14,6 @@ class DeclaracionComercio extends Model
      * @var array
      */
     protected $fillable = [
-        'idcomercio', 'idperiodo', 'idtipo', 'tipo_declaracion', 'monto'
+        'idcomercio', 'idperiodo', 'idtipo', 'tipo_declaracion', 'monto_declaracion', 'monto_impuesto', 'idpago'
     ];
 }

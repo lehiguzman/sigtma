@@ -124,7 +124,15 @@
 
                     <div class="border-top my-3"></div>
 
-                    <form class="needs-validation" novalidate>                             
+                    <form v-if="estado_declaracion == 'deuda'">  
+                        <div class="form-row col-md-12 text-center">
+                            <label class="text-info text-center">
+                                <h4>Contribuyente cuenta con deuda de Año {{ anio }}, debe ser cancelada.</h4>
+                            </label>
+                        </div>
+                    </form>
+
+                    <form class="needs-validation" novalidate v-else> 
                        <div class="form-row">
                             <div class="col-md-2"></div>
 
@@ -287,7 +295,8 @@
                 unidad_tributaria: 0,
                 monto: 0,                
                 total: 0,
-                total_minimos: 0     
+                total_minimos: 0,
+                mensaje_deuda: false,    
             }            
         },
 
@@ -416,7 +425,8 @@
                         'idperiodo': me.periodo.id, 
                         'tipo_declaracion': me.tipoDeclaracion,
                         'codigos': me.codigos
-                    }).then(function (response) {                        
+                    }).then(function (response) {          
+                        console.log("response : ", response);
                         alerta.fire(
                             'Registro!',
                             'Registro exitoso.',
@@ -453,6 +463,9 @@
 
                 if( me.estado_declaracion == 'estimada' ) {                    
                     me.ultimoDeclarado = respuesta.ultimaDeclaracion;
+                }
+                if( me.estado_declaracion == 'deuda' ) {
+                    me.mensaje_deuda = true;
                 }
 
                 me.listarCodigos( comercio );                

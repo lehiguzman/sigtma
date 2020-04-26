@@ -39,8 +39,7 @@ class RegimenController extends Controller
         $regimen = new Regimen();       
         
         $regimen->regimen = $request->regimen;                
-        $regimen->alicuota = $request->alicuota;                
-        $regimen->valor_fiscal = $request->valor_fiscal;
+        $regimen->alicuota = $request->alicuota;        
         $regimen->save();        
     } 
 
@@ -57,8 +56,7 @@ class RegimenController extends Controller
 
         $regimen = Regimen::findOrFail($request->id);        
        	$regimen->regimen = $request->regimen;                
-        $regimen->alicuota = $request->alicuota;                
-        $regimen->valor_fiscal = $request->valor_fiscal;
+        $regimen->alicuota = $request->alicuota;        
         $regimen->save();
     }
 

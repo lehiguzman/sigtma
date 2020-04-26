@@ -105,7 +105,7 @@
 
                     <div class="border-top my-3"></div>
 
-                    <div class="font-weight-bold text-center bg-light">Registro de detalle a pagar</div>
+                    <div class="font-weight-bold text-center bg-light">Detalle de impuesto a pagar</div>
 
                     <div class="border-top my-3"></div>
 

@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateRegimenTable extends Migration
+class CreateBitacorasTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,10 +13,11 @@ class CreateRegimenTable extends Migration
      */
     public function up()
     {
-        Schema::create('regimen', function (Blueprint $table) {
+        Schema::create('bitacoras', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('regimen');
-            $table->float('alicuota');            
+            $table->string('accion');
+            $table->unsignedInteger('iduser');
+            $table->foreign('iduser')->references('id')->on('users');
             $table->timestamps();
         });
     }
@@ -28,6 +29,6 @@ class CreateRegimenTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('regimen');
+        Schema::dropIfExists('bitacoras');
     }
 }
