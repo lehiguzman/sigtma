@@ -2518,6 +2518,13 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
@@ -2528,6 +2535,8 @@ __webpack_require__.r(__webpack_exports__);
       comercios: [],
       boton: 'registro',
       tabla: '',
+      comercioImp: [],
+      registrado: false,
       //Datos de vista de detalle de comercio
       comercio: [],
       periodo: '',
@@ -2546,6 +2555,13 @@ __webpack_require__.r(__webpack_exports__);
   //Aqui se inyectan los componentes importados
   components: {
     datatable: datatables__WEBPACK_IMPORTED_MODULE_0___default.a
+  },
+  filters: {
+    numero: function numero(value) {
+      if (value) {
+        console.log("Valor : ", value);
+      }
+    }
   },
   computed: {
     calcularTotal: function calcularTotal() {
@@ -2579,7 +2595,8 @@ __webpack_require__.r(__webpack_exports__);
       var me = this;
       var url = '/comercio';
       axios.get(url).then(function (response) {
-        // handle success                     
+        // handle success
+        console.log("Response : ", response);
         var respuesta = response.data;
         me.comercios = respuesta.comercios.data;
         me.tablaComercios();
@@ -2649,8 +2666,7 @@ __webpack_require__.r(__webpack_exports__);
       }).then(function (response) {
         console.log("response : ", response);
         alerta.fire('Registro!', 'Registro exitoso.', 'success');
-        me.limpiarCampos();
-        me.cambiarVista("listado");
+        me.registrado = true, me.limpiarCampos(); //me.cambiarVista( "listado" );                        
       })["catch"](function (error) {
         // handle error
         console.log(error);
@@ -2685,6 +2701,10 @@ __webpack_require__.r(__webpack_exports__);
       })["finally"](function () {// always executed
       });
     },
+    imprimirEdoCta: function imprimirEdoCta(comercio) {
+      console.log("Comerio : ", comercio.id);
+      window.open('http://127.0.0.1:8000/edoCtaComercio?idcomercio=' + comercio.id, '_blank');
+    },
     listarCodigos: function listarCodigos(comercio) {
       var me = this;
       var url = '/tipos_comercio/' + comercio.id;
@@ -2712,16 +2732,17 @@ __webpack_require__.r(__webpack_exports__);
       this.cambiarVista("listado");
     },
     limpiarCampos: function limpiarCampos() {
-      this.comercios = [];
-      this.comercio = [];
+      this.comercios = []; //this.comercio = [];
+
+      this.codigos = [];
       this.unidad_tributaria = 0, this.monto = 0, this.total = 0, this.total_minimos = 0;
       this.boton = 'registro';
       this.titulo = 'Agregar declaracion';
     }
   },
   mounted: function mounted() {
-    this.listarComercios();
     console.clear();
+    this.listarComercios();
   }
 });
 
@@ -2738,6 +2759,7 @@ __webpack_require__.r(__webpack_exports__);
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var datatables__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! datatables */ "./node_modules/datatables/media/js/jquery.dataTables.js");
 /* harmony import */ var datatables__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(datatables__WEBPACK_IMPORTED_MODULE_0__);
+//
 //
 //
 //
@@ -3222,23 +3244,9 @@ __webpack_require__.r(__webpack_exports__);
       })["finally"](function () {// always executed
       });
     },
-    listarCodigos: function listarCodigos(comercio) {
-      /*  let me=this;
-         var url = '/tipos_comercio/'+comercio.id;
-         axios.get(url).then(function (response) {
-        // handle success                
-        
-        var respuesta = response;                  
-        me.codigos = respuesta.data;                
-        me.minimosTributables();
-      })
-      .catch(function (error) {
-        // handle error
-        console.log(error);
-      })
-      .finally(function () {
-        // always executed
-      });*/
+    imprimirEdoCta: function imprimirEdoCta(inmueble) {
+      console.log("Inmueble : ", inmueble.id);
+      window.open('http://127.0.0.1:8000/edoCtaInmueble?idinmueble=' + inmueble.id, '_blank');
     },
     cancelarRegistro: function cancelarRegistro() {
       this.limpiarCampos();
@@ -3270,6 +3278,7 @@ __webpack_require__.r(__webpack_exports__);
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var datatables__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! datatables */ "./node_modules/datatables/media/js/jquery.dataTables.js");
 /* harmony import */ var datatables__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(datatables__WEBPACK_IMPORTED_MODULE_0__);
+//
 //
 //
 //
@@ -3584,6 +3593,9 @@ __webpack_require__.r(__webpack_exports__);
       })["finally"](function () {// always executed
       });
     },
+    imprimirEdoCta: function imprimirEdoCta(vehiculo) {
+      window.open('http://127.0.0.1:8000/edoCtaVehiculo?idvehiculo=' + vehiculo.id, '_blank');
+    },
     cancelarRegistro: function cancelarRegistro() {
       this.limpiarCampos();
       this.cambiarVista("listado");
@@ -3684,7 +3696,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var datatables__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! datatables */ "./node_modules/datatables/media/js/jquery.dataTables.js");
 /* harmony import */ var datatables__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(datatables__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var vuejs_datepicker__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! vuejs-datepicker */ "./node_modules/vuejs-datepicker/dist/vuejs-datepicker.esm.js");
-//
 //
 //
 //
@@ -4197,10 +4208,6 @@ __webpack_require__.r(__webpack_exports__);
         result.dismiss === Swal.DismissReason.cancel) {}
       });
     },
-    imprimirEdoCta: function imprimirEdoCta(comercio) {
-      console.log("Comerio : ", comercio.id);
-      window.open('http://127.0.0.1:8000/edoCtaComercio?idcomercio=' + comercio.id, '_blank');
-    },
     cancelarRegistro: function cancelarRegistro() {
       this.limpiarCampos();
       this.cambiarVista("listado");
@@ -4239,7 +4246,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var datatables__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! datatables */ "./node_modules/datatables/media/js/jquery.dataTables.js");
 /* harmony import */ var datatables__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(datatables__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var vuejs_datepicker__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! vuejs-datepicker */ "./node_modules/vuejs-datepicker/dist/vuejs-datepicker.esm.js");
-//
 //
 //
 //
@@ -4940,10 +4946,6 @@ __webpack_require__.r(__webpack_exports__);
         } else if ( // Read more about handling dismissals
         result.dismiss === Swal.DismissReason.cancel) {}
       });
-    },
-    imprimirEdoCta: function imprimirEdoCta(inmueble) {
-      console.log("Inmueble : ", inmueble.id);
-      window.open('http://127.0.0.1:8000/edoCtaInmueble?idinmueble=' + inmueble.id, '_blank');
     },
     cancelarRegistro: function cancelarRegistro() {
       this.limpiarCampos();
@@ -14563,7 +14565,7 @@ exports.i(__webpack_require__(/*! -!../../../node_modules/css-loader??ref--5-1!.
 exports.i(__webpack_require__(/*! -!../../../node_modules/css-loader??ref--5-1!../../../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../../../public/css/switch.css */ "./node_modules/css-loader/index.js?!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./public/css/switch.css"), "");
 
 // module
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n/* Se importan los estilos del modulo */\n", ""]);
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n/* Se importan los estilos del modulo */\n", ""]);
 
 // exports
 
@@ -14582,7 +14584,7 @@ exports = module.exports = __webpack_require__(/*! ../../../node_modules/css-loa
 exports.i(__webpack_require__(/*! -!../../../node_modules/css-loader??ref--5-1!../../../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../../../public/css/usuario.css */ "./node_modules/css-loader/index.js?!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./public/css/usuario.css"), "");
 
 // module
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n/* Se importan los estilos del modulo */\n\n", ""]);
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n/* Se importan los estilos del modulo */\n\n", ""]);
 
 // exports
 
@@ -14601,7 +14603,7 @@ exports = module.exports = __webpack_require__(/*! ../../../node_modules/css-loa
 exports.i(__webpack_require__(/*! -!../../../node_modules/css-loader??ref--5-1!../../../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../../../public/css/usuario.css */ "./node_modules/css-loader/index.js?!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./public/css/usuario.css"), "");
 
 // module
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n/* Se importan los estilos del modulo */\n\n", ""]);
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n/* Se importan los estilos del modulo */\n\n", ""]);
 
 // exports
 
@@ -14621,7 +14623,7 @@ exports.i(__webpack_require__(/*! -!../../../node_modules/css-loader??ref--5-1!.
 exports.i(__webpack_require__(/*! -!../../../node_modules/css-loader??ref--5-1!../../../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../../../public/css/switch.css */ "./node_modules/css-loader/index.js?!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./public/css/switch.css"), "");
 
 // module
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n/* Se importan los estilos del modulo */\n", ""]);
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n/* Se importan los estilos del modulo */\n", ""]);
 
 // exports
 
@@ -14641,7 +14643,7 @@ exports.i(__webpack_require__(/*! -!../../../node_modules/css-loader??ref--5-1!.
 exports.i(__webpack_require__(/*! -!../../../node_modules/css-loader??ref--5-1!../../../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../../../public/css/switch.css */ "./node_modules/css-loader/index.js?!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./public/css/switch.css"), "");
 
 // module
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n/* Se importan los estilos del modulo */\n", ""]);
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n/* Se importan los estilos del modulo */\n", ""]);
 
 // exports
 
@@ -80654,6 +80656,17 @@ var render = function() {
                                     return _vm.verDetalle(comercio)
                                   }
                                 }
+                              }),
+                              _vm._v(" "),
+                              _c("i", {
+                                staticClass:
+                                  "bx bxs-report bx-md text-primary btn-eliminar",
+                                attrs: { title: "Estado de cuenta" },
+                                on: {
+                                  click: function($event) {
+                                    return _vm.imprimirEdoCta(comercio)
+                                  }
+                                }
                               })
                             ])
                           ])
@@ -80734,7 +80747,15 @@ var render = function() {
                     _vm._v(" "),
                     _vm._m(6),
                     _vm._v(" "),
-                    _vm._m(7)
+                    _c("div", { staticClass: "col-md-2 form-group my-0" }, [
+                      _c("label", { staticClass: "col-form-label-lg" }, [
+                        _vm._v(
+                          "\n                            " +
+                            _vm._s(_vm.comercio.licencia) +
+                            "\n                        "
+                        )
+                      ])
+                    ])
                   ]),
                   _vm._v(" "),
                   _c("div", { staticClass: "border-top my-3" }),
@@ -80822,17 +80843,17 @@ var render = function() {
                             _c("div", { staticClass: "col-md-4 text-center" }, [
                               _c("div", { staticClass: "position-relative" }, [
                                 _vm.tipoDeclaracion == 1
-                                  ? _c("label", [_vm._m(8)])
+                                  ? _c("label", [_vm._m(7)])
                                   : _vm._e(),
                                 _vm._v(" "),
                                 _vm.tipoDeclaracion == 2
-                                  ? _c("label", [_vm._m(9)])
+                                  ? _c("label", [_vm._m(8)])
                                   : _vm._e()
                               ])
                             ])
                           ]),
                           _vm._v(" "),
-                          _vm._m(10),
+                          _vm._m(9),
                           _vm._v(" "),
                           _vm._l(_vm.codigos, function(codigo) {
                             return _c(
@@ -80929,11 +80950,14 @@ var render = function() {
                                           staticClass: "form-control",
                                           attrs: {
                                             type: "number",
-                                            value: "3",
+                                            value: "",
                                             required: ""
                                           },
                                           domProps: { value: codigo.monto },
                                           on: {
+                                            keyUp: function($event) {
+                                              return _vm.numero($event)
+                                            },
                                             input: function($event) {
                                               if ($event.target.composing) {
                                                 return
@@ -80947,7 +80971,7 @@ var render = function() {
                                           }
                                         }),
                                         _vm._v(" "),
-                                        _vm._m(11, true),
+                                        _vm._m(10, true),
                                         _vm._v(" "),
                                         _c(
                                           "div",
@@ -81008,7 +81032,7 @@ var render = function() {
                             [
                               _c("div", { staticClass: "col-md-6" }),
                               _vm._v(" "),
-                              _vm._m(12),
+                              _vm._m(11),
                               _vm._v(" "),
                               _vm.calcularTotal < _vm.total_minimos
                                 ? _c(
@@ -81043,35 +81067,75 @@ var render = function() {
                           ),
                           _vm._v(" "),
                           _c("div", { staticClass: "form-row mt-5" }, [
-                            _c(
-                              "div",
-                              {
-                                staticClass:
-                                  "col-md-6 d-flex justify-content-center"
-                              },
-                              [
-                                _c(
-                                  "button",
+                            !_vm.registrado
+                              ? _c(
+                                  "div",
                                   {
                                     staticClass:
-                                      "btn btn-primary btn-registrar",
-                                    attrs: { type: "button", name: "registro" },
-                                    on: {
-                                      click: function($event) {
-                                        return _vm.validarFormulario("registro")
-                                      }
-                                    }
+                                      "col-md-6 d-flex justify-content-center"
                                   },
                                   [
                                     _c(
-                                      "span",
-                                      { staticClass: "align-middle ml-25" },
-                                      [_vm._v("Registrar")]
+                                      "button",
+                                      {
+                                        staticClass:
+                                          "btn btn-primary btn-registrar",
+                                        attrs: {
+                                          type: "button",
+                                          name: "registro"
+                                        },
+                                        on: {
+                                          click: function($event) {
+                                            return _vm.validarFormulario(
+                                              "registro"
+                                            )
+                                          }
+                                        }
+                                      },
+                                      [
+                                        _c(
+                                          "span",
+                                          { staticClass: "align-middle ml-25" },
+                                          [_vm._v("Registrar")]
+                                        )
+                                      ]
                                     )
                                   ]
                                 )
-                              ]
-                            ),
+                              : _c(
+                                  "div",
+                                  {
+                                    staticClass:
+                                      "col-md-6 d-flex justify-content-center"
+                                  },
+                                  [
+                                    _c(
+                                      "button",
+                                      {
+                                        staticClass:
+                                          "btn btn-success btn-nuevo",
+                                        attrs: {
+                                          type: "button",
+                                          name: "Imprimir"
+                                        },
+                                        on: {
+                                          click: function($event) {
+                                            return _vm.imprimirEdoCta(
+                                              _vm.comercio
+                                            )
+                                          }
+                                        }
+                                      },
+                                      [
+                                        _c(
+                                          "span",
+                                          { staticClass: "align-middle ml-25" },
+                                          [_vm._v("Imprimir")]
+                                        )
+                                      ]
+                                    )
+                                  ]
+                                ),
                             _vm._v(" "),
                             _c(
                               "div",
@@ -81169,9 +81233,7 @@ var staticRenderFns = [
     var _c = _vm._self._c || _h
     return _c("div", { staticClass: "col-md-1 form-group my-0" }, [
       _c("label", { staticClass: "col-form-label-lg" }, [
-        _vm._v(
-          "\n                            Cédula :\n                        "
-        )
+        _vm._v("\n                            Rif :\n                        ")
       ])
     ])
   },
@@ -81207,18 +81269,6 @@ var staticRenderFns = [
       _c("label", { staticClass: "col-form-label-lg" }, [
         _vm._v(
           "\n                            Licencia\n                        "
-        )
-      ])
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "col-md-2 form-group my-0" }, [
-      _c("label", { staticClass: "col-form-label-lg" }, [
-        _vm._v(
-          "\n                            041452522671\n                        "
         )
       ])
     ])
@@ -81378,6 +81428,17 @@ var render = function() {
                                 on: {
                                   click: function($event) {
                                     return _vm.verDetalle(inmueble)
+                                  }
+                                }
+                              }),
+                              _vm._v(" "),
+                              _c("i", {
+                                staticClass:
+                                  "bx bxs-report bx-md text-primary btn-eliminar",
+                                attrs: { title: "Estado de cuenta" },
+                                on: {
+                                  click: function($event) {
+                                    return _vm.imprimirEdoCta(inmueble)
                                   }
                                 }
                               })
@@ -81800,7 +81861,7 @@ var staticRenderFns = [
         _vm._v(" "),
         _c("th", { attrs: { width: "10%" } }, [_vm._v("Cédula Propietario")]),
         _vm._v(" "),
-        _c("th", { attrs: { width: "20%" } }, [_vm._v("Dirección")]),
+        _c("th", { attrs: { width: "15%" } }, [_vm._v("Dirección")]),
         _vm._v(" "),
         _c("th", { staticClass: "text-center", attrs: { width: "10%" } }, [
           _vm._v("Acción")
@@ -82031,6 +82092,17 @@ var render = function() {
                                 on: {
                                   click: function($event) {
                                     return _vm.verDetalle(vehiculo)
+                                  }
+                                }
+                              }),
+                              _vm._v(" "),
+                              _c("i", {
+                                staticClass:
+                                  "bx bxs-report bx-md text-primary btn-eliminar",
+                                attrs: { title: "Estado de cuenta" },
+                                on: {
+                                  click: function($event) {
+                                    return _vm.imprimirEdoCta(vehiculo)
                                   }
                                 }
                               })
@@ -82559,17 +82631,6 @@ var render = function() {
                                 on: {
                                   click: function($event) {
                                     return _vm.eliminarRegistro(comercio)
-                                  }
-                                }
-                              }),
-                              _vm._v(" "),
-                              _c("i", {
-                                staticClass:
-                                  "bx bxs-report bx-sm mr-2 text-primary btn-eliminar",
-                                attrs: { title: "Estado de cuenta" },
-                                on: {
-                                  click: function($event) {
-                                    return _vm.imprimirEdoCta(comercio)
                                   }
                                 }
                               })
@@ -83461,17 +83522,6 @@ var render = function() {
                                 on: {
                                   click: function($event) {
                                     return _vm.eliminarRegistro(inmueble)
-                                  }
-                                }
-                              }),
-                              _vm._v(" "),
-                              _c("i", {
-                                staticClass:
-                                  "bx bxs-report bx-sm mr-2 text-primary btn-eliminar",
-                                attrs: { title: "Estado de cuenta" },
-                                on: {
-                                  click: function($event) {
-                                    return _vm.imprimirEdoCta(inmueble)
                                   }
                                 }
                               })

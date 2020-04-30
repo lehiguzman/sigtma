@@ -27,8 +27,8 @@ class CreateDeclaracionInmuebleTable extends Migration
             $table->float('area_terreno', 12, 2);
             $table->float('area_construccion', 12,2);
             $table->integer('tipo_declaracion');
-            $table->float('valor_total', 12, 2);
-            $table->float('monto_impuesto', 12, 2);
+            $table->float('valor_total', 14, 2);
+            $table->float('monto_impuesto', 14, 2);
             $table->string('estado');
             $table->unsignedInteger('idpago')->nullable();
             $table->timestamps();

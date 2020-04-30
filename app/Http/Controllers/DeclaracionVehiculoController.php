@@ -100,6 +100,7 @@ class DeclaracionVehiculoController extends Controller
     {        
         //if(!$request->ajax()) return redirect('/');
         $saldo = 0;
+        $declaracionObj = [];
 
         $vehiculo = Vehiculo::find($request->idvehiculo);
         $tipoVehiculo = TipoContribuyenteVehiculo::find($vehiculo->idtipocontribuyentevehiculo);

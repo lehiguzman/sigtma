@@ -117,6 +117,7 @@ class DeclaracionInmuebleController extends Controller
         //if(!$request->ajax()) return redirect('/');
 
         $saldo = 0;
+        $declaracionObj = [];
 
         $inmueble = Inmueble::join('zonas', 'inmuebles.idzona', '=', 'zonas.id')->selectRaw('inmuebles.denominacion, inmuebles.direccion, inmuebles.codigo_catastral, inmuebles.numero_civico, inmuebles.numero_inscripcion, inmuebles.area_terreno, inmuebles.area_construccion, zonas.nombre, inmuebles.telefono, inmuebles.rif')
         ->find($request->idinmueble);

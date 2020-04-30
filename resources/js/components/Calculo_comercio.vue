@@ -39,7 +39,8 @@
                                 <td>{{ comercio.fecha_inscripcion }}</td>
                                 <td>{{ comercio.direccion }}</td>
                                 <td class="text-center">
-                                    <i class='bx bxs-printer bx-md text-success btn-editar' title="Calcular Declaracion" @click="verDetalle(comercio)"></i>                                   
+                                    <i class='bx bxs-printer bx-md text-success btn-editar' title="Calcular Declaracion" @click="verDetalle(comercio)"></i>
+                                    <i class='bx bxs-report bx-md text-primary btn-eliminar' title="Estado de cuenta" @click="imprimirEdoCta(comercio)"></i>                                   
                                 </td>
                             </tr>                            
                         </tbody>                  
@@ -69,7 +70,7 @@
 
                         <div class="col-md-1 form-group my-0">
                            <label class="col-form-label-lg">
-                                Cédula :
+                                Rif :
                             </label>                                  
                         </div>
 
@@ -113,7 +114,7 @@
 
                         <div class="col-md-2 form-group my-0">
                            <label class="col-form-label-lg">
-                                041452522671
+                                {{ comercio.licencia }}
                             </label>                                  
                         </div>
                     </div>
@@ -208,7 +209,7 @@
                                 </div>                                
                             </div>
                              <div class="col-md-3 form-group" v-else> 
-                               <input v-model="codigo.monto" type="number" value="3" class="form-control" required>
+                               <input v-model="codigo.monto" type="number" value="" class="form-control" @keyUp="numero($event)" required>
                                <div class="valid-feedback">
                                       <i>¡Correcto!</i>
                                 </div> 
@@ -246,16 +247,22 @@
                         
 
                         <div class="form-row mt-5">                            
-                            
-                            <div class="col-md-6 d-flex justify-content-center">
+                            <div class="col-md-6 d-flex justify-content-center" v-if="!registrado">
                                 <button type="button" @click="validarFormulario( 'registro' )" name="registro" class="btn btn-primary btn-registrar">                                       
                                     <span class="align-middle ml-25">Registrar</span>
                                 </button>
                             </div>
+
+                            <div class="col-md-6 d-flex justify-content-center" v-else>
+                                 <button type="button" @click="imprimirEdoCta( comercio )" name="Imprimir" class="btn btn-success btn-nuevo">
+                                    <span class="align-middle ml-25">Imprimir</span>
+                                </button>
+                            </div>
+
                             <div class="col-md-6 d-flex justify-content-center ">
                                 <i class='bx bx-cancel bx-sm' ></i>
                                 <input type="button" name="cancelar" @click="cancelarRegistro()" class="btn btn-danger btn-cancelar" value="Cancelar">
-                            </div>
+                            </div>                            
                         </div>   
                     </form>
                 </div>
@@ -283,6 +290,8 @@
                 comercios: [],
                 boton: 'registro',                
                 tabla: '',
+                comercioImp: [],
+                registrado: false,
 
                 //Datos de vista de detalle de comercio
                 comercio: [],
@@ -303,6 +312,14 @@
         //Aqui se inyectan los componentes importados
         components: {
             datatable            
+        },
+
+        filters: {
+            numero: function( value ) {
+                if(value) {
+                    console.log("Valor : ", value);
+                }
+            }
         },
 
         computed: {
@@ -340,7 +357,9 @@
                 var url = '/comercio';
 
                 axios.get(url).then(function (response) {
-                // handle success                     
+                // handle success
+
+                console.log("Response : ", response);
 
                 var respuesta = response.data;                                    
                 me.comercios = respuesta.comercios.data;
@@ -432,8 +451,9 @@
                             'Registro exitoso.',
                             'success'
                         );
+                        me.registrado = true,
                         me.limpiarCampos();
-                        me.cambiarVista( "listado" );                        
+                        //me.cambiarVista( "listado" );                        
 
                     }).catch(function (error) {
                     // handle error
@@ -479,6 +499,14 @@
               });
             },
 
+            imprimirEdoCta( comercio ) {
+
+                console.log("Comerio : ", comercio.id);
+
+                window.open('http://127.0.0.1:8000/edoCtaComercio?idcomercio=' + comercio.id,'_blank');
+
+            },
+
             listarCodigos( comercio ) {
 
                 let me=this;
@@ -519,7 +547,8 @@
 
             limpiarCampos() {                
                 this.comercios = [];
-                this.comercio = [];
+                //this.comercio = [];
+                this.codigos = [];
                 this.unidad_tributaria= 0,
                 this.monto = 0,                
                 this.total = 0,
@@ -530,8 +559,8 @@
         },
 
         mounted() {
-            this.listarComercios();   
-            console.clear();            
+            console.clear();  
+            this.listarComercios();               
         }
     }
 </script>

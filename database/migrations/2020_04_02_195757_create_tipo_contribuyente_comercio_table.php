@@ -15,7 +15,7 @@ class CreateTipoContribuyenteComercioTable extends Migration
     {
         Schema::create('tipo_contribuyente_comercio', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('codigo');
+            $table->string('codigo');
             $table->string('denominacion');
             $table->string('descripcion');
             $table->float('alicuota_anual');

@@ -45,8 +45,7 @@
                                 <td>{{ inmueble.telefono }}</td>
                                 <td class="text-center">
                                     <i class='bx bxs-edit bx-sm mr-2 text-success btn-editar' title="Editar" @click="editarRegistro(inmueble)"></i>
-                                    <i class='bx bxs-trash bx-sm mr-2 text-danger btn-eliminar' title="Eliminar" @click="eliminarRegistro(inmueble)"></i>
-                                    <i class='bx bxs-report bx-sm mr-2 text-primary btn-eliminar' title="Estado de cuenta" @click="imprimirEdoCta(inmueble)"></i>
+                                    <i class='bx bxs-trash bx-sm mr-2 text-danger btn-eliminar' title="Eliminar" @click="eliminarRegistro(inmueble)"></i>                                    
                                 </td>
                             </tr>                            
                         </tbody>                  
@@ -775,14 +774,6 @@
                   ) {                    
                   }
                 })
-            },
-
-            imprimirEdoCta( inmueble ) {
-
-                console.log("Inmueble : ", inmueble.id);
-
-                window.open('http://127.0.0.1:8000/edoCtaInmueble?idinmueble=' + inmueble.id,'_blank');
-
             },
 
             cancelarRegistro() {

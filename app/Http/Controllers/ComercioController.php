@@ -19,12 +19,6 @@ class ComercioController extends Controller
      */
     public function index(Request $request)
     {
-        //if(!$request->ajax()) return redirect('/');        
-        //$comercios = Comercio::orderBy('ID', 'DESC')->paginate();
-
-        /*$comercios = Comercio::join('tipo_contribuyente_comercio', 'comercios.idtipocontribuyentecomercio', '=', 'tipo_contribuyente_comercio.id')            
-            ->select('comercios.id', 'comercios.licencia', 'comercios.denominacion', 'comercios.rif', 'comercios.direccion', 'comercios.fecha_inscripcion', 'comercios.telefono', 'tipo_contribuyente_comercio.denominacion as tipo')
-            ->orderBy('comercios.id', 'desc')->paginate(10); */
         $comercios = Comercio::orderBy('ID', 'DESC')->paginate();
 
         $datos = [

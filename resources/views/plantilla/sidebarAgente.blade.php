@@ -13,12 +13,7 @@
               <span class="vertical">Actividad Ecónomica</span>
             <i class="fa fa-chevron-right fa-md mx-1 vertical"></i>    
       </a>
-      <ul>
-        <li>
-          <a href="#" @click="menu=2" class="list-group-item list-group-item-action border-0 link-menu">          
-            <i class="fa fa-building fa-lg mx-3 vertical"></i> <span class="vertical">Tipo</span>            
-          </a>
-        </li>
+      <ul>        
         <li>
           <a href="#" @click="menu=5" class="list-group-item list-group-item-action border-0 link-menu">          
             <i class="fa fa-building fa-lg mx-3 vertical"></i> <span class="vertical">Contribuyente</span>            
@@ -32,6 +27,11 @@
         <li>
           <a href="#" @click="menu=11" class="list-group-item list-group-item-action border-0 link-menu">          
             <i class="fa fa-building fa-lg mx-3 vertical"></i> <span class="vertical">Registrar Pago</span>            
+          </a>
+        </li>
+        <li>
+          <a href="#" @click="menu=2" class="list-group-item list-group-item-action border-0 link-menu">          
+            <i class="fa fa-building fa-lg mx-3 vertical"></i> <span class="vertical">Nuevo Código ISAE</span>            
           </a>
         </li>                
       </ul>       

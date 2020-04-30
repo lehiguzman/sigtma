@@ -41,8 +41,7 @@
                                 <td>{{ comercio.fecha_inscripcion }}</td>
                                 <td class="text-center">
                                     <i class='bx bxs-edit bx-sm mr-2 text-success btn-editar' title="Editar" @click="editarRegistro(comercio)"></i>
-                                    <i class='bx bxs-trash bx-sm mr-2 text-danger btn-eliminar' title="Eliminar" @click="eliminarRegistro(comercio)"></i>
-                                    <i class='bx bxs-report bx-sm mr-2 text-primary btn-eliminar' title="Estado de cuenta" @click="imprimirEdoCta(comercio)"></i>
+                                    <i class='bx bxs-trash bx-sm mr-2 text-danger btn-eliminar' title="Eliminar" @click="eliminarRegistro(comercio)"></i>                                    
                                 </td>
                             </tr>                            
                         </tbody>                  
@@ -577,14 +576,6 @@
                   ) {                    
                   }
                 })
-            },
-
-            imprimirEdoCta( comercio ) {
-
-                console.log("Comerio : ", comercio.id);
-
-                window.open('http://127.0.0.1:8000/edoCtaComercio?idcomercio=' + comercio.id,'_blank');
-
             },
 
             cancelarRegistro() {

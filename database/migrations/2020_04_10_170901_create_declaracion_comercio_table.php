@@ -22,8 +22,8 @@ class CreateDeclaracionComercioTable extends Migration
             $table->unsignedInteger('idtipo');
             $table->foreign('idtipo')->references('id')->on('tipo_contribuyente_comercio');
             $table->integer('tipo_declaracion');
-            $table->float('monto_declaracion');
-            $table->float('monto_impuesto');
+            $table->float('monto_declaracion', 14, 2);
+            $table->float('monto_impuesto', 14, 2);
             $table->string('estado');
             $table->unsignedInteger('idpago')->nullable();
             $table->timestamps();

@@ -113,7 +113,7 @@
                     {{ $declaracion['periodo'] }}
                 </td>                
                 <td class="bordes" width="55%" style="text-align: center;">
-                    Pago Anualidades Inmuebles Urbanos {{ $declaracion['periodo'] }}
+                    Pago Anualidades Vehiculo {{ $declaracion['periodo'] }}
                 </td>                
                 <td class="bordes" width="15%" style="text-align: center;"></td>                
                 <td class="bordes" width="15%" style="text-align: center;">

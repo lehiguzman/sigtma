@@ -39,7 +39,8 @@
                                 <td>{{ vehiculo.rif }}</td>
                                 <td>{{ vehiculo.direccion }}</td>                  
                                 <td class="text-center">
-                                    <i class='bx bxs-printer bx-md text-success btn-editar' title="Calcular Declaracion" @click="verDetalle(vehiculo)"></i>                                   
+                                    <i class='bx bxs-printer bx-md text-success btn-editar' title="Calcular Declaracion" @click="verDetalle(vehiculo)"></i>
+                                    <i class='bx bxs-report bx-md text-primary btn-eliminar' title="Estado de cuenta" @click="imprimirEdoCta(vehiculo)"></i>                             
                                 </td>
                             </tr>                            
                         </tbody>                  
@@ -354,6 +355,12 @@
               .finally(function () {
                 // always executed
               }); 
+            },
+
+            imprimirEdoCta( vehiculo ) {                
+
+                window.open('http://127.0.0.1:8000/edoCtaVehiculo?idvehiculo=' + vehiculo.id,'_blank');
+
             },
 
             cancelarRegistro() {

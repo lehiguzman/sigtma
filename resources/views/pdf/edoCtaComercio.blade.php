@@ -136,15 +136,21 @@
                     {{ $declaracion['periodo'] }}
                 </td>                
                 <td class="bordes" width="55%" style="text-align: center;">
-                    Cargo inmueble Pago Año {{ $declaracion['periodo'] }}
+                    Cargo Actividad Económica Pago Año {{ $declaracion['periodo'] }}
                 </td>                
                 <td class="bordes" width="15%" style="text-align: center;">
                     {{ number_format($declaracion['monto_impuesto'], 2) }}
                 </td>                
                 <td class="bordes" width="15%" style="text-align: center;"></td>
+                @if($declaracion["estado"] == "calculado")
                 <td class="bordes" width="15%" style="text-align: center;">
-                    {{ number_format($declaracion['saldo'], 2) }}
+                    {{ number_format($declaracion['monto_impuesto'], 2) }}
                 </td>
+                @else
+                <td class="bordes" width="15%" style="text-align: center;">
+                    0.00
+                </td>
+                @endif
             </tr>
             @if( $declaracion['estado'] == "pagado")
             <tr style="font-size: 12px;">

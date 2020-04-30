@@ -21,7 +21,7 @@ class CreateVehiculosTable extends Migration
             $table->string('modelo')->nullable();
             $table->string('placa');
             $table->string('serial')->nullable();            
-            $table->integer('rif');
+            $table->string('rif');
             $table->string('direccion')->nullable();
             $table->string('telefono')->nullable();
             $table->timestamps();

@@ -25,12 +25,12 @@ class CreateInmueblesTable extends Migration
             $table->string('tipo_vivienda');
             $table->unsignedInteger('idregimen');
             $table->foreign('idregimen')->references('id')->on('regimen');
-            $table->integer('numero_inscripcion');
+            $table->string('numero_inscripcion');
             $table->float('area_terreno', 12, 2);
             $table->float('area_construccion', 12, 2);
-            $table->integer('rif');
+            $table->string('rif');
             $table->string('direccion')->nullable();
-            $table->integer('telefono')->nullable();
+            $table->string('telefono')->nullable();
             $table->timestamps();
         });
     }

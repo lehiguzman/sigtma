@@ -27,7 +27,7 @@
                                 <th width="10%">Área de Terreno</th>
                                 <th width="10%">Área de Construcción</th>
                                 <th width="10%">Cédula Propietario</th>
-                                <th width="20%">Dirección</th>
+                                <th width="15%">Dirección</th>
                                 <th class="text-center" width="10%">Acción</th>                                  
                             </tr>
                         </thead>
@@ -41,7 +41,8 @@
                                 <td>{{ inmueble.rif }}</td>
                                 <td>{{ inmueble.direccion }}</td>
                                 <td class="text-center">
-                                    <i class='bx bxs-printer bx-md text-success btn-editar' title="Calcular Declaracion" @click="verDetalle(inmueble)"></i>                                   
+                                    <i class='bx bxs-printer bx-md text-success btn-editar' title="Calcular Declaracion" @click="verDetalle(inmueble)"></i>
+                                    <i class='bx bxs-report bx-md text-primary btn-eliminar' title="Estado de cuenta" @click="imprimirEdoCta(inmueble)"></i>                                
                                 </td>
                             </tr>                            
                         </tbody>                  
@@ -491,26 +492,11 @@
               }); 
             },
 
-            listarCodigos( comercio ) {
+            imprimirEdoCta( inmueble ) {
 
-              /*  let me=this;
+                console.log("Inmueble : ", inmueble.id);
 
-                var url = '/tipos_comercio/'+comercio.id;
-
-                axios.get(url).then(function (response) {
-                // handle success                
-                
-                var respuesta = response;                  
-                me.codigos = respuesta.data;                
-                me.minimosTributables();
-              })
-              .catch(function (error) {
-                // handle error
-                console.log(error);
-              })
-              .finally(function () {
-                // always executed
-              });*/
+                window.open('http://127.0.0.1:8000/edoCtaInmueble?idinmueble=' + inmueble.id,'_blank');
 
             },
 

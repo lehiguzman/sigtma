@@ -15,7 +15,7 @@ class CreateTipoContribuyenteInmuebleTable extends Migration
     {
         Schema::create('tipo_contribuyente_inmueble', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('numeral');
+            $table->string('numeral');
             $table->string('descripcion');
             $table->integer('exonerado');
             $table->timestamps();
