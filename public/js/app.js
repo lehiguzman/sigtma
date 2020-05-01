@@ -82532,12 +82532,12 @@ var render = function() {
     _c("div", { staticClass: "bg-white shadow-container col-md-5" }, [
       _c(
         "div",
-        { staticClass: "mt-5 text-center ml-5" },
+        { staticClass: "mt-5 text-center ml-2" },
         [
           _c("VueApexCharts", {
             attrs: {
-              width: "500",
-              height: "300",
+              width: "350",
+              height: "200",
               type: "bar",
               options: _vm.options,
               series: _vm.series
@@ -82553,12 +82553,12 @@ var render = function() {
     _c("div", { staticClass: "ml-2 bg-white shadow-container col-md-5" }, [
       _c(
         "div",
-        { staticClass: "mt-5 text-center ml-2" },
+        { staticClass: "mt-5 text-center ml-4" },
         [
           _c("VueApexCharts", {
             attrs: {
-              width: "500",
-              height: "300",
+              width: "350",
+              height: "200",
               type: "donut",
               options: _vm.options2,
               series: _vm.series2
@@ -82580,7 +82580,7 @@ var render = function() {
             _c("VueApexCharts", {
               attrs: {
                 width: "800",
-                height: "300",
+                height: "200",
                 type: "line",
                 options: _vm.options,
                 series: _vm.series
