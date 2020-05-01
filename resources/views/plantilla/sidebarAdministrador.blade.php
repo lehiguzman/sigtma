@@ -1,9 +1,9 @@
 <div class="menu" id="sidebar-wrapper">
-  <div class="mb-5">
+  <div class="mb-3">
     <img src="{{ asset('/img/samat.png') }}" class="logo-menu" >
   </div>
   <div class="list-group">
-    <div href="#" class="mb-4 ml-5 border-0">
+    <div href="#" class="mb-3 ml-5 border-0">
         <h6>MENU</h6>
     </div> 
     <div>

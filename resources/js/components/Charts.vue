@@ -2,21 +2,21 @@
 
 	<div class="contenedor row">
 		<div class="bg-white shadow-container col-md-5">  
-			<div class="mt-5 text-center ml-5">
-		        <VueApexCharts width="500" height="300" type="bar" :options="options" :series="series"></VueApexCharts>    
+			<div class="mt-5 text-center ml-2">
+		        <VueApexCharts width="350" height="200" type="bar" :options="options" :series="series"></VueApexCharts>    
 		    </div>  	  
 		</div>
 		<div class="col-md-1">			
 		</div>
 		<div class="ml-2 bg-white shadow-container col-md-5">  
-			<div class="mt-5 text-center ml-2">
-	      		<VueApexCharts width="500" height="300" type="donut" :options="options2" :series="series2"></VueApexCharts>
+			<div class="mt-5 text-center ml-4">
+	      		<VueApexCharts width="350" height="200" type="donut" :options="options2" :series="series2"></VueApexCharts>
 	      	</div>		    
 		</div>
 
 		<div class="row bg-white shadow-container mt-4 ml-2 col-11">  			
 			<div class="col-md-12">			
-	        	<VueApexCharts width="800" height="300" type="line" :options="options" :series="series"></VueApexCharts>    
+	        	<VueApexCharts width="800" height="200" type="line" :options="options" :series="series"></VueApexCharts>    
 	    	</div> 
 		</div>
 	</div>	
