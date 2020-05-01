@@ -42,7 +42,7 @@
                                 <td>{{ zona.id }}</td>
                                 <td>{{ zona.nombre }}</td>
                                 <td>{{ zona.c1 }}</td>
-                                <td>{{ zona.c2 }}</td>
+                                <td>{{ zona.c2.toFixed(2) }}</td>
                                 <td>{{ zona.c3 }}</td>
                                 <td>{{ zona.c4 }}</td>
                                 <td>{{ zona.v1 }}</td>

@@ -91858,7 +91858,7 @@ var render = function() {
                             _vm._v(" "),
                             _c("td", [_vm._v(_vm._s(zona.c1))]),
                             _vm._v(" "),
-                            _c("td", [_vm._v(_vm._s(zona.c2))]),
+                            _c("td", [_vm._v(_vm._s(zona.c2.toFixed(2)))]),
                             _vm._v(" "),
                             _c("td", [_vm._v(_vm._s(zona.c3))]),
                             _vm._v(" "),
