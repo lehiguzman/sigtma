@@ -26,9 +26,9 @@
     <div id="app">
         <header class="app-header border-bottom-0 navbar menu-superior">             
             <ul class="nav navbar-nav col-md-10 texto-titulo">
-                <li class="nav-item">
-                    <span class="" href="#">Sistema Integrado de Gestion Tributaria Municipal Avanzada</span> <br>
-                    <span class="" href="#">SIGTMA</span>
+                <li class="nav-item" style="font-family: arial;">
+                    <span class="" href="#"><b>Sistema Integrado de Gestion Tributaria Municipal Avanzada</b></span> <br>
+                    <span class="" href="#"><b>(SIGTMA)</b></span>
                 </li>           
             </ul>
             <ul class="nav navbar-nav">
