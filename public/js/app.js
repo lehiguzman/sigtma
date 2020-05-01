@@ -2525,6 +2525,11 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
@@ -2536,7 +2541,8 @@ __webpack_require__.r(__webpack_exports__);
       boton: 'registro',
       tabla: '',
       comercioImp: [],
-      registrado: false,
+      mostrarBtnRegistrar: true,
+      mostrarBtnImprimir: false,
       //Datos de vista de detalle de comercio
       comercio: [],
       periodo: '',
@@ -2549,7 +2555,8 @@ __webpack_require__.r(__webpack_exports__);
       monto: 0,
       total: 0,
       total_minimos: 0,
-      mensaje_deuda: false
+      mensaje_deuda: false,
+      esCero: false
     };
   },
   //Aqui se inyectan los componentes importados
@@ -2629,23 +2636,31 @@ __webpack_require__.r(__webpack_exports__);
     ////////////////////////* Registro de contribuyente de actividad económica *////////////////////////////////////////
     validarFormulario: function validarFormulario(accion) {
       var me = this;
+      var vacio = false;
       var forms = document.getElementsByClassName('needs-validation'); // Loop over them and prevent submission
 
       var validation = Array.prototype.filter.call(forms, function (form) {
-        //form.addEventListener('submit', function(event) {
-        if (form.checkValidity() === false) {
-          event.preventDefault();
-          event.stopPropagation();
-        } else {
-          if (accion == 'registro') {
-            console.log(accion);
-            me.agregarRegistro();
-          } else {
-            me.actualizarRegistro();
+        //form.addEventListener('submit', function(event) { 
+        for (var i = 0; i < me.codigos.length; i++) {
+          if (me.codigos[i].monto == 0) {
+            vacio = true;
           }
         }
 
-        form.classList.add('was-validated'); //}, false);
+        if (form.checkValidity() === false) {
+          event.preventDefault();
+          event.stopPropagation();
+          form.classList.add('was-validated');
+        } else if (vacio) {
+          form.classList.remove('was-validated');
+          me.esCero = true;
+        } else {
+          if (accion == 'registro') {
+            console.log("Registro de accion : ", accion);
+            me.agregarRegistro();
+          }
+        } //}, false);
+
       });
     },
     agregarRegistro: function agregarRegistro() {
@@ -2657,7 +2672,6 @@ __webpack_require__.r(__webpack_exports__);
         buttonsStyling: false
       });
       var me = this;
-      console.log("Codigo a registrar : ", me.codigos);
       axios.post('/declaracion_comercio/registrar', {
         'idcomercio': me.comercio.id,
         'idperiodo': me.periodo.id,
@@ -2666,7 +2680,13 @@ __webpack_require__.r(__webpack_exports__);
       }).then(function (response) {
         console.log("response : ", response);
         alerta.fire('Registro!', 'Registro exitoso.', 'success');
-        me.registrado = true, me.limpiarCampos(); //me.cambiarVista( "listado" );                        
+
+        if (me.tipoDeclaracion == 1) {
+          me.mostrarBtnImprimir = true;
+        }
+
+        me.limpiarCampos();
+        me.verDetalle(me.comercio); //me.cambiarVista( "listado" );                        
       })["catch"](function (error) {
         // handle error
         console.log(error);
@@ -2730,6 +2750,7 @@ __webpack_require__.r(__webpack_exports__);
     cancelarRegistro: function cancelarRegistro() {
       this.limpiarCampos();
       this.cambiarVista("listado");
+      this.registrado = false;
     },
     limpiarCampos: function limpiarCampos() {
       this.comercios = []; //this.comercio = [];
@@ -5201,6 +5222,14 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -5211,9 +5240,7 @@ __webpack_require__.r(__webpack_exports__);
       titulo: 'Agregar Nuevo Pago de contribuyente',
       declaraciones: [],
       declaracion: [],
-      comercio: [],
       periodo: [],
-      //tipos: [],
       boton: 'registro',
       tabla: '',
       //Vista de registro de pago de contribuyente Actividad Ecónomica
@@ -5338,13 +5365,12 @@ __webpack_require__.r(__webpack_exports__);
     verDetalle: function verDetalle(declaracion) {
       var me = this;
       this.vista = "registro";
-      var url = '/declaracion/' + declaracion.id;
+      var url = '/declaracion/' + declaracion.idcomercio;
       axios.get(url).then(function (response) {
         // handle success                                      
         var respuesta = response.data;
-        console.log("Respuesta ss: ", respuesta);
+        console.log("Declaracion Respuesta : ", respuesta);
         me.declaracion = respuesta.declaracion;
-        me.comercio = respuesta.comercio;
       })["catch"](function (error) {
         // handle error
         console.log(error);
@@ -5385,6 +5411,14 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var datatables__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! datatables */ "./node_modules/datatables/media/js/jquery.dataTables.js");
 /* harmony import */ var datatables__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(datatables__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var vuejs_datepicker__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! vuejs-datepicker */ "./node_modules/vuejs-datepicker/dist/vuejs-datepicker.esm.js");
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -5781,6 +5815,14 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var datatables__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! datatables */ "./node_modules/datatables/media/js/jquery.dataTables.js");
 /* harmony import */ var datatables__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(datatables__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var vuejs_datepicker__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! vuejs-datepicker */ "./node_modules/vuejs-datepicker/dist/vuejs-datepicker.esm.js");
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -14565,7 +14607,7 @@ exports.i(__webpack_require__(/*! -!../../../node_modules/css-loader??ref--5-1!.
 exports.i(__webpack_require__(/*! -!../../../node_modules/css-loader??ref--5-1!../../../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../../../public/css/switch.css */ "./node_modules/css-loader/index.js?!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./public/css/switch.css"), "");
 
 // module
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n/* Se importan los estilos del modulo */\n", ""]);
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n/* Se importan los estilos del modulo */\n", ""]);
 
 // exports
 
@@ -14662,7 +14704,7 @@ exports = module.exports = __webpack_require__(/*! ../../../node_modules/css-loa
 exports.i(__webpack_require__(/*! -!../../../node_modules/css-loader??ref--5-1!../../../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../../../public/css/usuario.css */ "./node_modules/css-loader/index.js?!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./public/css/usuario.css"), "");
 
 // module
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n/* Se importan los estilos del modulo */\n\n", ""]);
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n/* Se importan los estilos del modulo */\n\n", ""]);
 
 // exports
 
@@ -14681,7 +14723,7 @@ exports = module.exports = __webpack_require__(/*! ../../../node_modules/css-loa
 exports.i(__webpack_require__(/*! -!../../../node_modules/css-loader??ref--5-1!../../../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../../../public/css/usuario.css */ "./node_modules/css-loader/index.js?!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./public/css/usuario.css"), "");
 
 // module
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n/* Se importan los estilos del modulo */\n\n", ""]);
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n/* Se importan los estilos del modulo */\n\n", ""]);
 
 // exports
 
@@ -14700,7 +14742,7 @@ exports = module.exports = __webpack_require__(/*! ../../../node_modules/css-loa
 exports.i(__webpack_require__(/*! -!../../../node_modules/css-loader??ref--5-1!../../../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../../../public/css/usuario.css */ "./node_modules/css-loader/index.js?!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./public/css/usuario.css"), "");
 
 // module
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n/* Se importan los estilos del modulo */\n\n", ""]);
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n/* Se importan los estilos del modulo */\n\n", ""]);
 
 // exports
 
@@ -80971,17 +81013,35 @@ var render = function() {
                                           }
                                         }),
                                         _vm._v(" "),
+                                        _vm.esCero
+                                          ? _c(
+                                              "div",
+                                              { staticClass: "text-danger" },
+                                              [
+                                                _c("i", [
+                                                  _vm._v(
+                                                    "Debe ser mayor a cero"
+                                                  )
+                                                ])
+                                              ]
+                                            )
+                                          : _vm._e(),
+                                        _vm._v(" "),
                                         _vm._m(10, true),
                                         _vm._v(" "),
-                                        _c(
-                                          "div",
-                                          { staticClass: "invalid-feedback" },
-                                          [
-                                            _vm._v(
-                                              "\n                                  ¡Introduzca Monto!\n                            "
+                                        !_vm.esCero
+                                          ? _c(
+                                              "div",
+                                              {
+                                                staticClass: "invalid-feedback"
+                                              },
+                                              [
+                                                _vm._v(
+                                                  "\n                                  ¡Introduzca Monto!\n                            "
+                                                )
+                                              ]
                                             )
-                                          ]
-                                        )
+                                          : _vm._e()
                                       ]
                                     ),
                                 _vm._v(" "),
@@ -81067,12 +81127,16 @@ var render = function() {
                           ),
                           _vm._v(" "),
                           _c("div", { staticClass: "form-row mt-5" }, [
-                            !_vm.registrado
+                            !_vm.mostrarBtnImprimir
+                              ? _c("div", { staticClass: "col-md-1" })
+                              : _vm._e(),
+                            _vm._v(" "),
+                            _vm.mostrarBtnRegistrar
                               ? _c(
                                   "div",
                                   {
                                     staticClass:
-                                      "col-md-6 d-flex justify-content-center"
+                                      "col-md-4 d-flex justify-content-center"
                                   },
                                   [
                                     _c(
@@ -81102,11 +81166,14 @@ var render = function() {
                                     )
                                   ]
                                 )
-                              : _c(
+                              : _vm._e(),
+                            _vm._v(" "),
+                            _vm.mostrarBtnImprimir
+                              ? _c(
                                   "div",
                                   {
                                     staticClass:
-                                      "col-md-6 d-flex justify-content-center"
+                                      "col-md-4 d-flex justify-content-center"
                                   },
                                   [
                                     _c(
@@ -81135,13 +81202,14 @@ var render = function() {
                                       ]
                                     )
                                   ]
-                                ),
+                                )
+                              : _c("div", { staticClass: "col-md-1" }),
                             _vm._v(" "),
                             _c(
                               "div",
                               {
                                 staticClass:
-                                  "col-md-6 d-flex justify-content-center "
+                                  "col-md-4 d-flex justify-content-center "
                               },
                               [
                                 _c("i", { staticClass: "bx bx-cancel bx-sm" }),
@@ -81160,7 +81228,11 @@ var render = function() {
                                   }
                                 })
                               ]
-                            )
+                            ),
+                            _vm._v(" "),
+                            !_vm.mostrarBtnImprimir
+                              ? _c("div", { staticClass: "col-md-2" })
+                              : _vm._e()
                           ])
                         ],
                         2
@@ -84978,14 +85050,14 @@ var render = function() {
                       attrs: { novalidate: "" }
                     },
                     [
-                      _c("div", { staticClass: "form-row" }, [
+                      _c("div", { staticClass: "form-row text-center" }, [
                         _vm._m(2),
                         _vm._v(" "),
                         _c("div", { staticClass: "col-md-5 form-group my-0" }, [
                           _c("label", { staticClass: "col-form-label-lg" }, [
                             _vm._v(
                               "\n                                " +
-                                _vm._s(_vm.comercio.denominacion) +
+                                _vm._s(_vm.declaracion.denominacion) +
                                 "\n                            "
                             )
                           ])
@@ -84993,18 +85065,18 @@ var render = function() {
                         _vm._v(" "),
                         _vm._m(3),
                         _vm._v(" "),
-                        _c("div", { staticClass: "col-md-2 form-group my-0" }, [
+                        _c("div", { staticClass: "col-md-3 form-group my-0" }, [
                           _c("label", { staticClass: "col-form-label-lg" }, [
                             _vm._v(
                               "\n                                " +
-                                _vm._s(_vm.comercio.rif) +
+                                _vm._s(_vm.declaracion.rif) +
                                 "\n                            "
                             )
                           ])
                         ])
                       ]),
                       _vm._v(" "),
-                      _c("div", { staticClass: "form-row" }, [
+                      _c("div", { staticClass: "form-row text-center" }, [
                         _vm._m(4),
                         _vm._v(" "),
                         _c("div", { staticClass: "col-md-2 form-group my-0" }, [
@@ -85023,7 +85095,9 @@ var render = function() {
                           _c("label", { staticClass: "col-form-label-lg" }, [
                             _vm._v(
                               "\n                                " +
-                                _vm._s(_vm.declaracion.monto_declaracion) +
+                                _vm._s(
+                                  _vm.declaracion.monto_declaracion.toFixed(2)
+                                ) +
                                 "\n                            "
                             )
                           ])
@@ -85035,7 +85109,9 @@ var render = function() {
                           _c("label", { staticClass: "col-form-label-lg" }, [
                             _vm._v(
                               "\n                                " +
-                                _vm._s(_vm.declaracion.monto_impuesto) +
+                                _vm._s(
+                                  _vm.declaracion.monto_impuesto.toFixed(2)
+                                ) +
                                 "\n                            "
                             )
                           ])
@@ -85100,11 +85176,11 @@ var render = function() {
                               ),
                               _vm._v(" "),
                               _c("option", { attrs: { value: "1" } }, [
-                                _vm._v("Cheque")
+                                _vm._v("Depósito")
                               ]),
                               _vm._v(" "),
                               _c("option", { attrs: { value: "2" } }, [
-                                _vm._v("Transferencia")
+                                _vm._v("Punto de Venta")
                               ])
                             ]
                           )
@@ -85139,27 +85215,78 @@ var render = function() {
                         ]),
                         _vm._v(" "),
                         _c("div", { staticClass: "col-md-2" }, [
-                          _c("input", {
-                            directives: [
-                              {
-                                name: "model",
-                                rawName: "v-model",
-                                value: _vm.banco,
-                                expression: "banco"
-                              }
-                            ],
-                            staticClass: "form-control",
-                            attrs: { type: "text", value: "3", required: "" },
-                            domProps: { value: _vm.banco },
-                            on: {
-                              input: function($event) {
-                                if ($event.target.composing) {
-                                  return
+                          _c(
+                            "select",
+                            {
+                              directives: [
+                                {
+                                  name: "model",
+                                  rawName: "v-model",
+                                  value: _vm.banco,
+                                  expression: "banco"
                                 }
-                                _vm.banco = $event.target.value
+                              ],
+                              staticClass: "form-control",
+                              attrs: { value: "banco", required: "" },
+                              on: {
+                                change: function($event) {
+                                  var $$selectedVal = Array.prototype.filter
+                                    .call($event.target.options, function(o) {
+                                      return o.selected
+                                    })
+                                    .map(function(o) {
+                                      var val =
+                                        "_value" in o ? o._value : o.value
+                                      return val
+                                    })
+                                  _vm.banco = $event.target.multiple
+                                    ? $$selectedVal
+                                    : $$selectedVal[0]
+                                }
                               }
-                            }
-                          })
+                            },
+                            [
+                              _c(
+                                "option",
+                                {
+                                  attrs: {
+                                    value: "",
+                                    selected: "",
+                                    disabled: ""
+                                  }
+                                },
+                                [_vm._v("Banco")]
+                              ),
+                              _vm._v(" "),
+                              _c("option", { attrs: { value: "Banesco" } }, [
+                                _vm._v("Banesco")
+                              ]),
+                              _vm._v(" "),
+                              _c("option", { attrs: { value: "Mercantil" } }, [
+                                _vm._v("Mercantil")
+                              ]),
+                              _vm._v(" "),
+                              _c("option", { attrs: { value: "Venezuela" } }, [
+                                _vm._v("Venezuela")
+                              ]),
+                              _vm._v(" "),
+                              _c("option", { attrs: { value: "Tesoro" } }, [
+                                _vm._v("Tesoro")
+                              ]),
+                              _vm._v(" "),
+                              _c(
+                                "option",
+                                { attrs: { value: "Fondo Común" } },
+                                [_vm._v("Fondo Común")]
+                              ),
+                              _vm._v(" "),
+                              _c(
+                                "option",
+                                { attrs: { value: "Bicentenario" } },
+                                [_vm._v("Bicentenario")]
+                              )
+                            ]
+                          )
                         ]),
                         _vm._v(" "),
                         _c("div", { staticClass: "col-md-4" }, [
@@ -85347,7 +85474,7 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "col-md-2 form-group my-0" }, [
+    return _c("div", { staticClass: "col-md-1 form-group my-0" }, [
       _c("label", { staticClass: "col-form-label-lg" }, [
         _vm._v(
           "\n                                Rif :\n                            "
@@ -85692,11 +85819,11 @@ var render = function() {
                               ),
                               _vm._v(" "),
                               _c("option", { attrs: { value: "1" } }, [
-                                _vm._v("Cheque")
+                                _vm._v("Depósito")
                               ]),
                               _vm._v(" "),
                               _c("option", { attrs: { value: "2" } }, [
-                                _vm._v("Transferencia")
+                                _vm._v("Punto de Venta")
                               ])
                             ]
                           )
@@ -85731,27 +85858,78 @@ var render = function() {
                         ]),
                         _vm._v(" "),
                         _c("div", { staticClass: "col-md-2" }, [
-                          _c("input", {
-                            directives: [
-                              {
-                                name: "model",
-                                rawName: "v-model",
-                                value: _vm.banco,
-                                expression: "banco"
-                              }
-                            ],
-                            staticClass: "form-control",
-                            attrs: { type: "text", value: "3", required: "" },
-                            domProps: { value: _vm.banco },
-                            on: {
-                              input: function($event) {
-                                if ($event.target.composing) {
-                                  return
+                          _c(
+                            "select",
+                            {
+                              directives: [
+                                {
+                                  name: "model",
+                                  rawName: "v-model",
+                                  value: _vm.banco,
+                                  expression: "banco"
                                 }
-                                _vm.banco = $event.target.value
+                              ],
+                              staticClass: "form-control",
+                              attrs: { value: "banco", required: "" },
+                              on: {
+                                change: function($event) {
+                                  var $$selectedVal = Array.prototype.filter
+                                    .call($event.target.options, function(o) {
+                                      return o.selected
+                                    })
+                                    .map(function(o) {
+                                      var val =
+                                        "_value" in o ? o._value : o.value
+                                      return val
+                                    })
+                                  _vm.banco = $event.target.multiple
+                                    ? $$selectedVal
+                                    : $$selectedVal[0]
+                                }
                               }
-                            }
-                          })
+                            },
+                            [
+                              _c(
+                                "option",
+                                {
+                                  attrs: {
+                                    value: "",
+                                    selected: "",
+                                    disabled: ""
+                                  }
+                                },
+                                [_vm._v("Banco")]
+                              ),
+                              _vm._v(" "),
+                              _c("option", { attrs: { value: "Banesco" } }, [
+                                _vm._v("Banesco")
+                              ]),
+                              _vm._v(" "),
+                              _c("option", { attrs: { value: "Mercantil" } }, [
+                                _vm._v("Mercantil")
+                              ]),
+                              _vm._v(" "),
+                              _c("option", { attrs: { value: "Venezuela" } }, [
+                                _vm._v("Venezuela")
+                              ]),
+                              _vm._v(" "),
+                              _c("option", { attrs: { value: "Tesoro" } }, [
+                                _vm._v("Tesoro")
+                              ]),
+                              _vm._v(" "),
+                              _c(
+                                "option",
+                                { attrs: { value: "Fondo Común" } },
+                                [_vm._v("Fondo Común")]
+                              ),
+                              _vm._v(" "),
+                              _c(
+                                "option",
+                                { attrs: { value: "Bicentenario" } },
+                                [_vm._v("Bicentenario")]
+                              )
+                            ]
+                          )
                         ]),
                         _vm._v(" "),
                         _c("div", { staticClass: "col-md-4" }, [
@@ -86280,11 +86458,11 @@ var render = function() {
                               ),
                               _vm._v(" "),
                               _c("option", { attrs: { value: "1" } }, [
-                                _vm._v("Cheque")
+                                _vm._v("Depósito")
                               ]),
                               _vm._v(" "),
                               _c("option", { attrs: { value: "2" } }, [
-                                _vm._v("Transferencia")
+                                _vm._v("Punto de Venta")
                               ])
                             ]
                           )
@@ -86319,27 +86497,78 @@ var render = function() {
                         ]),
                         _vm._v(" "),
                         _c("div", { staticClass: "col-md-2" }, [
-                          _c("input", {
-                            directives: [
-                              {
-                                name: "model",
-                                rawName: "v-model",
-                                value: _vm.banco,
-                                expression: "banco"
-                              }
-                            ],
-                            staticClass: "form-control",
-                            attrs: { type: "text", value: "3", required: "" },
-                            domProps: { value: _vm.banco },
-                            on: {
-                              input: function($event) {
-                                if ($event.target.composing) {
-                                  return
+                          _c(
+                            "select",
+                            {
+                              directives: [
+                                {
+                                  name: "model",
+                                  rawName: "v-model",
+                                  value: _vm.banco,
+                                  expression: "banco"
                                 }
-                                _vm.banco = $event.target.value
+                              ],
+                              staticClass: "form-control",
+                              attrs: { value: "banco", required: "" },
+                              on: {
+                                change: function($event) {
+                                  var $$selectedVal = Array.prototype.filter
+                                    .call($event.target.options, function(o) {
+                                      return o.selected
+                                    })
+                                    .map(function(o) {
+                                      var val =
+                                        "_value" in o ? o._value : o.value
+                                      return val
+                                    })
+                                  _vm.banco = $event.target.multiple
+                                    ? $$selectedVal
+                                    : $$selectedVal[0]
+                                }
                               }
-                            }
-                          })
+                            },
+                            [
+                              _c(
+                                "option",
+                                {
+                                  attrs: {
+                                    value: "",
+                                    selected: "",
+                                    disabled: ""
+                                  }
+                                },
+                                [_vm._v("Banco")]
+                              ),
+                              _vm._v(" "),
+                              _c("option", { attrs: { value: "Banesco" } }, [
+                                _vm._v("Banesco")
+                              ]),
+                              _vm._v(" "),
+                              _c("option", { attrs: { value: "Mercantil" } }, [
+                                _vm._v("Mercantil")
+                              ]),
+                              _vm._v(" "),
+                              _c("option", { attrs: { value: "Venezuela" } }, [
+                                _vm._v("Venezuela")
+                              ]),
+                              _vm._v(" "),
+                              _c("option", { attrs: { value: "Tesoro" } }, [
+                                _vm._v("Tesoro")
+                              ]),
+                              _vm._v(" "),
+                              _c(
+                                "option",
+                                { attrs: { value: "Fondo Común" } },
+                                [_vm._v("Fondo Común")]
+                              ),
+                              _vm._v(" "),
+                              _c(
+                                "option",
+                                { attrs: { value: "Bicentenario" } },
+                                [_vm._v("Bicentenario")]
+                              )
+                            ]
+                          )
                         ]),
                         _vm._v(" "),
                         _c("div", { staticClass: "col-md-4" }, [

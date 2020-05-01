@@ -57,7 +57,7 @@
                 </div>
                 <div class="card-body mt-5">
                     <form class="needs-validation" novalidate>
-                        <div class="form-row">                           
+                        <div class="form-row text-center">                           
                             <div class="col-md-3 my-0">
                                 <label class="col-form-label-lg">
                                     Nombre o Denominación :
@@ -66,23 +66,23 @@
 
                             <div class="col-md-5 form-group my-0">
                                <label class="col-form-label-lg">
-                                    {{ comercio.denominacion }}
+                                    {{ declaracion.denominacion }}
                                 </label>                                  
                             </div>
 
-                            <div class="col-md-2 form-group my-0">
+                            <div class="col-md-1 form-group my-0">
                                <label class="col-form-label-lg">
                                     Rif :
                                 </label>                                  
                             </div>
 
-                            <div class="col-md-2 form-group my-0">
+                            <div class="col-md-3 form-group my-0">
                                <label class="col-form-label-lg">
-                                    {{ comercio.rif }}
+                                    {{ declaracion.rif }}
                                 </label>                                  
                             </div>
                         </div>                        
-                        <div class="form-row">                           
+                        <div class="form-row text-center">                           
                             <div class="col-md-2 my-0">
                                 <label class="col-form-label-lg">
                                     Periodo:
@@ -103,7 +103,7 @@
 
                             <div class="col-md-2 form-group my-0">
                                <label class="col-form-label-lg">
-                                    {{ declaracion.monto_declaracion }}
+                                    {{ declaracion.monto_declaracion.toFixed(2) }}
                                 </label>                                  
                             </div>
 
@@ -115,7 +115,7 @@
 
                             <div class="col-md-2 form-group my-0">
                                <label class="col-form-label-lg">
-                                    {{ declaracion.monto_impuesto }}
+                                    {{ declaracion.monto_impuesto.toFixed(2) }}
                                 </label>                                  
                             </div>
                         </div>                          
@@ -151,8 +151,8 @@
                             <div class="col-md-2">
                                 <select class="form-control" v-model="tipoPago" value="tipoPago" required>
                                    <option value="" selected disabled>Tipo de Pago</option>
-                                   <option value="1">Cheque</option>
-                                   <option value="2">Transferencia</option>
+                                   <option value="1">Depósito</option>
+                                   <option value="2">Punto de Venta</option>
                                 </select>
                             </div>
 
@@ -161,7 +161,15 @@
                             </div>
 
                             <div class="col-md-2">
-                                <input v-model="banco" type="text" value="3" class="form-control" required>
+                                <select class="form-control" v-model="banco" value="banco" required>
+                                   <option value="" selected disabled>Banco</option>
+                                   <option value="Banesco">Banesco</option>
+                                   <option value="Mercantil">Mercantil</option>
+                                   <option value="Venezuela">Venezuela</option>
+                                   <option value="Tesoro">Tesoro</option>
+                                   <option value="Fondo Común">Fondo Común</option>
+                                   <option value="Bicentenario">Bicentenario</option>
+                                </select>                                
                             </div>
 
                             <div class="col-md-4">
@@ -223,10 +231,8 @@
                 vista: 'listado',
                 titulo: 'Agregar Nuevo Pago de contribuyente',
                 declaraciones: [],
-                declaracion: [],
-                comercio: [],
-                periodo: [],
-                //tipos: [],
+                declaracion: [],                
+                periodo: [],                
                 boton: 'registro',                
                 tabla: '',
 
@@ -382,15 +388,14 @@
                 let me = this;
                 
                 this.vista = "registro";
-
-                var url = '/declaracion/'+declaracion.id;
+               
+                var url = '/declaracion/'+declaracion.idcomercio;
 
                 axios.get(url).then(function (response) {                
                 // handle success                                      
                 var respuesta = response.data;                                    
-                console.log("Respuesta ss: ", respuesta);
-                me.declaracion = respuesta.declaracion;
-                me.comercio = respuesta.comercio;                
+                console.log("Declaracion Respuesta : ", respuesta);
+                me.declaracion = respuesta.declaracion;                
               })
               .catch(function (error) {
                 // handle error

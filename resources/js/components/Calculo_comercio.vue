@@ -210,10 +210,13 @@
                             </div>
                              <div class="col-md-3 form-group" v-else> 
                                <input v-model="codigo.monto" type="number" value="" class="form-control" @keyUp="numero($event)" required>
+                               <div class="text-danger" v-if="esCero">
+                                      <i>Debe ser mayor a cero</i>
+                                </div>                          
                                <div class="valid-feedback">
                                       <i>¡Correcto!</i>
                                 </div> 
-                                <div class="invalid-feedback">
+                                <div class="invalid-feedback" v-if="!esCero">
                                       ¡Introduzca Monto!
                                 </div>
                             </div>
@@ -246,23 +249,25 @@
                         </div>
                         
 
-                        <div class="form-row mt-5">                            
-                            <div class="col-md-6 d-flex justify-content-center" v-if="!registrado">
+                        <div class="form-row mt-5"> 
+                            <div class="col-md-1" v-if="!mostrarBtnImprimir"></div>                          
+                            <div class="col-md-4 d-flex justify-content-center" v-if="mostrarBtnRegistrar">
                                 <button type="button" @click="validarFormulario( 'registro' )" name="registro" class="btn btn-primary btn-registrar">                                       
                                     <span class="align-middle ml-25">Registrar</span>
                                 </button>
                             </div>
 
-                            <div class="col-md-6 d-flex justify-content-center" v-else>
+                            <div class="col-md-4 d-flex justify-content-center" v-if="mostrarBtnImprimir">
                                  <button type="button" @click="imprimirEdoCta( comercio )" name="Imprimir" class="btn btn-success btn-nuevo">
                                     <span class="align-middle ml-25">Imprimir</span>
                                 </button>
                             </div>
-
-                            <div class="col-md-6 d-flex justify-content-center ">
+                            <div class="col-md-1" v-else></div>
+                            <div class="col-md-4 d-flex justify-content-center ">
                                 <i class='bx bx-cancel bx-sm' ></i>
                                 <input type="button" name="cancelar" @click="cancelarRegistro()" class="btn btn-danger btn-cancelar" value="Cancelar">
-                            </div>                            
+                            </div>
+                            <div class="col-md-2" v-if="!mostrarBtnImprimir"></div>
                         </div>   
                     </form>
                 </div>
@@ -291,7 +296,8 @@
                 boton: 'registro',                
                 tabla: '',
                 comercioImp: [],
-                registrado: false,
+                mostrarBtnRegistrar: true,
+                mostrarBtnImprimir: false,
 
                 //Datos de vista de detalle de comercio
                 comercio: [],
@@ -305,7 +311,8 @@
                 monto: 0,                
                 total: 0,
                 total_minimos: 0,
-                mensaje_deuda: false,    
+                mensaje_deuda: false, 
+                esCero: false,                            
             }            
         },
 
@@ -404,23 +411,32 @@
             
             validarFormulario( accion ) {
                 let me=this;
+                let vacio = false;
             
              var forms = document.getElementsByClassName('needs-validation');
                 // Loop over them and prevent submission
                 var validation = Array.prototype.filter.call(forms, function(form) {
-                    //form.addEventListener('submit', function(event) {
+                    //form.addEventListener('submit', function(event) { 
+                        for (var i = 0; i < me.codigos.length; i++) {
+                            if( me.codigos[i].monto == 0) { 
+                                vacio = true;
+                            }                                              
+                        }
+
                         if (form.checkValidity() === false) {
                           event.preventDefault();
-                          event.stopPropagation();                           
-                        } else {
-                           if( accion == 'registro' ) { 
-                                console.log(accion);
+                          event.stopPropagation(); 
+                          form.classList.add('was-validated');                          
+                        } else if( vacio ) {
+                            form.classList.remove('was-validated');                          
+                            me.esCero = true;
+                        } 
+                        else {
+                           if( accion == 'registro' ) {                                 
+                                console.log("Registro de accion : ", accion);
                                 me.agregarRegistro(); 
-                            } else { 
-                                me.actualizarRegistro(); 
                             }
-                        }
-                        form.classList.add('was-validated');
+                        }                        
                     //}, false);
                 });
             },
@@ -437,8 +453,6 @@
 
                 let me = this;  
 
-                console.log("Codigo a registrar : ", me.codigos)
-
                 axios.post('/declaracion_comercio/registrar', {                        
                         'idcomercio': me.comercio.id,
                         'idperiodo': me.periodo.id, 
@@ -451,8 +465,12 @@
                             'Registro exitoso.',
                             'success'
                         );
-                        me.registrado = true,
+                        
+                        if( me.tipoDeclaracion == 1) {
+                            me.mostrarBtnImprimir = true;                                                                             
+                        }                        
                         me.limpiarCampos();
+                        me.verDetalle( me.comercio );
                         //me.cambiarVista( "listado" );                        
 
                     }).catch(function (error) {
@@ -479,7 +497,7 @@
                 me.periodo = respuesta.periodo;
                 me.unidad_tributaria = respuesta.periodo.unidad_tributaria;                
                 me.tipoDeclaracion = respuesta.tipoDeclaracion; 
-                me.estado_declaracion = respuesta.estado_declaracion;
+                me.estado_declaracion = respuesta.estado_declaracion;                
 
                 if( me.estado_declaracion == 'estimada' ) {                    
                     me.ultimoDeclarado = respuesta.ultimaDeclaracion;
@@ -543,12 +561,13 @@
             cancelarRegistro() {
                 this.limpiarCampos();
                 this.cambiarVista("listado");
+                this.registrado = false;
             },
 
             limpiarCampos() {                
                 this.comercios = [];
                 //this.comercio = [];
-                this.codigos = [];
+                this.codigos = [];                
                 this.unidad_tributaria= 0,
                 this.monto = 0,                
                 this.total = 0,

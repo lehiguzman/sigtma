@@ -26,8 +26,27 @@ class DeclaracionComercioController extends Controller
         ->get();*/
         $declaracionesComercio = DeclaracionComercio::join('periodos', 'declaracion_comercio.idperiodo', '=', 'periodos.id')
                                     ->join('comercios', 'declaracion_comercio.idcomercio', '=', 'comercios.id')
-                                    ->selectRaw('periodos.periodo as periodo, comercios.id as id, comercios.rif, comercios.denominacion, comercios.direccion as direccion, comercios.licencia, declaracion_comercio.idcomercio as idcomercio, declaracion_comercio.estado, declaracion_comercio.tipo_declaracion as tipo_declaracion, sum(declaracion_comercio.monto_impuesto) as monto_impuesto')
-                                    ->groupBy('periodos.periodo', 'comercios.id', 'comercios.rif', 'comercios.denominacion', 'comercios.direccion', 'comercios.licencia', 'declaracion_comercio.idcomercio', 'declaracion_comercio.estado', 'declaracion_comercio.tipo_declaracion')->get();
+                                    ->selectRaw('periodos.periodo as periodo, 
+                                                 comercios.id as id, 
+                                                 comercios.rif, 
+                                                 comercios.denominacion, 
+                                                 comercios.direccion as direccion, 
+                                                 comercios.licencia, 
+                                                 declaracion_comercio.idcomercio as idcomercio, 
+                                                 declaracion_comercio.estado, 
+                                                 declaracion_comercio.tipo_declaracion as tipo_declaracion, 
+                                                 sum(declaracion_comercio.monto_impuesto) as monto_impuesto')
+                                    ->groupBy('periodos.periodo', 
+                                              'comercios.id', 
+                                              'comercios.rif', 
+                                              'comercios.denominacion', 
+                                              'comercios.direccion', 
+                                              'comercios.licencia', 
+                                              'declaracion_comercio.idcomercio', 
+                                              'declaracion_comercio.estado', 
+                                              'declaracion_comercio.tipo_declaracion')
+                                    ->where('declaracion_comercio.estado', '=', 'calculado')
+                                    ->get();
          
         return [ 
             'declaraciones_comercio' => $declaracionesComercio
@@ -62,9 +81,8 @@ class DeclaracionComercioController extends Controller
         
         foreach($codigos as $ep=>$codigo)
             {
-                $declaracionComercio = new DeclaracionComercio();
-                //$montoImpuesto = 0;
-                  $montoImpuesto = $codigo['monto_impuesto'];
+                $declaracionComercio = new DeclaracionComercio();                
+                $montoImpuesto = $codigo['monto_impuesto'];
 
                 if($declaracionPagada) {
                 foreach ($declaracionPagada as $key => $montoPag) {
@@ -148,14 +166,39 @@ class DeclaracionComercioController extends Controller
 
     public function selectDeclaracion(Request $request, $id) {
 
-        $declaracion = DeclaracionComercio::find($id);
-        $comercio = Comercio::find($declaracion->idcomercio);
-        $periodo = Periodo::find($declaracion->idperiodo);
+        //$declaracion = DeclaracionComercio::where("idcomercio", "=", $id);
+        //$comercio = Comercio::find($id);
+
+        $declaracion = DeclaracionComercio::join('periodos', 'declaracion_comercio.idperiodo', '=', 'periodos.id')
+                                    ->join('comercios', 'declaracion_comercio.idcomercio', '=', 'comercios.id')
+                                    ->selectRaw('periodos.periodo as periodo, 
+                                                 comercios.id as id, 
+                                                 comercios.rif, 
+                                                 comercios.denominacion, 
+                                                 comercios.direccion as direccion, 
+                                                 comercios.licencia, 
+                                                 declaracion_comercio.idcomercio as idcomercio, 
+                                                 declaracion_comercio.estado, 
+                                                 declaracion_comercio.tipo_declaracion as tipo_declaracion, 
+                                                 sum(declaracion_comercio.monto_declaracion) as monto_declaracion,
+                                                 sum(declaracion_comercio.monto_impuesto) as monto_impuesto')
+                                    ->groupBy('periodos.periodo', 
+                                              'comercios.id', 
+                                              'comercios.rif', 
+                                              'comercios.denominacion', 
+                                              'comercios.direccion', 
+                                              'comercios.licencia', 
+                                              'declaracion_comercio.idcomercio', 
+                                              'declaracion_comercio.estado', 
+                                              'declaracion_comercio.tipo_declaracion')
+                                    ->where('declaracion_comercio.estado', '=', 'calculado')
+                                    ->where('declaracion_comercio.idcomercio', '=', $id )
+                                    ->first();
+
+        //$periodo = Periodo::find($declaracion->idperiodo);
 
         return $datos = [
-            'declaracion' => $declaracion,
-            'comercio' => $comercio,
-            'periodo' => $periodo
+            'declaracion' => $declaracion,                       
         ];
     }
 

@@ -152,8 +152,8 @@
                             <div class="col-md-2">
                                 <select class="form-control" v-model="tipoPago" value="tipoPago" required>
                                    <option value="" selected disabled>Tipo de Pago</option>
-                                   <option value="1">Cheque</option>
-                                   <option value="2">Transferencia</option>
+                                   <option value="1">Depósito</option>
+                                   <option value="2">Punto de Venta</option>
                                 </select>
                             </div>
 
@@ -162,7 +162,15 @@
                             </div>
 
                             <div class="col-md-2">
-                                <input v-model="banco" type="text" value="3" class="form-control" required>
+                                <select class="form-control" v-model="banco" value="banco" required>
+                                   <option value="" selected disabled>Banco</option>
+                                   <option value="Banesco">Banesco</option>
+                                   <option value="Mercantil">Mercantil</option>
+                                   <option value="Venezuela">Venezuela</option>
+                                   <option value="Tesoro">Tesoro</option>
+                                   <option value="Fondo Común">Fondo Común</option>
+                                   <option value="Bicentenario">Bicentenario</option>
+                                </select>
                             </div>
 
                             <div class="col-md-4">
