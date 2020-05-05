@@ -1,20 +1,15 @@
 <template>
-    <div class="contenedor">
-        <div class="row mb-4">
-            <div class="col-12">
-                <div class="row">
-                    <div class="col-12">
-                        <h3 class="float-left pr-1">
-                            <b>Tipo de Contribuyente -> Actividad económica</b>
-                        </h3>
-                    </div>
-                </div>
-            </div>
-        </div>        
+    <!--<div class="contenedor"> -->
+    <div class="shadow-container"> 
+        <div class="card-body">       
+            <div class="card-header">                    
+                <h4 class="card-text">Códigos ISAE</h4>
+            </div>     
+        </div>
         <template v-if="vista=='listado'">    
-            <div class="p-5 bg-white rounded shadow-container">        
-                <div class="ml-5 mb-5">                    
-                    <input type="button" value="Nueva Act. económica" v-on:click="cambiarVista('registro')" class="btn btn-primary btn-nuevo">                
+            <div class="p-5 bg-white rounded">                
+                <div class="ml-5 mt-1 mb-2">                    
+                    <input type="button" value="Nueva Act. económica" v-on:click="cambiarVista('registro')" class="btn btn-primary btn-nuevo">       
                 </div>                         
                 <div class="float-right mb-0 input-search">
                     <span>Buscar : </span>
@@ -53,9 +48,9 @@
         </template>
         <!-- formulario de Nuevo Contribuyente de actividad comercial-->
         <template v-else-if="vista=='registro'">
-            <div class="p-5 bg-white rounded shadow-container">  
-                 <div class="card-header">                    
-                    <h4 class="card-text">{{ titulo }}</h4>
+            <div class="p-3 bg-white rounded shadow-container">  
+                <div class="col-md-12 mb-0 text-center bg-light">
+                    <h4>{{ titulo }}</h4>
                 </div>
                 <div class="card-body mt-5">
                     <form class="needs-validation" novalidate>                       
@@ -219,7 +214,7 @@
             return {
                 //Vista de listado de contribuyente de actividad económica
                 vista: 'listado',
-                titulo: 'Agregar Nueva Actividad comercial',
+                titulo: 'Nueva Actividad comercial',
                 tipos_comercio: [],
                 boton: 'registro',                
                 tabla: '',

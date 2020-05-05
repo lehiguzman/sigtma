@@ -1,24 +1,12 @@
 <template>
-	<div class="contenedor" style="z-index:-1;">
-		<div class="row mb-4">
-            <div class="col-12">
-                <div class="row">
-                    <div class="col-12">
-                        <h3 class="float-left pr-1">
-                            <b>Reportes -> bitacora</b>
-                        </h3>
-                    </div>
-                </div>
-            </div>
+	<div class="shadow-container">
+        <div class="card-body">       
+            <div class="card-header">                    
+                <h4 class="card-text">Reporte de Bitácora</h4>
+            </div>     
         </div>
-
         <template v-if="vista == 'listado'">
-        	<div class="p-5 bg-white rounded shadow-container">
-        		
-        		<div class="card-header">                    
-                    <h4 class="card-text">{{ titulo }}</h4>
-                </div>              	
-
+        	<div class="p-5 bg-white rounded">
         	<div class="card-body mt-4">
         		<div class="form-row">
         			<div class="col-md-3"></div>

@@ -59,6 +59,7 @@ class ComercioController extends Controller
         $comercio->denominacion = $request->denominacion;
         $comercio->rif = $request->rif;
         $comercio->fecha_inscripcion = $date->format('Y-m-d');
+        $comercio->anio_inscripcion = $date->format('Y');
         $comercio->cedula = $request->cedula;
         $comercio->direccion = $request->direccion;
         $comercio->telefono = $request->telefono;        

@@ -8,6 +8,10 @@ body {
   height: 100% !important;
 }
 
+ul {
+  list-style-type: none;
+}
+
 #sidebar-wrapper {
   min-height: 100vh;
   margin-left: -15rem;
@@ -70,9 +74,10 @@ body {
   text-align: center;
 }
 
-
-.link-menu {
+.bg-link {
   background-color: #f2f4f4;
+}
+.link-menu {  
   color: #AEADBF;
   font-family: helvetica;  
   font-size: 1em;
@@ -128,5 +133,7 @@ body {
   color: #AEADBF;
   font-family: helvetica, arial;  
 }
+
+
 
   

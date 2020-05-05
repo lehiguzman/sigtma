@@ -22,7 +22,7 @@
     
 </head>
 
-<body class="app">
+<body>
     <div id="app">
         <header class="app-header border-bottom-0 navbar menu-superior">             
             <ul class="nav navbar-nav col-md-10 texto-titulo">

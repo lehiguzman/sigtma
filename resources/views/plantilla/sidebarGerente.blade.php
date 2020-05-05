@@ -1,6 +1,6 @@
 <div class="menu" id="sidebar-wrapper">
   <div class="mb-5">
-    <img src="{{ asset('/img/samat.png') }}" class="logo-menu" >
+    <img src="{{ asset('/img/samat.png') }}" class="logo-menu" @click="menu=0">
   </div>
   <div class="list-group">
     <div href="#" class="mb-4 ml-5 border-0">

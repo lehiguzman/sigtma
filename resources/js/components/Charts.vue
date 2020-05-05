@@ -1,20 +1,19 @@
 <template>	
-
-	<div class="contenedor row">
-		<div class="bg-white shadow-container col-md-5">  
+	<div class="box-container row">
+		<div class="bg-white col-md-5 bg-shadow">  
 			<div class="mt-5 text-center ml-2">
 		        <VueApexCharts width="350" height="200" type="bar" :options="options" :series="series"></VueApexCharts>    
 		    </div>  	  
 		</div>
 		<div class="col-md-1">			
 		</div>
-		<div class="ml-2 bg-white shadow-container col-md-5">  
+		<div class="ml-2 bg-white col-md-5 bg-shadow">  
 			<div class="mt-5 text-center ml-4">
 	      		<VueApexCharts width="350" height="200" type="donut" :options="options2" :series="series2"></VueApexCharts>
 	      	</div>		    
 		</div>
 
-		<div class="row bg-white shadow-container mt-4 ml-2 col-11">  			
+		<div class="row bg-white mt-4 ml-2 col-11 bg-shadow">  			
 			<div class="col-md-12">			
 	        	<VueApexCharts width="800" height="200" type="line" :options="options" :series="series"></VueApexCharts>    
 	    	</div> 
@@ -23,6 +22,11 @@
 
 	
 </template>
+
+<style scoped>
+    /* Se importan los estilos del modulo */
+    @import "../../../public/css/chart.css";
+</style>    
 
 <script type="text/javascript">
 	import VueApexCharts from 'vue-apexcharts'	

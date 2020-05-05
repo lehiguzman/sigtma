@@ -1,18 +1,12 @@
 <template>
-    <div class="contenedor">
-        <div class="row mb-4">
-            <div class="col-12">
-                <div class="row">
-                    <div class="col-12">
-                        <h3 class="float-left pr-1">
-                            <b>Calcular Declaración -> Inmueble</b>
-                        </h3>
-                    </div>
-                </div>
-            </div>
-        </div>        
+    <div class="shadow-container">
+        <div class="card-body">       
+            <div class="card-header">                    
+                <h4 class="card-text">Declaración Inmueble</h4>
+            </div>     
+        </div>  
         <template v-if="vista=='listado'">    
-            <div class="p-5 bg-white rounded shadow-container">                                               
+            <div class="p-5 bg-white rounded">                                               
                 <div class="float-right mb-0 input-search">
                     <span>Buscar : </span>
                     <input type="text" id="mySearchText" class="border" @keyup="buscar()">                
@@ -52,9 +46,9 @@
         </template>
         <!-- formulario de Nuevo Contribuyente de actividad comercial-->
         <template v-else-if="vista=='registro'">
-            <div class="p-5 bg-white rounded shadow-container">  
-                 <div class="card-header">                    
-                    <h4 class="card-text">{{ titulo }}</h4>
+            <div class="p-3 bg-white rounded">  
+                <div class="col-md-12 mb-0 text-center bg-light">
+                    <h4>{{ titulo }}</h4>
                 </div>
                 <div class="card-body mt-3">                                               
                     <div class="form-row">                           
@@ -259,7 +253,7 @@
             return {
                 //Vista de listado de contribuyente de Inmueble
                 vista: 'listado',
-                titulo: 'Agregar Nueva Declaración Inmueble',                
+                titulo: 'Nueva Declaración',                
                 boton: 'registro',
                 periodos: [],
                 inmuebles: [],                

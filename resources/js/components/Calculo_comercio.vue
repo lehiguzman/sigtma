@@ -1,18 +1,13 @@
  <template>
-    <div class="contenedor">
-        <div class="row mb-4">
-            <div class="col-12">
-                <div class="row">
-                    <div class="col-12">
-                        <h3 class="float-left pr-1">
-                            <b>Calcular Declaración -> Actividad económica</b>
-                        </h3>
-                    </div>
-                </div>
-            </div>
-        </div>        
+    <div class="shadow-container">
+
+        <div class="card-body">       
+            <div class="card-header">                    
+                <h4 class="card-text">Declaración Actividad Económica</h4>
+            </div>     
+        </div>      
         <template v-if="vista=='listado'">    
-            <div class="p-5 bg-white rounded shadow-container">                                               
+            <div class="p-5 mt-1 bg-white rounded">                                               
                 <div class="float-right mb-0 input-search">
                     <span>Buscar : </span>
                     <input type="text" id="mySearchText" class="border" @keyup="buscar()">                
@@ -50,11 +45,11 @@
         </template>
         <!-- formulario de Nuevo Contribuyente de actividad comercial-->
         <template v-else-if="vista=='registro'">
-            <div class="p-5 bg-white rounded shadow-container">  
-                 <div class="card-header">                    
-                    <h4 class="card-text">{{ titulo }}</h4>
-                </div>
-                <div class="card-body mt-5">                                               
+            <div class="p-3 bg-white rounded">
+                <div class="col-md-12 mb-0 text-center bg-light">
+                    <h4>{{ titulo }}</h4>
+                </div>        
+                <div class="card-body">                                               
                     <div class="form-row">                           
                         <div class="col-md-3 my-0">
                             <label class="col-form-label-lg">
@@ -126,10 +121,16 @@
                     <div class="border-top my-3"></div>
 
                     <form v-if="estado_declaracion == 'deuda'">  
-                        <div class="form-row col-md-12 text-center">
+                        <div class="form-row col-md-12 mt-4 justify-content-center">
                             <label class="text-info text-center">
                                 <h4>Contribuyente cuenta con deuda de Año {{ anio }}, debe ser cancelada.</h4>
                             </label>
+                        </div>
+
+                        <div class="col-md-12 d-flex mt-5 justify-content-center" v-if="mostrarBtnImprimir">
+                             <button type="button" @click="imprimirEdoCta( comercio )" name="Imprimir" class="btn btn-success btn-nuevo">
+                                <span class="align-middle">Estado de cuenta</span>
+                            </button>
                         </div>
                     </form>
 
@@ -291,7 +292,7 @@
             return {
                 //Vista de listado de contribuyente de actividad económica
                 vista: 'listado',
-                titulo: 'Agregar Nueva Actividad comercial',
+                titulo: 'Nueva Declaración',
                 comercios: [],
                 boton: 'registro',                
                 tabla: '',
@@ -504,6 +505,7 @@
                 }
                 if( me.estado_declaracion == 'deuda' ) {
                     me.mensaje_deuda = true;
+                    me.mostrarBtnImprimir = true;
                 }
 
                 me.listarCodigos( comercio );                

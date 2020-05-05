@@ -19,6 +19,7 @@ class CreateComerciosTable extends Migration
             $table->string('denominacion');
             $table->string('rif');
             $table->date('fecha_inscripcion');
+            $table->string('anio_inscripcion');
             $table->string('cedula')->nullable();            
             $table->string('direccion')->nullable();
             $table->string('telefono')->nullable();

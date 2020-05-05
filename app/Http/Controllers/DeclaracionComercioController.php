@@ -110,10 +110,11 @@ class DeclaracionComercioController extends Controller
 
     	$declaracionComercio = DeclaracionComercio::where("idcomercio", '=', $id)->orderBy('ID', 'DESC')->first();	
 
-    	if(!$declaracionComercio) {
-            $periodo = Periodo::orderBy('ID', 'ASC')->first();
+    	if(!$declaracionComercio) {            
+            $comercio = Comercio::find($id);
+            $periodo = Periodo::where('periodo', '=',  $comercio->anio_inscripcion)->first();
     		$datos = [
-    		'anio' => $periodo->periodo,
+    		'anio' => $comercio->anio_inscripcion,
     		'tipoDeclaracion' => 1,
             'periodo' => $periodo,
             'estado_declaracion' => 'estimada_inicial'
@@ -224,30 +225,32 @@ class DeclaracionComercioController extends Controller
 
         $declaracionEstatus = DeclaracionComercio::where("idcomercio", "=", $request->idcomercio)->get();
 
-        //foreach ($declaracionEstatus as $key => $declaracion) {
-          //  if( $declaracion->estado == "calculado" ) {
+        foreach ($declaracionEstatus as $key => $declaracion) {
+            if( $declaracion->estado == "calculado" || $declaracion->estado == "no_pagado") {
                 $declaracionComercio = DeclaracionComercio::join('periodos', 'declaracion_comercio.idperiodo', '=', 'periodos.id')
                                     ->join('comercios', 'declaracion_comercio.idcomercio', '=', 'comercios.id')
-                                    ->selectRaw('periodos.periodo as periodo, comercios.id as idcomercio, comercios.rif, comercios.denominacion, comercios.direccion, comercios.licencia, declaracion_comercio.idcomercio, declaracion_comercio.estado, sum(declaracion_comercio.monto_impuesto) as monto_impuesto')
-                                    ->groupBy('periodos.periodo', 'comercios.id', 'comercios.rif', 'comercios.denominacion', 'comercios.direccion', 'comercios.licencia', 'declaracion_comercio.idcomercio', 'declaracion_comercio.estado')->where("declaracion_comercio.idcomercio", "=", $request->idcomercio)->get();
+                                    ->selectRaw('periodos.periodo as periodo, comercios.id as idcomercio, comercios.rif, comercios.denominacion, comercios.direccion, comercios.licencia, declaracion_comercio.idcomercio, declaracion_comercio.estado, declaracion_comercio.tipo_declaracion, declaracion_comercio.monto_impuesto as monto_impuesto')
+                                    ->where("declaracion_comercio.id", "=", $declaracion->id)
+                                    ->first();
 
-                    //$saldo = $saldo + $declaracionComercio->monto_impuesto;
+                    $saldo = $saldo + $declaracionComercio->monto_impuesto;
 
-                    $declaracionObj = $declaracionComercio;
+                    //$declaracionObj = $declaracionComercio;
 
-                /*$declaracionObj[] = [
+                $declaracionObj[] = [
                     "periodo" => $declaracionComercio->periodo,
                     "estado" => $declaracion->estado,
+                    "tipo_declaracion" => $declaracion->tipo_declaracion,
                     "tipo" => "abono",
                     "saldo" => $saldo,
                     "monto_impuesto" => $declaracionComercio->monto_impuesto
-                ];*/
-           // } elseif($declaracion->estado == "pagado") {
+                ];
+            } elseif($declaracion->estado == "pagado") {
 
-             /*   $declaracionComercio = DeclaracionComercio::join('periodos', 'declaracion_comercio.idperiodo', '=', 'periodos.id')
+                $declaracionComercio = DeclaracionComercio::join('periodos', 'declaracion_comercio.idperiodo', '=', 'periodos.id')
                                     ->join('pagos', 'declaracion_comercio.idpago', '=', 'pagos.id')
                                     ->join('comercios', 'declaracion_comercio.idcomercio', '=', 'comercios.id')
-                                    ->selectRaw('periodos.periodo, comercios.id as idcomercio, comercios.rif, comercios.denominacion, comercios.direccion, comercios.licencia, declaracion_comercio.estado, pagos.monto as monto_impuesto, pagos.referencia, pagos.banco')
+                                    ->selectRaw('periodos.periodo, comercios.id as idcomercio, comercios.rif, comercios.denominacion, comercios.direccion, comercios.licencia, declaracion_comercio.estado, declaracion_comercio.tipo_declaracion, pagos.monto as monto_impuesto')
                                     ->where("declaracion_comercio.id", "=", $declaracion->id)->first();
 
                     $saldo = $saldo + $declaracionComercio->monto_impuesto;
@@ -255,13 +258,13 @@ class DeclaracionComercioController extends Controller
                 $declaracionObj[] = [
                     "periodo" => $declaracionComercio->periodo,
                     "estado" => $declaracion->estado,
+                    "tipo_declaracion" => $declaracion->tipo_declaracion,
                     "tipo" => "abono",
                     "saldo" => $saldo,
                     "monto_impuesto" => $declaracionComercio->monto_impuesto
-                ]; */
-            //}
-        //}
-
+                ];
+            }
+        }
 
              $pdf = \PDF::loadView('pdf.edoCtaComercio', ['comercio' => $comercio , 'declaracionObj' => $declaracionObj, 'ramas' => $ramas ]);
                     return $pdf->download('EstadoCta Comercio.pdf');

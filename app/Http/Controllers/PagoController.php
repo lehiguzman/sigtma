@@ -14,6 +14,7 @@ use App\Vehiculo;
 use App\DeclaracionComercio;
 use App\DeclaracionInmueble;
 use App\DeclaracionVehiculo;
+use App\DetallePago;
 use App\Bitacora;
 
 class PagoController extends Controller
@@ -49,20 +50,36 @@ class PagoController extends Controller
         //if(!$request->ajax()) return redirect('/');
         $pago = new Pago();     
 
-        $date = new \DateTime($request->fecha_pago);
+        //$date = new \DateTime($request->fecha_pago);
         $user_id = Auth::user()->id;  
+
+        $detalles = $request->detalles; 
 
         try{
             DB::beginTransaction();   
         
-            $pago->tipo_pago = $request->tipo_pago;
-            $pago->referencia = $request->referencia;
-            $pago->banco = $request->banco;
-            $pago->fecha_pago = $date->format('Y-m-d');
+            //$pago->tipo_pago = $request->tipo_pago;
+            //$pago->referencia = $request->referencia;
+            //$pago->banco = $request->banco;
+            //$pago->fecha_pago = $date->format('Y-m-d');
     		    $pago->tipo_contribuyente = $request->tipo_contribuyente;
             $pago->monto = $request->monto_pago;
             $pago->user_id = $user_id;
             $pago->save(); 
+
+            foreach ($detalles as $a => $det) {
+
+              $fechaPago = new \DateTime($det['fecha_pago']);
+
+              $detalle = new DetallePago();
+              $detalle->idpago = $pago->id;
+              $detalle->tipo_pago = $det['tipoPago'];
+              $detalle->referencia = $det['referencia'];
+              $detalle->fecha_pago = $fechaPago;
+              $detalle->banco = $det['banco'];
+              $detalle->monto = $det['monto_pago'];
+              $detalle->save();
+            }
 
             if($request->tipo_contribuyente == 'comercio') {
                 $comercio = Comercio::find($request->idcomercio);

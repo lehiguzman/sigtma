@@ -1,18 +1,12 @@
 <template>
-    <div class="contenedor">
-        <div class="row mb-4">
-            <div class="col-12">
-                <div class="row">
-                    <div class="col-12">
-                        <h3 class="float-left pr-1">
-                            <b>Pago Contribuyente -> Inmueble</b>
-                        </h3>
-                    </div>
-                </div>
-            </div>
-        </div>        
+    <div class="shadow-container">
+        <div class="card-body">       
+            <div class="card-header">                    
+                <h4 class="card-text">Pago Inmueble</h4>
+            </div>     
+        </div>           
         <template v-if="vista=='listado'">    
-            <div class="p-5 bg-white rounded shadow-container">        
+            <div class="p-5 bg-white rounded">        
                 <!-- <div class="ml-5 mb-5">                    
                     <input type="button" value="Nuevo Pago" v-on:click="cambiarVista('registro')" class="btn btn-primary btn-nuevo">                
                 </div> -->
@@ -54,9 +48,9 @@
         </template>
         <!-- formulario de Nuevo Contribuyente de actividad comercial-->
         <template v-else-if="vista=='registro'">
-            <div class="p-5 bg-white rounded shadow-container">  
-                 <div class="card-header">                    
-                    <h4 class="card-text">{{ titulo }}</h4>
+            <div class="p-3 bg-white rounded">  
+                <div class="col-md-12 mb-0 text-center bg-light">
+                    <h4>{{ titulo }}</h4>
                 </div>
                 <div class="card-body mt-5">
                     <form class="needs-validation" novalidate>
@@ -106,7 +100,7 @@
 
                             <div class="col-md-2 form-group my-0">
                                <label class="col-form-label-lg">
-                                    {{ declaracion.monto_impuesto }}
+                                    {{ formatoMonto(declaracion.monto_impuesto) }}
                                 </label>                                  
                             </div>
 
@@ -118,10 +112,18 @@
 
                             <div class="col-md-2 form-group my-0">
                                <label class="col-form-label-lg">
-                                    {{ declaracion.monto_impuesto }}
+                                    {{ formatoMonto(declaracion.monto_impuesto) }}
                                 </label>                                  
                             </div>
-                        </div>                          
+                        </div>
+
+                        <div class="col-md-3 d-flex justify-content-center mb-3">
+                            <button type="button" @click="agregarFila()" name="registro" class="btn btn-primary btn-registrar">
+                                <span class="align-middle ml-25">
+                                    Agregar fila
+                                </span>
+                            </button>
+                        </div>                    
 
                         <div class="border-top my-3"></div>
 
@@ -150,9 +152,12 @@
                                <label><strong>Monto</strong></label>                               
                             </div>           
                         </div>
-                        <div class="form-row mt-2">
+
+                        <div v-if="detalles.length"> 
+
+                        <div class="form-row mt-2" v-for="(detalle, index) in detalles">
                             <div class="col-md-2">
-                                <select class="form-control" v-model="tipoPago" value="tipoPago" required>
+                                <select class="form-control" v-model="detalle.tipoPago" value="detalle.tipoPago" required>
                                    <option value="" selected disabled>Tipo de Pago</option>
                                    <option value="1">Depósito</option>
                                    <option value="2">Punto de Venta</option>
@@ -160,11 +165,11 @@
                             </div>
 
                             <div class="col-md-2">
-                                <input v-model="referencia" type="referencia" value="3" class="form-control" required>
+                                <input v-model="detalle.referencia" type="referencia" value="3" class="form-control" required>
                             </div>
 
                             <div class="col-md-2">
-                                <select class="form-control" v-model="banco" value="banco" required>
+                                <select class="form-control" v-model="detalle.banco" value="detalle.banco" required>
                                    <option value="" selected disabled>Banco</option>
                                    <option value="Banesco">Banesco</option>
                                    <option value="Mercantil">Mercantil</option>
@@ -177,7 +182,7 @@
 
                             <div class="col-md-4">
                                 <div class="position-relative has-icon-left">
-                                    <datepicker name="fecha_pago" v-model="fecha_pago" bootstrap-styling format="dd/MM/yyyy" placeholder="Fecha de pago" required>
+                                    <datepicker name="detalle.fecha_pago" v-model="detalle.fecha_pago" bootstrap-styling format="dd/MM/yyyy" placeholder="Fecha de pago" required>
                                     </datepicker>                                    
                                     <div class="valid-feedback">
                                       <i>¡Correcto!</i>
@@ -192,10 +197,10 @@
                             </div>
 
                             <div class="col-md-2">
-                                <input v-model="monto_pago" type="text" value="3" class="form-control" required>
+                                <input v-model="detalle.monto_pago" type="text" value="3" class="form-control" required>
                             </div>
                         </div>                                             
-
+                        </div>
                         <div class="form-row mt-5">                            
                             
                             <div class="col-md-6 d-flex justify-content-center" v-if="boton == 'registro'" >
@@ -232,13 +237,14 @@
             return {
                 //Vista de listado de contribuyente de actividad económica
                 vista: 'listado',
-                titulo: 'Agregar Nuevo Pago de contribuyente',
+                titulo: 'Nuevo Pago',
                 declaraciones: [],
                 declaracion: [],
                 comercio: [],                
                 //tipos: [],
                 boton: 'registro',                
                 tabla: '',
+                detalles: [],
 
                 //Vista de registro de pago de contribuyente Actividad Ecónomica
                 id: 0,
@@ -261,6 +267,12 @@
         },
 
         methods: {
+
+            formatoMonto(value) {
+                let val = (value/1).toFixed(2).replace('.', ',')
+                return val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")
+            },
+            
             cambiarVista( opcion ) {                
                 this.vista = opcion;                
                 this.listarDeclaraciones();                
@@ -339,8 +351,30 @@
                 $(function() {                    
                     $('#dataTable').dataTable().fnFilter($('#mySearchText').val());
                 });
-            },         
-     
+            },
+
+            agregarFila() {
+                //console.log("Detalle : ", detalles);
+                this.detalles.push({
+                        tipoPago: '',
+                        referencia: '',
+                        banco: '',
+                        fecha_pago: '',
+                        monto_pago: ''
+                    }); 
+
+            },
+
+            eliminarFila(index) {
+                let me = this;                
+                me.detalles.splice(index, 1);
+
+                if( me.detalles.length == 0) {
+                    me.boton = "";
+                } else {
+                    me.boton = "registro";
+                }
+            },    
 
 ////////////////////////* Registro de Pago *////////////////////////////////////////            
             agregarRegistro() {
@@ -354,8 +388,13 @@
                 });
 
                 let me = this;       
+                var monto = 0;
 
-                if( me.monto_pago != me.declaracion.monto_impuesto ) {
+                for (var i = 0; i < this.detalles.length; i++) {                    
+                    monto = monto + (parseFloat(this.detalles[i].monto_pago));
+                }
+
+                if( monto != me.declaracion.monto_impuesto ) {
                     alerta.fire(
                             'El monto debe coincidir con monto impuesto!',
                             'Error.',
@@ -364,14 +403,11 @@
                     return false;
                 }
 
-                axios.post('/pago/registrar', {
-                        'tipo_pago': me.tipoPago,
-                        'referencia': me.referencia,
-                        'banco': me.banco,
-                        'fecha_pago': me.fecha_pago,
-                        'monto_pago': me.monto_pago,
+                axios.post('/pago/registrar', {                        
+                        'monto_pago': monto,
                         'tipo_contribuyente': "inmueble",
-                        'idinmueble': me.declaracion.idinmueble
+                        'idinmueble': me.declaracion.idinmueble,
+                        'detalles': me.detalles,
                     }).then(function (response) {                        
                         alerta.fire(
                             'Registro!',
@@ -397,7 +433,14 @@
                 axios.get(url).then(function (response) {                
                 // handle success                                      
                 var respuesta = response.data;                
-                me.declaracion = respuesta;                
+                me.declaracion = respuesta;
+                me.detalles.push({
+                        tipoPago: '',
+                        referencia: '',
+                        banco: '',
+                        fecha_pago: '',
+                        monto_pago: ''
+                    });                   
               })
               .catch(function (error) {
                 // handle error

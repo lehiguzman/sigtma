@@ -15,10 +15,10 @@
 <body>
     <table width="100%">
         <tr>
-            <td width="30%" style="text-align: center;" >
+            <td width="25%" style="text-align: center;" >
                 <img src="./img/logo-alcaldia.png" style="height: 80px;">            
             </td>
-            <td width="40%" style="text-align: center;"><b>Estado de Cuenta Actividad Económica</b></td>
+            <td width="45%" style="text-align: center;"><b>Estado de Cuenta Actividades Económicas</b></td>
             <td width="30%" style="text-align: center;">
                 <img src="./img/samat.png" style="margin-top:40px; height: 100px; width: 140px;">
             </td>
@@ -134,23 +134,23 @@
             <tr style="font-size: 12px;">
                 <td class="bordes" width="15%" style="text-align: center;">
                     {{ $declaracion['periodo'] }}
-                </td>                
+                </td> 
+                @if($declaracion['tipo_declaracion'] == 1)                
                 <td class="bordes" width="55%" style="text-align: center;">
-                    Cargo Actividad Económica Pago Año {{ $declaracion['periodo'] }}
-                </td>                
-                <td class="bordes" width="15%" style="text-align: center;">
-                    {{ number_format($declaracion['monto_impuesto'], 2) }}
-                </td>                
-                <td class="bordes" width="15%" style="text-align: center;"></td>
-                @if($declaracion["estado"] == "calculado")
-                <td class="bordes" width="15%" style="text-align: center;">
-                    {{ number_format($declaracion['monto_impuesto'], 2) }}
+                    Cargo Estimado Actividad Económica Pago Año {{ $declaracion['periodo'] }}
                 </td>
                 @else
-                <td class="bordes" width="15%" style="text-align: center;">
-                    0.00
+                 <td class="bordes" width="55%" style="text-align: center;">
+                    Cargo Definitiva Actividad Económica Pago Año {{ $declaracion['periodo'] }}
                 </td>
                 @endif
+                <td class="bordes" width="15%" style="text-align: center;">
+                    {{ number_format($declaracion['monto_impuesto'], 2) }}
+                </td>                
+                <td class="bordes" width="15%" style="text-align: center;"></td>                
+                <td class="bordes" width="15%" style="text-align: center;">
+                    {{ number_format($declaracion['saldo'], 2) }}
+                </td>                
             </tr>
             @if( $declaracion['estado'] == "pagado")
             <tr style="font-size: 12px;">
