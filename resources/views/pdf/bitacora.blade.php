@@ -42,7 +42,10 @@
                 <td class="bordes" width="20%" style="text-align: center;">
                     <b>Usuario</b>
                 </td>
-                <td class="bordes" width="50%" style="text-align: center;">
+                <td class="bordes" width="20%" style="text-align: center;">
+                    <b>Código</b>
+                </td> 
+                <td class="bordes" width="30%" style="text-align: center;">
                     <b>Descripción del Movimiento</b>
                 </td>               
                 <td class="bordes" width="15%" style="text-align: center;">
@@ -54,8 +57,11 @@
             </tr>
             @foreach($bitacoraObj as $bitacora)
             <tr style="font-size: 12px;">
-                <td class="bordes" width="20%" style="text-align: center;">
+                <td class="bordes" width="10%" style="text-align: center;">
                     {{ $bitacora->name }}
+                </td>
+                <td class="bordes" width="10%" style="text-align: center;">
+                    {{ $bitacora->codigo }}
                 </td>                
                 <td class="bordes" width="50%" style="text-align: center;">
                     {{ $bitacora->accion }}

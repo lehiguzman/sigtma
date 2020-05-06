@@ -8,6 +8,8 @@ use App\Periodo;
 use App\Comercio;
 use App\Comerciotipo;
 use App\TipoContribuyenteComercio;
+use App\Bitacora;
+use Auth;
 
 class DeclaracionComercioController extends Controller
 {
@@ -66,6 +68,7 @@ class DeclaracionComercioController extends Controller
         //$declaracionComercio = new DeclaracionComercio(); 
 
         $codigos = $request->codigos;
+        $iduser = Auth::user()->id;
         $hayPagada = '0';
 
         $declaracionEstimada = DeclaracionComercio::where('idperiodo', '=', $request->idperiodo)->where('tipo_declaracion', '=', 1)->where('idcomercio', '=', $request->idcomercio)->where('estado', '=', 'calculado')->get();
@@ -101,6 +104,14 @@ class DeclaracionComercioController extends Controller
                 $declaracionComercio->estado = "calculado";
                 $declaracionComercio->save();
             }
+
+            $accion = 'Agrega Nueva Declaracion de Comercio';
+                Bitacora::create([
+                    'accion' => $accion,
+                    'codigo' => $request->rif,
+                    'tipo_contribuyente' => 'comercio',
+                    'iduser' => $iduser,            
+                ]);
          
     }
 
@@ -127,7 +138,7 @@ class DeclaracionComercioController extends Controller
             $ultimoPeriodoDeclarado = $periodo->periodo;
             $tipoDeclaracion = $declaracionComercio->tipo_declaracion;
 
-            if($declaracionComercio->estado == "calculado" && $declaracionComercio->tipo_declaracion == "2") {
+            if($periodo->periodo == $anioActual && $declaracionComercio->tipo_declaracion == "1") {
                $datos = [
                 'anio' => $periodo->periodo,
                 'tipoDeclaracion' => 2,
@@ -151,10 +162,11 @@ class DeclaracionComercioController extends Controller
                         $declaracionAnioAnterior = DeclaracionComercio::selectRaw('idtipo, sum(monto_declaracion) as monto_declaracion')->groupBy('idtipo')->where("idperiodo", '=', $declaracionComercio->idperiodo)->get();
 
                         $periodoNuevo = $ultimoPeriodoDeclarado + 1;
+                        $periodoSig = Periodo::where("periodo", '=', $periodoNuevo)->first();
                         $datos = [
                             'anio' => $periodoNuevo,
                             'tipoDeclaracion' => 1,
-                            'periodo' => $periodo,
+                            'periodo' => $periodoSig,
                             'estado_declaracion' => 'estimada',
                             'ultimaDeclaracion' => $declaracionAnioAnterior
                         ];
@@ -172,27 +184,21 @@ class DeclaracionComercioController extends Controller
 
         $declaracion = DeclaracionComercio::join('periodos', 'declaracion_comercio.idperiodo', '=', 'periodos.id')
                                     ->join('comercios', 'declaracion_comercio.idcomercio', '=', 'comercios.id')
-                                    ->selectRaw('periodos.periodo as periodo, 
-                                                 comercios.id as id, 
+                                    ->selectRaw('comercios.id as id, 
                                                  comercios.rif, 
                                                  comercios.denominacion, 
                                                  comercios.direccion as direccion, 
                                                  comercios.licencia, 
                                                  declaracion_comercio.idcomercio as idcomercio, 
-                                                 declaracion_comercio.estado, 
-                                                 declaracion_comercio.tipo_declaracion as tipo_declaracion, 
                                                  sum(declaracion_comercio.monto_declaracion) as monto_declaracion,
                                                  sum(declaracion_comercio.monto_impuesto) as monto_impuesto')
-                                    ->groupBy('periodos.periodo', 
-                                              'comercios.id', 
+                                    ->groupBy('comercios.id', 
                                               'comercios.rif', 
                                               'comercios.denominacion', 
                                               'comercios.direccion', 
                                               'comercios.licencia', 
-                                              'declaracion_comercio.idcomercio', 
-                                              'declaracion_comercio.estado', 
-                                              'declaracion_comercio.tipo_declaracion')
-                                    ->where('declaracion_comercio.estado', '=', 'calculado')
+                                              'declaracion_comercio.idcomercio')
+                                    //->where('declaracion_comercio.estado', '=', 'calculado')
                                     ->where('declaracion_comercio.idcomercio', '=', $id )
                                     ->first();
 
@@ -215,6 +221,7 @@ class DeclaracionComercioController extends Controller
 
         $saldo = 0;
         $declaracionObj = [];
+        $nameUser = Auth::user()->name;
         
         $comercio = Comercio::find($request->idcomercio);
         $tipos = Comerciotipo::where("idcomercio", "=", $request->idcomercio)->get();
@@ -260,13 +267,13 @@ class DeclaracionComercioController extends Controller
                     "estado" => $declaracion->estado,
                     "tipo_declaracion" => $declaracion->tipo_declaracion,
                     "tipo" => "abono",
-                    "saldo" => $saldo,
+                    "saldo" => $saldo,                    
                     "monto_impuesto" => $declaracionComercio->monto_impuesto
                 ];
             }
         }
 
-             $pdf = \PDF::loadView('pdf.edoCtaComercio', ['comercio' => $comercio , 'declaracionObj' => $declaracionObj, 'ramas' => $ramas ]);
+             $pdf = \PDF::loadView('pdf.edoCtaComercio', ['comercio' => $comercio , 'declaracionObj' => $declaracionObj, 'ramas' => $ramas, 'nombre' => $nameUser ]);
                     return $pdf->download('EstadoCta Comercio.pdf');
         
     }

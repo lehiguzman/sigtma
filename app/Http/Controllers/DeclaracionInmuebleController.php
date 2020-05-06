@@ -68,6 +68,8 @@ class DeclaracionInmuebleController extends Controller
         $accion = 'Agrega Nueva Declaracion de Inmueble';
                 Bitacora::create([
                     'accion' => $accion,
+                    'codigo' => $request->codigo_catastral,
+                    'tipo_contribuyente' => 'inmueble',
                     'iduser' => $iduser,            
                 ]);
     }

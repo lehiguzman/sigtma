@@ -62,6 +62,8 @@ class DeclaracionVehiculoController extends Controller
         $accion = 'Agrega Nueva Declaracion de Vehiculo';
                 Bitacora::create([
                     'accion' => $accion,
+                    'codigo' => $request->placa,
+                    'tipo_contribuyente' => 'vehiculo',
                     'iduser' => $iduser,            
                 ]);           
     }

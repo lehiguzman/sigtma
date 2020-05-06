@@ -1,4 +1,4 @@
-<template>
+<template>    
     <div class="shadow-container">
         <div class="card-body">       
             <div class="card-header">                    
@@ -51,34 +51,30 @@
                 </div>
                 <div class="card-body mt-5">
                     <form class="needs-validation" novalidate>
-
                         <div class="form-row">
-                            <div class="col-md-1"></div>
-
-                                <label for="denominacion" class="col-md-3 col-form-label-lg">
-                                    Actividad Económica
-                                </label> 
+                            <div class="col-md-1"></div>                               
+                                                               
+                                <label for="rif" class="col-md-3 col-form-label-lg">
+                                    Rif
+                                </label>                                
 
                             <div class="col-md-4 form-group">
                                 <div class="position-relative has-icon-left">
-                                    <select class="form-control" v-model="tipoArray" value="tipoArray" multiple required>
-                                       <option value="" selected disabled>Seleccione Tipo</option>
-                                       <option v-for="tipo in tipos" :key="tipo.id" :value="tipo.id" v-text="tipo.denominacion"></option>
-                                    </select>                                    
+                                    <input type="text" name="rif" v-model="rif" class="form-control" placeholder="Rif" required>
                                     <div class="valid-feedback">
                                       <i>¡Correcto!</i>
                                     </div>
                                     <div class="invalid-feedback">
-                                      ¡Seleccione Tipo de Actividad comercial!
+                                      ¡Introduzca Rif o Cédula!
                                     </div>
                                     <div class="form-control-position">
-                                        <i class='bx bx-id-card bx-sm' ></i>
-                                    </div>                                    
-                                </div>                                    
+                                        <i class='bx bxs-lock bx-sm' ></i>
+                                    </div>
+                                </div>                                                              
                             </div>
-                        </div> 
+                        </div>
 
-                        <div class="form-row">
+                        <div class="form-row">                            
                             <div class="col-md-1"></div>
 
                                 <label for="licencia" class="col-md-3 col-form-label-lg">
@@ -122,31 +118,7 @@
                                     </div>                                                                
                                 </div>                                    
                             </div>
-                        </div>                        
-
-                        <div class="form-row">
-                            <div class="col-md-1"></div>                               
-                                                               
-                                <label for="rif" class="col-md-3 col-form-label-lg">
-                                    Rif
-                                </label>                                
-
-                            <div class="col-md-4 form-group">
-                                <div class="position-relative has-icon-left">
-                                    <input type="text" name="rif" v-model="rif" class="form-control" placeholder="Rif" required>
-                                    <div class="valid-feedback">
-                                      <i>¡Correcto!</i>
-                                    </div>
-                                    <div class="invalid-feedback">
-                                      ¡Introduzca Rif o Cédula!
-                                    </div>
-                                    <div class="form-control-position">
-                                        <i class='bx bxs-lock bx-sm' ></i>
-                                    </div>
-                                </div>                                                              
-                            </div>
-                        </div>
-
+                        </div>    
                         <div class="form-row">
                             <div class="col-md-1"></div>                               
                                                                
@@ -221,7 +193,59 @@
                                     </div>
                                 </div>                                                              
                             </div>
-                        </div>                        
+                        </div> 
+
+                        <div class="form-row">
+                           <div class="col-md-1"></div>                               
+                                                               
+                                <label for="direccion" class="col-md-3 col-form-label-lg">
+                                    Tipo de Contribuyente
+                                </label>                                
+
+                            <div class="col-md-4 form-group">
+                                <div class="position-relative has-icon-left">
+                                    <button type="button" @click="abrirModal()" class="btn btn-primary">
+                                        <i class="fa fa-plus"></i>&nbsp;Agregar Tipo
+                                    </button>                                                                     
+                                </div>                                                              
+                            </div> 
+                        </div>
+
+                         <table class="table table-bordered table-striped table-sm">
+                            <thead>
+                                <tr class="bg-success">
+                                    <th>Eliminar</th>
+                                    <th>Código</th>
+                                    <th>Denominación</th>
+                                    <th>Alicuota Anual</th>
+                                    <th>Minimo Tributable</th>
+                                </tr>
+                            </thead>
+                            <tbody v-if="arrayDetalle.length">
+                                <tr v-for="(detalle,index) in arrayDetalle" :key="detalle.id">
+                                    <td>
+                                        <button @click="eliminarDetalle(index)" type="button" class="btn btn-danger btn-sm">
+                                            <i class="fa fa-times fa-2x"></i>
+                                        </button>
+                                    </td>
+                                    <td v-text="detalle.codigo">
+                                    </td>
+                                    <td v-text="detalle.denominacion">
+                                    </td>
+                                    <td v-text="detalle.alicuota_anual">                                        
+                                    </td>
+                                    <td v-text="detalle.minimo_tributable">                                        
+                                    </td>                                   
+                                </tr>
+                            </tbody>
+                            <tbody v-else>
+                                <tr>
+                                    <td colspan="5">
+                                        No se ha agregado tipo de Actividad Económica
+                                    </td>
+                                </tr>
+                            </tbody>                                    
+                        </table>
 
                         <div class="form-row mt-5">
                             <div class="col-md-1"></div>
@@ -243,17 +267,88 @@
                                 <input type="button" name="cancelar" @click="cancelarRegistro()" class="btn btn-danger btn-cancelar" value="Cancelar">
                             </div>
                         </div>                                               
-                    </form>                  
+                    </form>                     
+
+                    <div class="modal fade" :class="{'mostrar':modal}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" style="display: none;" aria-hidden="true">
+                        <div class="modal-dialog modal-primary modal-lg" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h4 class="modal-title" v-text="tituloModal"></h4>
+                                    <button type="button" @click="cerrarModal()" class="close" aria-label="Close">
+                                      <span aria-hidden="true">×</span>
+                                    </button>
+                                </div>
+                       
+                                <div class="modal-body">  
+                                    <div class="form-group row">
+                                    <div class="col-md-6">
+                                        <div class="input-group">
+                                            <select class="form-control col-md-3" v-model="criterioP">
+                                                <option value="denominación">Denominación</option>
+                                                <option value="codigo">Codigo</option>
+                                            </select>
+                                            <input type="text" @keyup.enter="listarTipo(buscarP,criterioP);" class="form-control" placeholder="Buscar texto" v-model="buscarP">
+                                            <button type="submit"  @click="listarTipo(buscarP,criterioP);" class="btn btn-primary"><i class="fa fa-search"></i> Buscar</button>
+                                        </div>
+                                    </div>                          
+                                    <table class="table table-bordered table-striped table-sm">
+                                    <thead>
+                                        <tr class="bg-primary">                                   
+                                            <th>Categoría</th>
+                                            <th>Producto</th>
+                                            <th>Codigo</th>
+                                            <th>Accion</th>                                                                    
+                                        </tr>
+                                    </thead>
+                                    <tbody>                               
+                                        <tr v-for="tipo in tipos" :key="tipo.id">
+                                            <td v-text="tipo.codigo"></td>
+                                            <td v-text="tipo.denominacion"></td>
+                                            <td v-text="tipo.alicuota_anual"></td>
+                                            <td v-text="tipo.minimo_tributable"></td>
+                                            <td>    
+                                                <button type="button" @click="agregarDetalleModal(tipo)" class="btn btn-info">
+                                                    <i class="fa fa-plus fa-2x"> </i> Agregar
+                                                </button>
+                                            </td>
+                                        </tr>                                       
+                                    </tbody>
+                                </table>                           
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" @click="cerrarModal()" class="btn btn-danger"><i class="fa fa-times fa-2x"></i> Cerrar
+                            </button>
+                        </div>                        
+                    </div>
+                    <!-- /.modal-content -->
+                </div>
+                <!-- /.modal-dialog -->
+            </div>
+                                   
                 </div>
             </div>
-        </template>        
+        </template>
+        <!--Inicio del modal agregar/actualizar-->             
     </div>
+        
 </template>
 
 <style scoped>
     /* Se importan los estilos del modulo */
     @import "../../../public/css/usuario.css";
-    @import "../../../public/css/switch.css";
+
+    .modal-content {
+            width: 100% !important;
+            position: absolute !important;
+        }
+
+        .mostrar {
+            display: initial !important;
+            opacity: 1 !important;
+            position: absolute !important;
+            background-color: #3c29297a !important;
+        }
 </style>    
 
 <script type="text/javascript">
@@ -271,6 +366,13 @@
                 tipos: [],
                 boton: 'registro',                
                 tabla: '',
+
+                modal: 0,
+                tituloModal: '',
+                criterioP: 'codigo',
+                buscarP: '',
+                tipoAccion: 0,
+                arrayDetalle: [],
 
                 //Vista de registro de contribuyente de actividad económica
                 id: 0,
@@ -300,6 +402,73 @@
                 } else {
                     this.listarComercios();
                 }
+            },
+
+            abrirModal() {
+                this.tipos=[];
+                this.modal = 1;                                
+                this.tituloModal="Seleccione uno o varios tipo de contribuyente";                
+            },
+
+            cerrarModal() { 
+                this.modal = 0;
+                this.tituloModal = "";                
+            },
+
+            listarTipo(buscar, criterio){
+                let me = this;
+
+                var url = '/tipoComercio/listarTipoComercio?buscar='+ buscar + '&criterio=' + criterio;
+
+                axios.get(url).then(function (response) {
+                    // handle success
+                    //console.log(response);
+                    var respuesta = response.data;
+                    me.tipos = respuesta.tipoComercio.data;
+                    me.pagination = respuesta.pagination;                
+                  })
+                  .catch(function (error) {
+                    // handle error
+                    console.log(error);
+                  })
+                  .finally(function () {
+                    // always executed
+                  });
+            },
+
+            agregarDetalleModal(data=[]) {
+                let me = this;
+
+                if(me.encuentra(data['id'])){
+                    swal.fire({
+                        type: 'error',
+                        title: 'Error...',
+                        text: 'Tipo de contribuyente ya agregado!'
+                    });
+                } else {
+                    me.arrayDetalle.push({
+                        idtipo: data['id'],
+                        codigo: data['codigo'],
+                        denominacion: data['denominacion'],
+                        alicuota_anual: data['alicuota_anual'],
+                        minimo_tributable: data['minimo_tributable'],
+                    });
+                }
+            },
+
+            eliminarDetalle(index) {
+                let me = this;                
+                me.arrayDetalle.splice(index, 1);
+            },
+
+            encuentra(id) {
+                var sw=0;
+                for (var i = 0; i<this.arrayDetalle.length; i++) {
+                    if(this.arrayDetalle[i].idtipo == id){
+                        sw=true;
+                    }
+                }
+                return sw;
             },
 
 ///////////////////////////* Listado de contribuyente de actividad económica *//////////////////////////////////////////            
@@ -427,7 +596,7 @@
                 })                
 
                 let me=this;
-                console.log("Array de tipo ", me.tipoArray);               
+                console.log("Array de tipo ", me.arrayDetalle);               
                 
                 axios.post('/comercio/registrar', {
                         'licencia': me.licencia,
@@ -437,7 +606,7 @@
                         'rif': me.rif,
                         'direccion':me.direccion,
                         'telefono':me.telefono,
-                        'tipos': me.tipoArray
+                        'tipos': me.arrayDetalle
 
                     }).then(function (response) {   
 
@@ -476,6 +645,7 @@
                     me.cedula = comercio.cedula;
                     me.direccion = comercio.direccion;
                     me.telefono = comercio.telefono;
+                    me.arrayDetalle = tipoArray;
                     me.titulo = 'Editar contribuyente';
                     me.boton = "edicion";
                   })
@@ -581,9 +751,10 @@
                 this.comercios = [];
                 this.id = 0;
                 this.licencia = '',
+                this.arrayDetalle = [],
                 this.tipo = '';
                 this.denominacion = '';
-                this.fecha_inscripcion;                
+                this.fecha_inscripcion = '';                
                 this.rif = '';
                 this.cedula = '';
                 this.direccion = '';

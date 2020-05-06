@@ -27,7 +27,8 @@ class ComercioController extends Controller
         
         if($request->id) {
             $comercio = Comercio::find($request->id);    
-            $tipos = Comerciotipo::where('idcomercio', '=', $request->id)->get();
+            $tipos = Comerciotipo::join('tipo_contribuyente_comercio', 'comercios_tipo.idtipo', '=', 'tipo_contribuyente_comercio.id')
+            ->where('comercios_tipo.idcomercio', '=', $request->id)->get();
             
             $datos = [
                 'comercios' => $comercio,
@@ -72,7 +73,7 @@ class ComercioController extends Controller
             {
                 $comercioTipo = new Comerciotipo();
 
-                $comercioTipo->idtipo = $tipo;
+                $comercioTipo->idtipo = $tipo['idtipo'];
                 $comercioTipo->idcomercio = $comercio->id;
                 
                 $comercioTipo->save();
@@ -81,6 +82,8 @@ class ComercioController extends Controller
             $accion = 'Agrega Nuevo Contribuyente';
                 Bitacora::create([
                     'accion' => $accion,
+                    'codigo' => $request->rif,
+                    'tipo_contribuyente' => 'comercio',
                     'iduser' => $iduser,            
                 ]);    
 
@@ -118,11 +121,14 @@ class ComercioController extends Controller
         try{
             DB::beginTransaction();
 
+            $date = new \DateTime($request->fecha_inscripcion);  
+
         $comercio = Comercio::findOrFail($request->id);                
         $comercio->licencia = $request->licencia;
         $comercio->denominacion = $request->denominacion;
         $comercio->rif = $request->rif;
-        $comercio->fecha_inscripcion = $request->fecha_inscripcion;
+        $comercio->fecha_inscripcion = $date->format('Y-m-d');
+        $comercio->anio_inscripcion = $date->format('Y');
         $comercio->cedula = $request->cedula;
         $comercio->direccion = $request->direccion;
         $comercio->telefono = $request->telefono;      
@@ -136,7 +142,7 @@ class ComercioController extends Controller
                 
                 if(count($comercioTipo)==0) {
                     $comercioTipoAdd = new Comerciotipo();
-                    $comercioTipoAdd->idtipo = $tipo;
+                    $comercioTipoAdd->idtipo = $tipo['idtipo'];
                     $comercioTipoAdd->idcomercio = $comercio->id;
                     $comercioTipoAdd->save();
                 }                
@@ -146,6 +152,8 @@ class ComercioController extends Controller
             $accion = 'Actualiza Contribuyente: '. $request->denominacion;
                 Bitacora::create([
                     'accion' => $accion,
+                    'codigo' => $request->rif,
+                    'tipo_contribuyente' => 'comercio',
                     'iduser' => $iduser,            
                 ]);  
 
@@ -156,7 +164,7 @@ class ComercioController extends Controller
             DB::rollBack();
         }
 
-        return $comercioTipo;
+        return $comercio;
     }
 
     /**
@@ -173,10 +181,10 @@ class ComercioController extends Controller
             $accion = 'Elimina Contribuyente: '. $comercio->denominacion;
                 Bitacora::create([
                     'accion' => $accion,
+                    'codigo' => $comercio->rif,
+                    'tipo_contribuyente' => 'comercio',
                     'iduser' => $iduser,            
-                ]);  
-
-           
+                ]);           
         $comercio->delete();
     }
 }

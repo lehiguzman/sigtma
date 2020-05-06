@@ -132,14 +132,16 @@
                     <thead>
                         <tr class="text-center">                                
                             <th width="15%">Usuario</th>
+                            <th width="15%">Código</th>
                             <th width="15%">Fecha</th>
                             <th width="15%">Hora</th>
-                            <th width="55%">Acción</th>                            
+                            <th width="40%">Acción</th>                            
                         </tr>
                     </thead>
                     <tbody>
                         <tr class="text-center" v-for="pago in pagos">                          
                             <td>{{ pago.name }}</td>      
+                            <td>{{ pago.codigo }}</td>      
                             <td>{{ pago.fecha | formatoFecha }}</td>
                             <td>{{ pago.fecha | formatoHora }}</td>                            
                             <td>{{ pago.accion }}</td>                            

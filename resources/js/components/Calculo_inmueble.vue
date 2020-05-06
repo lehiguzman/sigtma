@@ -410,6 +410,7 @@
                         'area_terreno': me.area_terreno,
                         'valor_total': me.valor_total,
                         'monto_impuesto': me.total,
+                        'codigo_catastral': me.codigo_catastral,
                     }).then(function (response) {                        
                         alerta.fire(
                             'Registro!',

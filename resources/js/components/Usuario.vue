@@ -70,7 +70,7 @@
                                 <div class="position-relative has-icon-left">
                                     <select class="form-control" v-model="sede" value="sede" required>
                                        <option value="" selected="selected">Seleccione Sede</option>
-                                       <option value="Barinas">Barinas</option>                                       
+                                       <option value="Samat">Samat</option>                                       
                                     </select>                                    
                                     <div class="valid-feedback">
                                       <i>¡Correcto!</i>

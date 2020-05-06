@@ -29,12 +29,7 @@
           <a href="#" @click="menu=8" class="list-group-item list-group-item-action border-0 link-menu">          
             <i class="bx bx-calculator bx-sm mx-3"></i> <span>Declaración</span>            
           </a>
-        </li>
-        <li>
-          <a href="#" @click="menu=11" class="list-group-item list-group-item-action border-0 link-menu">          
-            <i class="bx bxl-paypal bx-sm mx-3"></i> <span>Registrar Pago</span>            
-          </a>
-        </li>
+        </li>        
         <li>
           <a href="#" @click="menu=2" class="list-group-item list-group-item-action border-0 link-menu">          
             <i class="bx bx-list-plus bx-sm mx-3"></i> <span>Nuevo Código ISAE</span>            

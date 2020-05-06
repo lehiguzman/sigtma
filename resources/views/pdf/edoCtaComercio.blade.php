@@ -70,6 +70,14 @@
                     {{ $comercio->licencia }}
                 </td>             
             </tr>
+            <tr>
+                <td class="bordes" width="30%" style="padding-left: 10px;">
+                    Impreso por :
+                </td>
+                <td class="bordes" colspan="3" width="30%">
+                    {{ $nombre }}
+                </td>                              
+            </tr>
         </table>
     </div>    
     <div style="padding-top: 30px;">
@@ -121,10 +129,10 @@
                     <b>Descripción del Movimiento</b>
                 </td>               
                 <td class="bordes" width="15%" style="text-align: center;">
-                    <b>Abonos</b>
+                    <b>Cargos</b>
                 </td>
                 <td class="bordes" width="15%" style="text-align: center;">
-                    <b>Cargos</b>
+                    <b>Abonos</b>
                 </td>
                 <td class="bordes" width="15%" style="text-align: center;">
                     <b>Saldo</b>
@@ -137,11 +145,11 @@
                 </td> 
                 @if($declaracion['tipo_declaracion'] == 1)                
                 <td class="bordes" width="55%" style="text-align: center;">
-                    Cargo Estimado Actividad Económica Pago Año {{ $declaracion['periodo'] }}
+                    Estimada Año {{ $declaracion['periodo'] }}
                 </td>
                 @else
                  <td class="bordes" width="55%" style="text-align: center;">
-                    Cargo Definitiva Actividad Económica Pago Año {{ $declaracion['periodo'] }}
+                    Definitiva Año {{ $declaracion['periodo'] }}
                 </td>
                 @endif
                 <td class="bordes" width="15%" style="text-align: center;">

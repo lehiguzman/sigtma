@@ -81,10 +81,10 @@
     
         <div class="app-body">
 
-        @if(Auth::user()->roles->first()->rol == 'admin')
+        @if(Auth::user()->roles->first()->rol == 'gerente')
             @include('plantilla.sidebarAdministrador')
         @endif
-        @if(Auth::user()->roles->first()->rol == 'gerente')
+        @if(Auth::user()->roles->first()->rol == 'supervisor')
             @include('plantilla.sidebarGerente')
         @endif
         @if(Auth::user()->roles->first()->rol == 'agente')

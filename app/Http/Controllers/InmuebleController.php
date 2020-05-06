@@ -59,6 +59,8 @@ class InmuebleController extends Controller
         $accion = 'Agrega Nuevo Contribuyente';
                 Bitacora::create([
                     'accion' => $accion,
+                    'codigo' => $inmueble->codigo_catastral,
+                    'tipo_contribuyente' => 'inmueble',
                     'iduser' => $iduser,            
                 ]);     
     } 
@@ -94,6 +96,8 @@ class InmuebleController extends Controller
             $accion = 'Actualiza Contribuyente: '. $request->denominacion;
                 Bitacora::create([
                     'accion' => $accion,
+                    'codigo' => $inmueble->codigo_catastral,
+                    'tipo_contribuyente' => 'inmueble',
                     'iduser' => $iduser,            
                 ]);   
     }
@@ -113,6 +117,8 @@ class InmuebleController extends Controller
         $accion = 'Elimina Contribuyente: '. $inmueble->denominacion;
                 Bitacora::create([
                     'accion' => $accion,
+                    'codigo' => $inmueble->codigo_catastral,
+                    'tipo_contribuyente' => 'inmueble',
                     'iduser' => $iduser,            
                 ]);  
         $inmueble->delete();

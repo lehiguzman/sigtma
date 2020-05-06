@@ -54,6 +54,8 @@ class VehiculoController extends Controller
         $accion = 'Agrega Nuevo Contribuyente';
                 Bitacora::create([
                     'accion' => $accion,
+                    'codigo' => $vehiculo->placa,
+                    'tipo_contribuyente' => 'vehiculo',
                     'iduser' => $iduser,            
                 ]);   
     } 
@@ -84,6 +86,8 @@ class VehiculoController extends Controller
             $accion = 'Actualiza Contribuyente: '. $request->denominacion;
                 Bitacora::create([
                     'accion' => $accion,
+                    'codigo' => $vehiculo->placa,
+                    'tipo_contribuyente' => 'vehiculo',
                     'iduser' => $iduser,            
                 ]);   
     }
@@ -103,6 +107,8 @@ class VehiculoController extends Controller
         $accion = 'Elimina Contribuyente: '. $vehiculo->denominacion;
                 Bitacora::create([
                     'accion' => $accion,
+                    'codigo' => $vehiculo->placa,
+                    'tipo_contribuyente' => 'vehiculo',
                     'iduser' => $iduser,            
                 ]);  
         $vehiculo->delete();

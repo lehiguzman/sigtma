@@ -299,7 +299,8 @@
                 axios.post('/declaracion_vehiculo/registrar', {
                         'idvehiculo': me.idvehiculo,
                         'periodos': me.periodos,
-                        'monto_ut': me.monto_ut                     
+                        'monto_ut': me.monto_ut,
+                        'placa': me.placa,                     
                     }).then(function (response) {                        
                         alerta.fire(
                             'Registro!',

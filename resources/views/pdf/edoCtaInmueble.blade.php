@@ -116,10 +116,10 @@
                     <b>Descripción del Movimiento</b>
                 </td>               
                 <td class="bordes" width="15%" style="text-align: center;">
-                    <b>Abonos</b>
+                    <b>Cargos</b>
                 </td>
                 <td class="bordes" width="15%" style="text-align: center;">
-                    <b>Cargos</b>
+                    <b>Abonos</b>
                 </td>
                 <td class="bordes" width="15%" style="text-align: center;">
                     <b>Saldo</b>

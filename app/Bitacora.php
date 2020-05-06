@@ -12,6 +12,6 @@ class Bitacora extends Model
      * @var array
      */
     protected $fillable = [
-        'accion', 'iduser',
+       'codigo', 'tipo_contribuyente', 'accion', 'iduser',
     ];
 }

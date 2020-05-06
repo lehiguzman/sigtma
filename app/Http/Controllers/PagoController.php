@@ -47,10 +47,9 @@ class PagoController extends Controller
      */
     public function store(Request $request)
     {
-        //if(!$request->ajax()) return redirect('/');
-        $pago = new Pago();     
+        //if(!$request->ajax()) return redirect('/');        
 
-        //$date = new \DateTime($request->fecha_pago);
+        $date = new \DateTime('now');
         $user_id = Auth::user()->id;  
 
         $detalles = $request->detalles; 
@@ -62,8 +61,56 @@ class PagoController extends Controller
             //$pago->referencia = $request->referencia;
             //$pago->banco = $request->banco;
             //$pago->fecha_pago = $date->format('Y-m-d');
-    		    $pago->tipo_contribuyente = $request->tipo_contribuyente;
+    		    
+
+            if($request->tipo_contribuyente == 'comercio') {
+                $comercio = Comercio::find($request->idcomercio);
+                $declaraciones = DeclaracionComercio::where('idcomercio', '=', $request->idcomercio)->where('estado', '=', 'calculado')->get();
+              
+              $accion = 'Registra Pago Contribuyente : '. $comercio->denominacion;
+                Bitacora::create([
+                    'accion' => $accion,
+                    'codigo' => $comercio->rif,
+                    'tipo_contribuyente' => 'comercio',
+                    'iduser' => $user_id,            
+                ]);
+
+                $codigo = $comercio->rif.$date->format('dmY');
+            } 
+
+            if($request->tipo_contribuyente == 'inmueble') {
+                $inmueble = Inmueble::find($request->idinmueble);
+                $declaraciones = DeclaracionInmueble::where('idinmueble', '=', $request->idinmueble)->where('estado', '=', 'calculado')->get();
+
+                 $accion = 'Registra Pago Contribuyente : '. $inmueble->denominacion;
+                  Bitacora::create([
+                      'accion' => $accion,
+                      'codigo' => $inmueble->codigo_catastral,
+                      'tipo_contribuyente' => 'inmueble',
+                      'iduser' => $user_id,            
+                  ]);
+
+                  $codigo = $inmueble->codigo_catastral.$date->format('dmY');
+            }
+
+            if($request->tipo_contribuyente == 'vehiculo') {
+                $vehiculo = Vehiculo::find($request->idvehiculo);
+                $declaraciones = DeclaracionVehiculo::where('idvehiculo', '=', $request->idvehiculo)->where('estado', '=', 'calculado')->get();
+                $accion = 'Registra Pago Contribuyente : '. $vehiculo->denominacion;
+                  Bitacora::create([
+                      'accion' => $accion,
+                      'codigo' => $vehiculo->placa,
+                      'tipo_contribuyente' => 'vehiculo',
+                      'iduser' => $user_id,            
+                  ]);
+
+                  $codigo = $vehiculo->placa.$date->format('dmY');
+            }          
+
+            $pago = new Pago();
+            $pago->tipo_contribuyente = $request->tipo_contribuyente;
             $pago->monto = $request->monto_pago;
+            $pago->comprobante = $codigo;
             $pago->user_id = $user_id;
             $pago->save(); 
 
@@ -81,43 +128,11 @@ class PagoController extends Controller
               $detalle->save();
             }
 
-            if($request->tipo_contribuyente == 'comercio') {
-                $comercio = Comercio::find($request->idcomercio);
-                $declaraciones = DeclaracionComercio::where('idcomercio', '=', $request->idcomercio)->where('estado', '=', 'calculado')->get();
-              
-              $accion = 'Registra Pago Contribuyente : '. $comercio->denominacion;
-                Bitacora::create([
-                    'accion' => $accion,
-                    'iduser' => $user_id,            
-                ]);
+            foreach ($declaraciones as $key => $declaracion) {
+              $declaracion->idpago = $pago->id;
+              $declaracion->estado = "pagado";
+              $declaracion->save();
             } 
-
-            if($request->tipo_contribuyente == 'inmueble') {
-                $inmueble = Inmueble::find($request->idinmueble);
-                $declaraciones = DeclaracionInmueble::where('idinmueble', '=', $request->idinmueble)->where('estado', '=', 'calculado')->get();
-
-                 $accion = 'Registra Pago Contribuyente : '. $inmueble->denominacion;
-                  Bitacora::create([
-                      'accion' => $accion,
-                      'iduser' => $user_id,            
-                  ]);
-            }
-
-            if($request->tipo_contribuyente == 'vehiculo') {
-                $vehiculo = Vehiculo::find($request->idvehiculo);
-                $declaraciones = DeclaracionVehiculo::where('idvehiculo', '=', $request->idvehiculo)->where('estado', '=', 'calculado')->get();
-                $accion = 'Registra Pago Contribuyente : '. $vehiculo->denominacion;
-                  Bitacora::create([
-                      'accion' => $accion,
-                      'iduser' => $user_id,            
-                  ]);
-            }            
-          
-          foreach ($declaraciones as $key => $declaracion) {
-            $declaracion->idpago = $pago->id;
-            $declaracion->estado = "pagado";
-            $declaracion->save();
-          } 
 
             DB::commit();
 
@@ -142,13 +157,13 @@ class PagoController extends Controller
         if($request->fecha_desde && $request->fecha_hasta) {
           if( $request->user_id == "todos" ) {
             $bitacora = Bitacora::join("users", "bitacoras.iduser", "=", "users.id")
-              ->selectRaw('users.name, bitacoras.created_at as fecha, bitacoras.accion')
+              ->selectRaw('users.name, bitacoras.created_at as fecha, bitacoras.accion, bitacoras.codigo')
               ->whereDate("bitacoras.created_at", '>=', $fecha_desde->format('Y-m-d'))
               ->whereDate("bitacoras.created_at", '<=', $fecha_hasta->format('Y-m-d'))
               ->orderBY('bitacoras.ID', 'ASC')->get();
           } else {
              $bitacora = Bitacora::join("users", "bitacoras.iduser", "=", "users.id")
-              ->selectRaw('users.name, bitacoras.created_at as fecha, bitacoras.accion')
+              ->selectRaw('users.name, bitacoras.created_at as fecha, bitacoras.accion, bitacoras.codigo')
               ->where("iduser", '=', $request->user_id)
               ->whereDate("bitacoras.created_at", '>=', $fecha_desde->format('Y-m-d'))
               ->whereDate("bitacoras.created_at", '<=', $fecha_hasta->format('Y-m-d'))
@@ -158,7 +173,7 @@ class PagoController extends Controller
             $hoy = date('Y-m-d');            
             if( $request->user_id == "todos" ) {
               $bitacora = Bitacora::join("users", "bitacoras.iduser", "=", "users.id")
-              ->selectRaw('users.name, bitacoras.created_at as fecha, bitacoras.accion')
+              ->selectRaw('users.name, bitacoras.created_at as fecha, bitacoras.accion, bitacoras.codigo')
               ->whereDate('bitacoras.created_at', '=', $hoy)
               ->orderBY('bitacoras.ID', 'ASC')
               ->get();    

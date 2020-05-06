@@ -25,7 +25,26 @@ class TipoComercioController extends Controller
             'tipos_comercio' => $tiposComercio
         ];
     }
-    
+
+     public function listarTipoComercio(Request $request) {
+
+        if(!$request->ajax()) return redirect('/');
+
+        $buscar= $request->buscar;
+        $criterio= $request->criterio;
+
+        if($buscar==''){
+
+            $tipoComercio = TipoContribuyenteComercio::orderBy('ID', 'DESC')->paginate();
+
+        } else {
+
+            $tipoComercio = TipoContribuyenteComercio::where('tipo_contribuyente_comercio.'.$criterio, 'like', '%'. $buscar . '%')
+            ->orderBy('tipo_contribuyente_comercio.id', 'desc')->paginate(10);
+        }
+         
+        return[ 'tipoComercio' =>$tipoComercio ];    
+    }    
 
     /**
      * Store a newly created resource in storage.

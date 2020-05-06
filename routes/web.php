@@ -123,3 +123,6 @@ Route::get('/edoCtaComercio', 'DeclaracionComercioController@edoCtaComercio');
 Route::get('/edoCtaInmueble', 'DeclaracionInmuebleController@edoCtaInmueble');
 Route::get('/edoCtaVehiculo', 'DeclaracionVehiculoController@edoCtaVehiculo');
 
+//Listado
+Route::get('/tipoComercio/listarTipoComercio', 'TipoComercioController@listarTipoComercio');
+

@@ -17,6 +17,7 @@ class CreatePagosTable extends Migration
             $table->increments('id');            
             $table->float('monto', 12, 2); 
             $table->string('tipo_contribuyente'); 
+            $table->string('comprobante'); 
             $table->unsignedInteger('user_id');
             $table->timestamps();
         });
