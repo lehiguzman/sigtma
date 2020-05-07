@@ -116,6 +116,11 @@ Route::get('/pago', 'PagoController@index');
 Route::post('/pago/registrar', 'PagoController@store');
 Route::delete('/pago/eliminar/{id}', 'PagoController@destroy');
 
+//Historico de pagos
+Route::get('/historico_comercio/{id}', 'ComercioController@historico');
+Route::get('/historico_inmueble/{id}', 'InmuebleController@historico');
+Route::get('/historico_vehiculo/{id}', 'VehiculoController@historico');
+
 //Reportes
 Route::get('/reportePagos', 'PagoController@reportePagos');
 Route::get('/bitacora', 'PagoController@bitacora');

@@ -42,12 +42,13 @@ class DeclaracionVehiculoController extends Controller
     {
         //if(!$request->ajax()) return redirect('/');
 
-        $periodos = $request->periodos;
-
-        $declaracionVehiculo = new DeclaracionVehiculo();
+        $periodos = $request->periodos;        
 
         foreach($periodos as $ep=>$periodo)
             { 
+
+                $declaracionVehiculo = new DeclaracionVehiculo();
+
                 $monto_impuesto = $request->monto_ut * $periodo['unidad_tributaria'];
 
                 $declaracionVehiculo->idvehiculo = $request->idvehiculo;
@@ -130,7 +131,7 @@ class DeclaracionVehiculoController extends Controller
                 $declaracionVehiculo = DeclaracionVehiculo::join('periodos', 'declaracion_vehiculo.idperiodo', '=', 'periodos.id')
                                     ->join('pagos', 'declaracion_vehiculo.idpago', '=', 'pagos.id')
                                     ->join('vehiculos', 'declaracion_vehiculo.idvehiculo', '=', 'vehiculos.id')
-                                    ->selectRaw('periodos.periodo, vehiculos.id as idvehiculo, vehiculos.placa, vehiculos.denominacion, vehiculos.direccion, vehiculos.rif, declaracion_vehiculo.idvehiculo, declaracion_vehiculo.estado, pagos.monto as monto_impuesto, pagos.referencia, pagos.banco')
+                                    ->selectRaw('periodos.periodo, vehiculos.id as idvehiculo, vehiculos.placa, vehiculos.denominacion, vehiculos.direccion, vehiculos.rif, declaracion_vehiculo.idvehiculo, declaracion_vehiculo.estado,  declaracion_inmueble.monto_impuesto as monto_impuesto, pagos.monto as monto_impuesto')
                                     ->where("declaracion_vehiculo.id", "=", $declaracion->id)->first();
 
                     $saldo = $saldo + $declaracionVehiculo->monto_impuesto;
@@ -140,7 +141,8 @@ class DeclaracionVehiculoController extends Controller
                     "estado" => $declaracion->estado,
                     "tipo" => "abono",
                     "saldo" => $saldo,
-                    "monto_impuesto" => $declaracionVehiculo->monto_impuesto
+                    "monto_impuesto" => $declaracionVehiculo->monto_impuesto,
+                    "monto_pago" => $declaracionInmueble->monto_pago
                 ];
             }
         } 

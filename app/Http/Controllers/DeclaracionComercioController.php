@@ -71,11 +71,14 @@ class DeclaracionComercioController extends Controller
         $iduser = Auth::user()->id;
         $hayPagada = '0';
 
-        $declaracionEstimada = DeclaracionComercio::where('idperiodo', '=', $request->idperiodo)->where('tipo_declaracion', '=', 1)->where('idcomercio', '=', $request->idcomercio)->where('estado', '=', 'calculado')->get();
+        $declaracionEstimada = DeclaracionComercio::where('idperiodo', '=', $request->idperiodo)
+                    ->where('idcomercio', '=', $request->idcomercio)
+                    ->where('estado', '=', 'calculado')
+                    ->get();
 
         foreach ($declaracionEstimada as $key => $decEstimada) {
             $declaracionAct = DeclaracionComercio::find($decEstimada->id);                
-            $declaracionAct->estado = "no_pagado";
+            $declaracionAct->estado = "calculado";
             $declaracionAct->save();
         }
 
@@ -198,7 +201,7 @@ class DeclaracionComercioController extends Controller
                                               'comercios.direccion', 
                                               'comercios.licencia', 
                                               'declaracion_comercio.idcomercio')
-                                    //->where('declaracion_comercio.estado', '=', 'calculado')
+                                    ->where('declaracion_comercio.estado', '=', 'calculado')
                                     ->where('declaracion_comercio.idcomercio', '=', $id )
                                     ->first();
 
@@ -233,7 +236,7 @@ class DeclaracionComercioController extends Controller
         $declaracionEstatus = DeclaracionComercio::where("idcomercio", "=", $request->idcomercio)->get();
 
         foreach ($declaracionEstatus as $key => $declaracion) {
-            if( $declaracion->estado == "calculado" || $declaracion->estado == "no_pagado") {
+            if( $declaracion->estado == "calculado") {
                 $declaracionComercio = DeclaracionComercio::join('periodos', 'declaracion_comercio.idperiodo', '=', 'periodos.id')
                                     ->join('comercios', 'declaracion_comercio.idcomercio', '=', 'comercios.id')
                                     ->selectRaw('periodos.periodo as periodo, comercios.id as idcomercio, comercios.rif, comercios.denominacion, comercios.direccion, comercios.licencia, declaracion_comercio.idcomercio, declaracion_comercio.estado, declaracion_comercio.tipo_declaracion, declaracion_comercio.monto_impuesto as monto_impuesto')
@@ -257,7 +260,7 @@ class DeclaracionComercioController extends Controller
                 $declaracionComercio = DeclaracionComercio::join('periodos', 'declaracion_comercio.idperiodo', '=', 'periodos.id')
                                     ->join('pagos', 'declaracion_comercio.idpago', '=', 'pagos.id')
                                     ->join('comercios', 'declaracion_comercio.idcomercio', '=', 'comercios.id')
-                                    ->selectRaw('periodos.periodo, comercios.id as idcomercio, comercios.rif, comercios.denominacion, comercios.direccion, comercios.licencia, declaracion_comercio.estado, declaracion_comercio.tipo_declaracion, pagos.monto as monto_impuesto')
+                                    ->selectRaw('periodos.periodo, comercios.id as idcomercio, comercios.rif, comercios.denominacion, comercios.direccion, comercios.licencia, declaracion_comercio.estado, declaracion_comercio.tipo_declaracion, declaracion_comercio.monto_impuesto as monto_impuesto, pagos.monto as monto_pago')
                                     ->where("declaracion_comercio.id", "=", $declaracion->id)->first();
 
                     $saldo = $saldo + $declaracionComercio->monto_impuesto;
@@ -268,7 +271,8 @@ class DeclaracionComercioController extends Controller
                     "tipo_declaracion" => $declaracion->tipo_declaracion,
                     "tipo" => "abono",
                     "saldo" => $saldo,                    
-                    "monto_impuesto" => $declaracionComercio->monto_impuesto
+                    "monto_impuesto" => $declaracionComercio->monto_impuesto,
+                    "monto_pago" => $declaracionComercio->monto_pago
                 ];
             }
         }

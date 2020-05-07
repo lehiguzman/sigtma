@@ -54,33 +54,33 @@
                     <h4>{{ titulo }}</h4>
                 </div>
                 <div class="card-body mt-5">
-                    <form class="needs-validation" novalidate>
+                    <form class="needs-validation" novalidate> 
 
                         <div class="form-row">
-                            <div class="col-md-1"></div>
-
-                                <label for="tipo" class="col-md-3 col-form-label-lg">
-                                    Tipo de Inmueble
-                                </label> 
+                            <div class="col-md-1"></div>                               
+                                                               
+                                <label for="regimen" class="col-md-3 col-form-label-lg">
+                                    Tipo de Vivienda
+                                </label>                                
 
                             <div class="col-md-4 form-group">
                                 <div class="position-relative has-icon-left">
-                                    <select class="form-control" v-model="tipo" value="tipo" required>
-                                       <option value="" selected disabled>Seleccione Tipo de Inmueble</option>
-                                       <option v-for="tipo in tipos" :key="tipo.id" :value="tipo.id" v-text="tipo.descripcion"></option>
-                                    </select>                                    
+                                    <select class="form-control" v-model="regimen" value="regimen" required>
+                                       <option value="" selected disabled>Seleccione Tipo</option>
+                                       <option v-for="regimen in regimenes" :key="regimen.id" :value="regimen.id" v-text="regimen.regimen"></option>
+                                    </select>   
                                     <div class="valid-feedback">
                                       <i>¡Correcto!</i>
                                     </div>
                                     <div class="invalid-feedback">
-                                      ¡Seleccione Tipo de Inmueble!
-                                    </div>
+                                      ¡Seleccione un Régimen!
+                                    </div>                            
                                     <div class="form-control-position">
-                                        <i class='bx bx-id-card bx-sm' ></i>
-                                    </div>                                    
-                                </div>                                    
+                                        <i class='bx bxs-lock bx-sm' ></i>
+                                    </div>
+                                </div>                                                              
                             </div>
-                        </div>
+                        </div>                       
 
                         <div class="form-row">
                             <div class="col-md-1"></div>
@@ -204,13 +204,13 @@
                             <div class="col-md-1"></div>                               
                                                                
                                 <label for="zona" class="col-md-3 col-form-label-lg" >
-                                    Tipo de Vivienda
+                                    Tipo de Zona
                                 </label>                                
 
                             <div class="col-md-4 form-group">
                                 <div class="position-relative has-icon-left">
                                     <select class="form-control" v-model="tipo_vivienda" value="tipo_vivienda" required>
-                                       <option value="" selected disabled>Seleccione Tipo de Vivienda</option>
+                                       <option value="" selected disabled>Seleccione Tipo de Zona</option>
                                        <option value="c1">C1</option>
                                        <option value="c2">C2</option>
                                        <option value="c3">C3</option>
@@ -233,24 +233,30 @@
                             </div>
                         </div>
 
-                        <div class="form-row">
+                        <div class="form-row" >
                             <div class="col-md-1"></div>                               
                                                                
-                                <label for="regimen" class="col-md-3 col-form-label-lg">
-                                    Régimen
+                                <label for="zona" class="col-md-3 col-form-label-lg" >
+                                    Ultima Declaración
                                 </label>                                
 
                             <div class="col-md-4 form-group">
                                 <div class="position-relative has-icon-left">
-                                    <select class="form-control" v-model="regimen" value="regimen" @change="listarSelectZonas()" required>
-                                       <option value="" selected disabled>Seleccione Regimen</option>
-                                       <option v-for="regimen in regimenes" :key="regimen.id" :value="regimen.id" v-text="regimen.regimen"></option>
+                                    <select class="form-control" v-model="ultima_declaracion" value="ultima_declaracion" required>
+                                       <option value="" selected disabled>Seleccione Año</option>
+                                       <option value="2014">2014</option>
+                                       <option value="2015">2015</option>
+                                       <option value="2016">2016</option>
+                                       <option value="2017">2017</option>
+                                       <option value="2018">2018</option>
+                                       <option value="2019">2019</option>
+                                       <option value="2020">2020</option>                                       
                                     </select>   
                                     <div class="valid-feedback">
                                       <i>¡Correcto!</i>
                                     </div>
                                     <div class="invalid-feedback">
-                                      ¡Seleccione un Régimen!
+                                      ¡Seleccione Año!
                                     </div>                            
                                     <div class="form-control-position">
                                         <i class='bx bxs-lock bx-sm' ></i>
@@ -422,6 +428,7 @@
                 numero_civico: '',                
                 zona: '',
                 tipo_vivienda: '',
+                ultima_declaracion: '',
                 regimen: '',
                 numero_inscripcion: '',
                 area_terreno: '',
@@ -621,12 +628,13 @@
                         'codigo_catastral': me.codigo_catastral,
                         'denominacion': me.denominacion,
                         'numero_civico': me.numero_civico,
-                        'idzona': me.zona,
-                        'tipo_vivienda': me.tipo_vivienda,
+                        'idzona': me.zona,                        
+                        'tipo_vivienda': me.tipo_vivienda,  
                         'idregimen': me.regimen,
                         'numero_inscripcion': me.numero_inscripcion,
                         'area_terreno':me.area_terreno,
                         'area_construccion':me.area_construccion,
+                        'ultima_declaracion':me.ultima_declaracion,
                         'rif': me.rif,
                         'telefono': me.telefono,
                         'direccion': me.direccion,

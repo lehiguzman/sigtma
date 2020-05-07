@@ -40,7 +40,6 @@
                                 <td class="text-center">
                                     <i class='bx bxs-edit bx-sm mr-2 text-success btn-editar' title="Editar" @click="editarRegistro(vehiculo)"></i>
                                     <i class='bx bxs-trash bx-sm mr-2 text-danger btn-eliminar' title="Eliminar" @click="eliminarRegistro(vehiculo)"></i>
-                                    <i class='bx bxs-report bx-sm mr-2 text-primary btn-eliminar' title="Estado de cuenta" @click="imprimirEdoCta(vehiculo)"></i>
                                 </td>
                             </tr>                            
                         </tbody>                  
@@ -150,7 +149,33 @@
                                     </div>                                                                
                                 </div>                                    
                             </div>
-                        </div>   
+                        </div>
+
+                        <div class="form-row">
+                            <div class="col-md-1"></div>
+
+                                <label for="anio" class="col-md-3 col-form-label-lg">
+                                    anio
+                                </label> 
+
+                            <div class="col-md-4 form-group">
+                                <div class="position-relative has-icon-left">
+                                    <select class="form-control" v-model="anio" value="anio" required>
+                                       <option value="" selected disabled>Seleccione Año de Vehiculo</option>
+                                       <option v-for="anio in anios"  :value="anio" v-text="anio"></option>
+                                    </select>                                    
+                                    <div class="valid-feedback">
+                                      <i>¡Correcto!</i>
+                                    </div>
+                                    <div class="invalid-feedback">
+                                      ¡Seleccione Tipo de Vehiculo!
+                                    </div>
+                                    <div class="form-control-position">
+                                        <i class='bx bx-id-card bx-sm' ></i>
+                                    </div>                                    
+                                </div>                                    
+                            </div>
+                        </div>
 
                         <div class="form-row">
                             <div class="col-md-1"></div>
@@ -267,7 +292,9 @@
                 serial: '',                
                 rif:'',                
                 direccion: '',
-                telefono: ''
+                telefono: '',
+                anio: '',
+                anios: []
             }            
         },
 
@@ -282,7 +309,12 @@
                 this.vista = opcion;                
 
                 if(this.vista == "registro") {
-                    this.listarTipos();                    
+                    this.listarTipos();     
+
+                    for (var i = 1970; i <= 2020; i++) {
+                        this.anios.push(i);
+                    }
+                    
                 } else {
                     this.listarVehiculos();
                 }
@@ -325,7 +357,7 @@
                         searching: true,
                         ordering:  true,
                         select: true,
-                        paging: true,
+                        paging: true,                        
 
                         "language": 
                             {                        
@@ -414,6 +446,7 @@
                         'modelo': me.modelo,
                         'serial': me.serial,                        
                         'rif': me.rif,
+                        'anio': me.anio,
                         'telefono': me.telefono,
                         'direccion': me.direccion,
                         'tipo': me.tipo
@@ -541,12 +574,6 @@
                   ) {                    
                   }
                 })
-            },
-
-            imprimirEdoCta( vehiculo ) {                
-
-                window.open('http://127.0.0.1:8000/edoCtaVehiculo?idvehiculo=' + vehiculo.id,'_blank');
-
             },
 
             cancelarRegistro() {

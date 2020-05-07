@@ -8,7 +8,9 @@ use App\Comercio;
 use App\Comerciotipo;
 use App\TipoContribuyenteComercio;
 use App\Bitacora;
+use App\DeclaracionComercio;
 use Auth;
+use App\Pago;
 
 class ComercioController extends Controller
 {
@@ -165,6 +167,21 @@ class ComercioController extends Controller
         }
 
         return $comercio;
+    }
+
+    public function historico(Request $request, $id) {
+
+        $comercio = Comercio::find($id);
+        $pagos = DeclaracionComercio::join("pagos", "declaracion_comercio.idpago", "=", "pagos.id")
+                                    ->join("detalle_pagos", "pagos.id", "=", "detalle_pagos.idpago")
+                                    ->selectRaw('distinct(declaracion_comercio.idpago), detalle_pagos.referencia, detalle_pagos.fecha_pago, detalle_pagos.banco, detalle_pagos.monto, detalle_pagos.tipo_pago')
+                                    ->where('declaracion_comercio.idcomercio', '=', $id)
+                                    ->get();
+
+        return $datos = [ 
+            'comercio' => $comercio,
+            'pagos' => $pagos
+        ];
     }
 
     /**

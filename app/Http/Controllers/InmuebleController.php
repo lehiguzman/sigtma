@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Inmueble;
 use App\Bitacora;
+use App\DeclaracionInmueble;
 use Auth;
 
 class InmuebleController extends Controller
@@ -38,15 +39,15 @@ class InmuebleController extends Controller
     public function store(Request $request)
     {
         //if(!$request->ajax()) return redirect('/');
-        $inmueble = new Inmueble();        
+        $inmueble = new Inmueble();                
         
-        $inmueble->idtipocontribuyenteinmueble = $request->tipo;
+        $inmueble->idregimen = $request->idregimen;
         $inmueble->denominacion = $request->denominacion;
         $inmueble->codigo_catastral = $request->codigo_catastral;
         $inmueble->numero_civico = $request->numero_civico;
         $inmueble->idzona = $request->idzona;
         $inmueble->tipo_vivienda = $request->tipo_vivienda;
-        $inmueble->idregimen = $request->idregimen;
+        $inmueble->ultima_declaracion = $request->ultima_declaracion;
         $inmueble->numero_inscripcion = $request->numero_inscripcion;
         $inmueble->area_terreno = $request->area_terreno;
         $inmueble->area_construccion = $request->area_construccion;
@@ -100,6 +101,21 @@ class InmuebleController extends Controller
                     'tipo_contribuyente' => 'inmueble',
                     'iduser' => $iduser,            
                 ]);   
+    }
+
+    public function historico(Request $request, $id) {
+
+        $inmueble = Inmueble::find($id);
+        $pagos = DeclaracionInmueble::join("pagos", "declaracion_inmueble.idpago", "=", "pagos.id")
+                                    ->join("detalle_pagos", "pagos.id", "=", "detalle_pagos.idpago")
+                                    ->selectRaw('distinct(declaracion_inmueble.idpago), detalle_pagos.referencia, detalle_pagos.fecha_pago, detalle_pagos.banco, detalle_pagos.monto, detalle_pagos.tipo_pago')
+                                    ->where('declaracion_inmueble.idinmueble', '=', $id)
+                                    ->get();
+
+        return $datos = [ 
+            'inmueble' => $inmueble,
+            'pagos' => $pagos
+        ];
     }
 
     /**

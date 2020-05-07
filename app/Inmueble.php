@@ -12,6 +12,6 @@ class Inmueble extends Model
      * @var array
      */
     protected $fillable = [
-        'idtipocontribuyenteinmueble', 'denominacion', 'codigo_catastral', 'numero_civico', 'idzona', 'tipo_vivienda', 'numero_inscripcion', 'area_terreno', 'area_construccion', 'rif', 'direccion', 'telefono'
+        'denominacion', 'codigo_catastral', 'ultima_declaracion', 'numero_civico', 'idzona', 'tipo_vivienda', 'numero_inscripcion', 'anio', 'area_terreno', 'area_construccion', 'rif', 'direccion', 'telefono'
     ];
 }

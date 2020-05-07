@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Vehiculo;
+use App\DeclaracionVehiculo;
 use App\Bitacora;
 use Auth;
 
@@ -46,6 +47,7 @@ class VehiculoController extends Controller
         $vehiculo->placa = $request->placa;
         $vehiculo->serial = $request->serial;             
         $vehiculo->rif = $request->rif;
+        $vehiculo->anio = $request->anio;
         $vehiculo->telefono = $request->telefono;
         $vehiculo->direccion = $request->direccion;
         $vehiculo->save();
@@ -76,7 +78,8 @@ class VehiculoController extends Controller
         $vehiculo->denominacion = $request->denominacion;
         $vehiculo->modelo = $request->modelo;
         $vehiculo->placa = $request->placa;
-        $vehiculo->serial = $request->serial;        
+        $vehiculo->serial = $request->serial;
+        $vehiculo->anio = $request->anio;     
         $vehiculo->rif = $request->rif;
         $vehiculo->telefono = $request->telefono;
         $vehiculo->direccion = $request->direccion;
@@ -90,6 +93,21 @@ class VehiculoController extends Controller
                     'tipo_contribuyente' => 'vehiculo',
                     'iduser' => $iduser,            
                 ]);   
+    }
+
+    public function historico(Request $request, $id) {
+
+        $vehiculo = Vehiculo::find($id);
+        $pagos = DeclaracionVehiculo::join("pagos", "declaracion_vehiculo.idpago", "=", "pagos.id")
+                                    ->join("detalle_pagos", "pagos.id", "=", "detalle_pagos.idpago")
+                                    ->selectRaw('distinct(declaracion_vehiculo.idpago), detalle_pagos.referencia, detalle_pagos.fecha_pago, detalle_pagos.banco, detalle_pagos.monto, detalle_pagos.tipo_pago')
+                                    ->where('declaracion_vehiculo.idvehiculo', '=', $id)
+                                    ->get();
+
+        return $datos = [ 
+            'vehiculo' => $vehiculo,
+            'pagos' => $pagos
+        ];
     }
 
     /**

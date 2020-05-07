@@ -36,7 +36,8 @@
                                 <td class="text-center">
                                     <i class='bx bxs-printer bx-md text-success btn-editar' title="Calcular Declaracion" @click="verDetalle(comercio)"></i>
                                     <i class='bx bxs-report bx-md text-primary btn-eliminar' title="Estado de cuenta" @click="imprimirEdoCta(comercio)"></i>
-                                    <i class='bx bxs-coin-stack bx-md text-success btn-editar' title="Registrar Pago" @click="pagar(comercio)"></i>                                
+                                    <i class='bx bxs-coin-stack bx-md text-success btn-editar' title="Registrar Pago" @click="pagar(comercio)"></i>
+                                    <i class='bx bx-history bx-md text-success btn-editar' title="Registrar Pago" @click="historico(comercio)"></i>
                                 </td>
                             </tr>                            
                         </tbody>                  
@@ -454,6 +455,87 @@
                     </form>                    
                 </div>
             </div>
+        </template> 
+
+        <template v-else-if="vista=='historico'">
+            <div class="p-3 bg-white rounded">  
+                <div class="col-md-12 mb-0 text-center bg-light">
+                    <h4>{{ titulo }}</h4>
+                </div>
+                <div class="card-body mt-5">
+                    <form class="needs-validation" novalidate>
+                        <div class="form-row text-center">                           
+                            <div class="col-md-3 my-0">
+                                <label class="col-form-label-lg">
+                                    Nombre o Denominación :
+                                </label>                                 
+                            </div>                                
+
+                            <div class="col-md-5 form-group my-0">
+                               <label class="col-form-label-lg">
+                                    {{ comercio.denominacion }}
+                                </label>                                  
+                            </div>
+
+                            <div class="col-md-1 form-group my-0">
+                               <label class="col-form-label-lg">
+                                    Rif :
+                                </label>                                  
+                            </div>
+
+                            <div class="col-md-3 form-group my-0">
+                               <label class="col-form-label-lg">
+                                    {{ comercio.rif }}
+                                </label>                                  
+                            </div>
+                        </div>                                                             
+
+                        <div class="border-top my-3"></div>
+
+                        <div class="font-weight-bold text-center">Lista de pagos</div>
+
+                        <div class="border-top my-3"></div>                        
+                        
+                        <table class="table table-hover table-striped table-bordered my-5" id="dataTable" width="100%" cellspacing="0">
+                            <thead>
+                                <tr class="text-center">                                
+                                    <th width="20%">Número de referencia</th>
+                                    <th width="20%">Fecha</th>                                    
+                                    <th width="20%">Banco</th>
+                                    <th width="20%">Monto</th>                            
+                                    <th width="20%">
+                                        Imprimir
+                                    </th>                            
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr class="text-center" v-for="pago in pagos">                          
+                                    <td>{{ pago.referencia }}</td>      
+                                    <td>{{ pago.fecha_pago | formatoFecha }}</td>                                    
+                                    <td>{{ pago.banco }}</td>
+                                    <td>{{ pago.monto.toFixed(2) }}</td> 
+                                    <td><i class="bx bx-edit bx-md"></i></td>                                                   
+                                </tr>                            
+                            </tbody>                  
+                        </table>
+
+                    
+                        <div class="form-row mt-5">                             
+                            <div class="col-md-6 d-flex justify-content-center" v-if="boton == 'registro'" >
+                                <button type="button" @click="validarFormulario( 'pagar' )" name="registro" class="btn btn-primary btn-registrar">
+                                    <span class="align-middle ml-25">Imprimir</span>
+                                </button>
+                            </div>
+                            <div class="col-md-3" v-else></div>
+
+                            <div class="col-md-6 d-flex justify-content-center ">
+                                <i class='bx bx-cancel bx-sm' ></i>
+                                <input type="button" name="cancelar" @click="cancelarRegistro()" class="btn btn-danger btn-cancelar" value="Cancelar">
+                            </div>
+                        </div>                                               
+                    </form>                    
+                </div>
+            </div>
         </template>       
     </div>
 </template>
@@ -467,7 +549,8 @@
 <script type="text/javascript">
 
     import datatable from 'datatables';    
-    import Datepicker from 'vuejs-datepicker';   
+    import Datepicker from 'vuejs-datepicker'; 
+    import moment from 'moment';  
 
     export default {
         data() {
@@ -479,6 +562,7 @@
                 boton: 'registro',                
                 tabla: '',
                 comercioImp: [],
+                detalles: [],
                 mostrarBtnRegistrar: true,
                 mostrarBtnImprimir: false,
 
@@ -499,17 +583,27 @@
 
                 //Modulo de pago
                 declaracion: [],
-                detalles: [],                        
+                detalles: [],     
+
+                //Historico de pagos
+                pagos: [],                   
             }            
         },
 
         //Aqui se inyectan los componentes importados
         components: {
             datatable,
-            Datepicker          
+            Datepicker,
+            moment
         },
 
         filters: {
+            formatoFecha: function(value) {
+                if (value) {
+                    return moment(String(value)).format('DD-MM-YYYY')
+                }
+            },
+
             numero: function( value ) {
                 if(value) {
                     console.log("Valor : ", value);
@@ -685,11 +779,10 @@
 
                 var url = '/declaracion_comercio/'+comercio.id;
 
-                axios.get(url).then(function (response) {
-                // handle success                     
+                axios.get(url).then(function (response) {                    
+                // handle success
                 
-                var respuesta = response.data;                
-                 console.log("respuesta : ", respuesta);
+                var respuesta = response.data;                                 
                 me.anio = respuesta.anio;
                 me.periodo = respuesta.periodo;
                 me.unidad_tributaria = respuesta.periodo.unidad_tributaria;                
@@ -842,7 +935,32 @@
                     me.monto_minimo = me.codigos[i].minimo_tributable * me.unidad_tributaria; 
                     me.total_minimos = me.total_minimos + me.monto_minimo;                    
                 }
-            },    
+            },
+
+            historico( comercio ) {
+                let me = this;
+                this.titulo = "Historico de pagos";
+                this.vista = "historico";
+
+                var url = '/historico_comercio/'+comercio.id;
+
+                axios.get(url).then(function (response) {
+                // handle success
+                var respuesta = response.data;
+                me.comercio = respuesta.comercio;
+                me.pagos = respuesta.pagos;
+                console.log("Respuesta historica : ", response.data);
+                
+                             
+              })
+              .catch(function (error) {
+                // handle error
+                console.log(error);
+              })
+              .finally(function () {
+                // always executed
+              });
+            },
 
             cancelarRegistro() {
                 this.limpiarCampos();

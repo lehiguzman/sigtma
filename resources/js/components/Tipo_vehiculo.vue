@@ -220,7 +220,7 @@
                         searching: true,
                         ordering:  true,
                         select: true,
-                        paging: true,
+                        paging: true,                        
 
                         "language": 
                             {                        

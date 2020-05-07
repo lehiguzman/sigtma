@@ -12,6 +12,26 @@ class PeriodoTableSeeder extends Seeder
      */
     public function run()
     {
+        $periodo = new Periodo();
+        $periodo->periodo = 2014;
+        $periodo->unidad_tributaria = 50;       
+        $periodo->save();
+
+        $periodo = new Periodo();
+        $periodo->periodo = 2015;
+        $periodo->unidad_tributaria = 50;       
+        $periodo->save();
+
+        $periodo = new Periodo();
+        $periodo->periodo = 2016;
+        $periodo->unidad_tributaria = 50;       
+        $periodo->save();
+
+        $periodo = new Periodo();
+        $periodo->periodo = 2017;
+        $periodo->unidad_tributaria = 50;       
+        $periodo->save();
+
     	$periodo = new Periodo();
         $periodo->periodo = 2018;
         $periodo->unidad_tributaria = 50;		

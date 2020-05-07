@@ -30,11 +30,11 @@
             <i class="bx bx-calculator bx-sm mx-3"></i> <span>Declaración</span>            
           </a>
         </li>
-        <li>
+        <!--<li>
           <a href="#" @click="menu=11" class="list-group-item list-group-item-action border-0 link-menu">          
             <i class="bx bxl-paypal bx-sm mx-3"></i> <span>Registrar Pago</span>            
           </a>
-        </li>
+        </li>-->
         <li>
           <a href="#" @click="menu=2" class="list-group-item list-group-item-action border-0 link-menu">          
             <i class="bx bx-list-plus bx-sm mx-3"></i> <span>Nuevo Código ISAE</span>            
@@ -49,12 +49,7 @@
               <span class="flex-grow-1">Inmueble</span>
             <i class="fa fa-chevron-right fa-md mx-1"></i>    
       </a>
-      <ul>  
-        <li>
-          <a href="#" @click="menu=3" class="list-group-item list-group-item-action border-0 link-menu">          
-            <i class="bx bx-list-plus bx-sm mx-3"></i> <span>Tipo</span>            
-          </a>
-        </li>      
+      <ul>              
         <li>
           <a href="#" @click="menu=6" class="list-group-item list-group-item-action border-0 link-menu">          
             <i class="bx bxs-building-house bx-sm mx-3"></i> <span>Contribuyente</span>            
@@ -65,11 +60,11 @@
             <i class="bx bx-calculator bx-sm mx-3"></i> <span>Declaracion</span>            
           </a>
         </li>
-         <li>
+        <!-- <li>
           <a href="#" @click="menu=12" class="list-group-item list-group-item-action border-0 link-menu">          
             <i class="bx bxl-paypal bx-sm mx-3"></i> <span>Registrar Pago</span>            
           </a>
-        </li>             
+        </li> -->
       </ul>       
     </div>
     <div>
@@ -78,12 +73,7 @@
             <span class="flex-grow-1">Vehiculo</span>
             <i class="fa fa-chevron-right fa-md mx-1"></i>           
       </a>
-      <ul>
-        <li>
-          <a href="#" @click="menu=4" class="list-group-item list-group-item-action border-0 link-menu">          
-            <i class="bx bx-list-plus bx-sm mx-3"></i> <span>Tipo</span>            
-          </a>
-        </li>
+      <ul>        
         <li>
           <a href="#" @click="menu=7" class="list-group-item list-group-item-action border-0 link-menu">          
             <i class="bx bxs-car-garage bx-sm mx-3"></i> <span>Contribuyente</span>            
@@ -94,11 +84,16 @@
             <i class="bx bx-calculator bx-sm mx-3"></i> <span>Declaración</span>            
           </a>
         </li> 
-         <li>
+        <li>
+          <a href="#" @click="menu=4" class="list-group-item list-group-item-action border-0 link-menu">          
+            <i class="bx bx-list-plus bx-sm mx-3"></i> <span>Tipo</span>            
+          </a>
+        </li>
+        <!-- <li>
           <a href="#" @click="menu=13" class="list-group-item list-group-item-action border-0 link-menu">          
             <i class="bx bxl-paypal bx-sm mx-3"></i> <span>Registrar Pago</span>  
           </a>
-        </li>        
+        </li> -->
       </ul> 
     </div>    
     <div class="vertical">

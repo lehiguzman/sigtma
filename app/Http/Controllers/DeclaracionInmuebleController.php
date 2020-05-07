@@ -104,8 +104,29 @@ class DeclaracionInmuebleController extends Controller
     public function selectDeclaracionInmueble(Request $request, $id) {
 
         $declaracion = DeclaracionInmueble::join('inmuebles', 'declaracion_inmueble.idinmueble', '=', 'inmuebles.id')
-                                ->selectRaw('inmuebles.id as idinmueble, inmuebles.codigo_catastral, inmuebles.denominacion, inmuebles.area_construccion, inmuebles.direccion, inmuebles.rif, inmuebles.area_terreno, declaracion_inmueble.idinmueble, sum(declaracion_inmueble.monto_impuesto) as monto_impuesto')->groupBy('inmuebles.id', 'inmuebles.denominacion', 'declaracion_inmueble.idinmueble', 'inmuebles.area_construccion', 'inmuebles.area_terreno', 'inmuebles.codigo_catastral', 'inmuebles.direccion', 'inmuebles.rif')->where('idinmueble', '=', $id)->where("declaracion_inmueble.estado", "=", "calculado")->first();
-        return $declaracion;
+                                ->selectRaw('inmuebles.id as idinmueble, 
+                                            inmuebles.codigo_catastral, 
+                                            inmuebles.denominacion, 
+                                            inmuebles.area_construccion, 
+                                            inmuebles.direccion, 
+                                            inmuebles.rif, 
+                                            inmuebles.area_terreno, 
+                                            declaracion_inmueble.idinmueble,                                             
+                                            sum(declaracion_inmueble.monto_impuesto) as monto_impuesto')
+                                ->groupBy('inmuebles.id', 
+                                          'inmuebles.denominacion', 
+                                          'declaracion_inmueble.idinmueble', 
+                                          'inmuebles.area_construccion', 
+                                          'inmuebles.area_terreno', 
+                                          'inmuebles.codigo_catastral', 
+                                          'inmuebles.direccion', 
+                                          'inmuebles.rif')
+                                ->where('idinmueble', '=', $id)
+                                ->where("declaracion_inmueble.estado", "=", "calculado")
+                                ->first();
+        return $datos = [
+            'declaracion' => $declaracion,                       
+        ];
     } 
 
     /**
@@ -148,7 +169,7 @@ class DeclaracionInmuebleController extends Controller
                 $declaracionInmueble = DeclaracionInmueble::join('periodos', 'declaracion_inmueble.idperiodo', '=', 'periodos.id')
                                     ->join('pagos', 'declaracion_inmueble.idpago', '=', 'pagos.id')
                                     ->join('inmuebles', 'declaracion_inmueble.idinmueble', '=', 'inmuebles.id')
-                                    ->selectRaw('periodos.periodo, inmuebles.id as idinmueble, inmuebles.codigo_catastral, inmuebles.denominacion, inmuebles.area_construccion, inmuebles.direccion, inmuebles.rif, inmuebles.area_terreno, declaracion_inmueble.idinmueble, declaracion_inmueble.estado, pagos.monto as monto_impuesto, pagos.referencia, pagos.banco')
+                                    ->selectRaw('periodos.periodo, inmuebles.id as idinmueble, inmuebles.codigo_catastral, inmuebles.denominacion, inmuebles.area_construccion, inmuebles.direccion, inmuebles.rif, inmuebles.area_terreno, declaracion_inmueble.idinmueble, declaracion_inmueble.estado, declaracion_inmueble.monto_impuesto as monto_impuesto, pagos.monto as monto_pago')
                                     ->where("declaracion_inmueble.id", "=", $declaracion->id)->first();
 
                     $saldo = $saldo + $declaracionInmueble->monto_impuesto;
@@ -158,7 +179,8 @@ class DeclaracionInmuebleController extends Controller
                     "estado" => $declaracion->estado,
                     "tipo" => "abono",
                     "saldo" => $saldo,
-                    "monto_impuesto" => $declaracionInmueble->monto_impuesto
+                    "monto_impuesto" => $declaracionInmueble->monto_impuesto,
+                    "monto_pago" => $declaracionInmueble->monto_pago
                 ];
             }
         }
