@@ -66,5 +66,8 @@
 	<template v-if="menu==18">
 		<bitacora></bitacora>
 	</template>
+	<template v-if="menu==19">
+		<reporte_tramites></reporte_tramites>
+	</template>
 
 @endsection

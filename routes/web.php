@@ -123,10 +123,19 @@ Route::get('/historico_vehiculo/{id}', 'VehiculoController@historico');
 
 //Reportes
 Route::get('/reportePagos', 'PagoController@reportePagos');
+Route::get('/reporteTramites', 'PagoController@reporteTramites');
 Route::get('/bitacora', 'PagoController@bitacora');
 Route::get('/edoCtaComercio', 'DeclaracionComercioController@edoCtaComercio');
 Route::get('/edoCtaInmueble', 'DeclaracionInmuebleController@edoCtaInmueble');
 Route::get('/edoCtaVehiculo', 'DeclaracionVehiculoController@edoCtaVehiculo');
+Route::get('/historicoComercio', 'PagoController@historicoComercio');
+Route::get('/historicoInmueble', 'PagoController@historicoInmueble');
+Route::get('/historicoVehiculo', 'PagoController@historicoVehiculo');
+
+//Solvencia
+Route::get('/solvenciaComercio', 'PagoController@solvenciaComercio');
+Route::get('/solvenciaInmueble', 'PagoController@solvenciaInmueble');
+Route::get('/solvenciaVehiculo', 'PagoController@solvenciaVehiculo');
 
 //Listado
 Route::get('/tipoComercio/listarTipoComercio', 'TipoComercioController@listarTipoComercio');

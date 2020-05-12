@@ -213,7 +213,7 @@
 
                          <table class="table table-bordered table-striped table-sm">
                             <thead>
-                                <tr class="bg-success">
+                                <tr style="background-color: #E4E0DF;" class="text-center">
                                     <th>Eliminar</th>
                                     <th>Código</th>
                                     <th>Denominación</th>
@@ -222,7 +222,7 @@
                                 </tr>
                             </thead>
                             <tbody v-if="arrayDetalle.length">
-                                <tr v-for="(detalle,index) in arrayDetalle" :key="detalle.id">
+                                <tr v-for="(detalle,index) in arrayDetalle" :key="detalle.id" class="text-center">
                                     <td>
                                         <button @click="eliminarDetalle(index)" type="button" class="btn btn-danger btn-sm">
                                             <i class="fa fa-times fa-2x"></i>
@@ -248,7 +248,7 @@
                         </table>
 
                         <div class="form-row mt-5">
-                            <div class="col-md-1"></div>
+                            <div class="col-md-3"></div>
                             
                             <div class="col-md-3 d-flex justify-content-center" v-if="boton == 'registro'" >                                    
                                 <button type="button" @click="validarFormulario( 'registro' )" name="registro" class="btn btn-primary btn-registrar">                                       
@@ -281,27 +281,30 @@
                        
                                 <div class="modal-body">  
                                     <div class="form-group row">
-                                    <div class="col-md-6">
-                                        <div class="input-group">
+                                    <div class="col-md-6 mb-3">
+                                        <div class="input-group input-search">
                                             <select class="form-control col-md-3" v-model="criterioP">
-                                                <option value="denominación">Denominación</option>
+                                                <option value="denominacion">Denominación</option>
                                                 <option value="codigo">Codigo</option>
                                             </select>
                                             <input type="text" @keyup.enter="listarTipo(buscarP,criterioP);" class="form-control" placeholder="Buscar texto" v-model="buscarP">
-                                            <button type="submit"  @click="listarTipo(buscarP,criterioP);" class="btn btn-primary"><i class="fa fa-search"></i> Buscar</button>
+                                            <button type="submit"  @click="listarTipo(buscarP,criterioP);" class="text-center bg-secondary bg-light colors-container rounded text-primary d-flex align-items-center justify-content-center ml-3 shadow">
+                                                <i class="fa fa-search"></i>&nbsp; Buscar
+                                            </button>
                                         </div>
                                     </div>                          
                                     <table class="table table-bordered table-striped table-sm">
                                     <thead>
-                                        <tr class="bg-primary">                                   
-                                            <th>Categoría</th>
-                                            <th>Producto</th>
-                                            <th>Codigo</th>
-                                            <th>Accion</th>                                                                    
+                                        <tr class="bg-info bg-light text-center">                                   
+                                            <th>Código</th>
+                                            <th>Denominación</th>
+                                            <th>Alicuota Anual</th>
+                                            <th>Mínimo Tributable</th>                                                                    
+                                            <th>Acción</th>
                                         </tr>
                                     </thead>
                                     <tbody>                               
-                                        <tr v-for="tipo in tipos" :key="tipo.id">
+                                        <tr v-for="tipo in tipos" :key="tipo.id" class="text-center">
                                             <td v-text="tipo.codigo"></td>
                                             <td v-text="tipo.denominacion"></td>
                                             <td v-text="tipo.alicuota_anual"></td>
@@ -484,8 +487,8 @@
                 axios.get(url).then(function (response) {
                 // handle success                                      
                 var respuesta = response.data;                                    
-                me.comercios = respuesta.comercios.data;
-                console.log("Comercios : ", me.comercios);
+                me.comercios = respuesta.comercios;
+                console.log("Comercios : ", me.comercios);                
                 if( me.comercios.length == 0 ) {
                     me.limpiarCampos();
                     me.tablaComercios();

@@ -39,6 +39,7 @@ Vue.component('calculo_inmueble', require('./components/Calculo_inmueble.vue').d
 Vue.component('calculo_vehiculo', require('./components/Calculo_vehiculo.vue').default);
 
 Vue.component('reporte_usuarios', require('./components/Reporte_usuarios.vue').default);
+Vue.component('reporte_tramites', require('./components/Reporte_tramites.vue').default);
 Vue.component('bitacora', require('./components/Bitacora.vue').default);
 
 /**

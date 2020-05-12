@@ -121,6 +121,11 @@
           <a href="#" @click="menu=17" class="list-group-item list-group-item-action border-0 link-menu">          
             <i class="bx bxs-user-detail bx-sm mx-3"></i> <span>Pagos por usuario</span> 
           </a>
+        </li>  
+        <li>
+          <a href="#" @click="menu=19" class="list-group-item list-group-item-action border-0 link-menu">          
+            <i class="bx bxs-user-detail bx-sm mx-3"></i> <span>Trámites</span> 
+          </a>
         </li>      
         <li>
           <a href="#" @click="menu=18" class="list-group-item list-group-item-action border-0 link-menu">          

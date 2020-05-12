@@ -472,16 +472,14 @@
                 axios.get(url).then(function (response) {
                 // handle success                                      
                 var respuesta = response.data;                                    
-                me.inmuebles = respuesta.inmuebles.data;
+                me.inmuebles = respuesta.inmuebles;
                 
                 if( me.inmuebles.length == 0 ) {
                     me.limpiarCampos();
                     me.tablaInmuebles();
                 } else {
                     me.tablaInmuebles();    
-                }
-                
-                console.log("Numero de registro : ", me.inmuebles.length);
+                }                
               })
               .catch(function (error) {
                 // handle error
@@ -676,6 +674,7 @@
                     me.tipo_vivienda = inmueble.tipo_vivienda;
                     me.regimen = inmueble.idregimen;
                     me.numero_inscripcion = inmueble.numero_inscripcion;
+                    me.ultima_declaracion = inmueble.ultima_declaracion;
                     me.area_terreno = inmueble.area_terreno;
                     me.area_construccion = inmueble.area_construccion;
                     me.rif = inmueble.rif;

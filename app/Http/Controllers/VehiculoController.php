@@ -19,7 +19,29 @@ class VehiculoController extends Controller
     {
         //if(!$request->ajax()) return redirect('/');
         
-        $vehiculos = Vehiculo::orderBy('ID', 'DESC')->paginate();
+        $vehiculosAll = Vehiculo::orderBy('ID', 'DESC')->paginate();
+
+        foreach ($vehiculosAll as $key => $vehiculo) {
+            $declaraciones = DeclaracionVehiculo::where('idvehiculo', '=', $vehiculo->id)->count();
+            $calculados = DeclaracionVehiculo::where('idvehiculo', '=', $vehiculo->id)->where("estado", '=', 'calculado')->count();
+            $pagos = DeclaracionVehiculo::where('idvehiculo', '=', $vehiculo->id)->where("estado", '=', 'pagado')->count();
+            $vehiculoDec = [
+                'id' => $vehiculo->id,
+                'placa' => $vehiculo->placa,
+                'denominacion' => $vehiculo->denominacion,
+                'serial' => $vehiculo->serial,
+                'rif' => $vehiculo->rif,  
+                'telefono' => $vehiculo->telefono,                
+                'direccion' => $vehiculo->direccion,
+                'declaraciones' => $declaraciones,
+                'calculados' => $calculados,
+                'pagos' => $pagos
+            ];
+
+            $vehiculoArray[] = $vehiculoDec;
+        } 
+
+        $vehiculos = $vehiculoArray;
 
         if($request->id) {
             $vehiculos = Vehiculo::find($request->id);                

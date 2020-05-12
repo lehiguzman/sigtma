@@ -83,7 +83,7 @@ class DeclaracionInmuebleController extends Controller
         
         if($declaracionInmueble == NULL) {
             $ultimo_anio = "N/A";
-            $periodo = Periodo::orderBy('ID', 'ASC')->paginate();
+            $periodo = Periodo::orderBy('ID', 'ASC')->where("periodo", '>', $inmueble->ultima_declaracion)->paginate();
         } else {
             $periodo = [];//Periodo::find($declaracionInmueble->idperiodo)->paginate();
             $ultimo_anio = "";//$periodo['periodo'];
@@ -130,7 +130,7 @@ class DeclaracionInmuebleController extends Controller
     } 
 
     /**
-     * Genera el estado de cuenta de comercio
+     * Genera el estado de cuenta de inmueble
      *
      * @param  int  $id
      * @return \Illuminate\Http\Response
@@ -141,10 +141,11 @@ class DeclaracionInmuebleController extends Controller
 
         $saldo = 0;
         $declaracionObj = [];
+        $nombre = Auth::user()->name;        
 
-        $inmueble = Inmueble::join('zonas', 'inmuebles.idzona', '=', 'zonas.id')->selectRaw('inmuebles.denominacion, inmuebles.direccion, inmuebles.codigo_catastral, inmuebles.numero_civico, inmuebles.numero_inscripcion, inmuebles.area_terreno, inmuebles.area_construccion, zonas.nombre, inmuebles.telefono, inmuebles.rif')
+        $inmueble = Inmueble::join('zonas', 'inmuebles.idzona', '=', 'zonas.id')->selectRaw('inmuebles.denominacion, inmuebles.direccion, inmuebles.codigo_catastral, inmuebles.numero_civico, inmuebles.idregimen, inmuebles.numero_inscripcion, inmuebles.area_terreno, inmuebles.area_construccion, zonas.nombre, inmuebles.telefono, inmuebles.rif')
         ->find($request->idinmueble);
-        $inmuebleTipo = TipoContribuyenteInmueble::find($request->idinmueble);
+        $inmuebleTipo = Regimen::find($inmueble->idregimen);
 
         $declaracionEstatus = DeclaracionInmueble::where("idinmueble", "=", $request->idinmueble)->get();
 
@@ -152,27 +153,11 @@ class DeclaracionInmuebleController extends Controller
             if( $declaracion->estado == "calculado" ) {
                 $declaracionInmueble = DeclaracionInmueble::join('periodos', 'declaracion_inmueble.idperiodo', '=', 'periodos.id')
                                     ->join('inmuebles', 'declaracion_inmueble.idinmueble', '=', 'inmuebles.id')
-                                    ->selectRaw('periodos.periodo, inmuebles.id as idinmueble, inmuebles.codigo_catastral, inmuebles.denominacion, inmuebles.area_construccion, inmuebles.direccion, inmuebles.rif, inmuebles.area_terreno, declaracion_inmueble.idinmueble, declaracion_inmueble.estado, declaracion_inmueble.monto_impuesto as monto_impuesto')
+                                    ->selectRaw('periodos.periodo, inmuebles.id as idinmueble, inmuebles.codigo_catastral, inmuebles.denominacion, inmuebles.area_construccion, inmuebles.direccion, inmuebles.rif, inmuebles.area_terreno, declaracion_inmueble.idinmueble, declaracion_inmueble.estado, declaracion_inmueble.monto_impuesto as monto_impuesto, declaracion_inmueble.created_at as fecha')
                                     ->where("declaracion_inmueble.id", "=", $declaracion->id)->first();
 
                     $saldo = $saldo + $declaracionInmueble->monto_impuesto;
-
-                $declaracionObj[] = [
-                    "periodo" => $declaracionInmueble->periodo,
-                    "estado" => $declaracion->estado,
-                    "tipo" => "abono",
-                    "saldo" => $saldo,
-                    "monto_impuesto" => $declaracionInmueble->monto_impuesto
-                ];
-            } elseif($declaracion->estado == "pagado") {
-
-                $declaracionInmueble = DeclaracionInmueble::join('periodos', 'declaracion_inmueble.idperiodo', '=', 'periodos.id')
-                                    ->join('pagos', 'declaracion_inmueble.idpago', '=', 'pagos.id')
-                                    ->join('inmuebles', 'declaracion_inmueble.idinmueble', '=', 'inmuebles.id')
-                                    ->selectRaw('periodos.periodo, inmuebles.id as idinmueble, inmuebles.codigo_catastral, inmuebles.denominacion, inmuebles.area_construccion, inmuebles.direccion, inmuebles.rif, inmuebles.area_terreno, declaracion_inmueble.idinmueble, declaracion_inmueble.estado, declaracion_inmueble.monto_impuesto as monto_impuesto, pagos.monto as monto_pago')
-                                    ->where("declaracion_inmueble.id", "=", $declaracion->id)->first();
-
-                    $saldo = $saldo + $declaracionInmueble->monto_impuesto;
+                    $date = new \DateTime($declaracionInmueble->fecha); 
 
                 $declaracionObj[] = [
                     "periodo" => $declaracionInmueble->periodo,
@@ -180,14 +165,36 @@ class DeclaracionInmuebleController extends Controller
                     "tipo" => "abono",
                     "saldo" => $saldo,
                     "monto_impuesto" => $declaracionInmueble->monto_impuesto,
-                    "monto_pago" => $declaracionInmueble->monto_pago
+                    "fecha" => $date->format('d/m/Y'),
+                ];
+            } elseif($declaracion->estado == "pagado") {
+
+                $declaracionInmueble = DeclaracionInmueble::join('periodos', 'declaracion_inmueble.idperiodo', '=', 'periodos.id')
+                                    ->join('pagos', 'declaracion_inmueble.idpago', '=', 'pagos.id')
+                                    ->join('inmuebles', 'declaracion_inmueble.idinmueble', '=', 'inmuebles.id')
+                                    ->selectRaw('periodos.periodo, inmuebles.id as idinmueble, inmuebles.codigo_catastral, inmuebles.denominacion, inmuebles.area_construccion, inmuebles.direccion, inmuebles.rif, inmuebles.area_terreno, declaracion_inmueble.idinmueble, declaracion_inmueble.estado, declaracion_inmueble.monto_impuesto as monto_impuesto, pagos.created_at as fecha, pagos.monto as monto_pago')
+                                    ->where("declaracion_inmueble.id", "=", $declaracion->id)->first();
+
+                    $saldo = $saldo + $declaracionInmueble->monto_impuesto;
+                    $date = new \DateTime($declaracionInmueble->fecha); 
+
+                $declaracionObj[] = [
+                    "periodo" => $declaracionInmueble->periodo,
+                    "estado" => $declaracion->estado,
+                    "tipo" => "abono",
+                    "saldo" => $saldo,
+                    "monto_impuesto" => $declaracionInmueble->monto_impuesto,
+                    "monto_pago" => $declaracionInmueble->monto_pago,
+                    "fecha" => $date->format('d/m/Y'),
                 ];
             }
         }
         
 
-        $pdf = \PDF::loadView('pdf.edoCtaInmueble', ['inmueble' => $inmueble , 'declaracionObj' => $declaracionObj, 'inmuebleTipo' => $inmuebleTipo ]);
-            return $pdf->download('EstadoCta Inmueble.pdf');
+            $view =  \View::make('pdf.edoCtaInmueble', compact('inmueble', 'declaracionObj', 'inmuebleTipo', 'nombre', 'saldo'))->render();
+            $pdf = \App::make('dompdf.wrapper');
+            $pdf->loadHTML($view);
+            return $pdf->stream('edoCuentaInmueble');
     }
 
     /**

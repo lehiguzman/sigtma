@@ -34,10 +34,18 @@
                                 <td>{{ comercio.fecha_inscripcion }}</td>
                                 <td>{{ comercio.direccion }}</td>
                                 <td class="text-center">
-                                    <i class='bx bxs-printer bx-md text-success btn-editar' title="Calcular Declaracion" @click="verDetalle(comercio)"></i>
-                                    <i class='bx bxs-report bx-md text-primary btn-eliminar' title="Estado de cuenta" @click="imprimirEdoCta(comercio)"></i>
-                                    <i class='bx bxs-coin-stack bx-md text-success btn-editar' title="Registrar Pago" @click="pagar(comercio)"></i>
-                                    <i class='bx bx-history bx-md text-success btn-editar' title="Registrar Pago" @click="historico(comercio)"></i>
+                                    <i class='bx bxs-printer bx-md text-success btn-editar' title="Calcular Declaracion" 
+                                        @click="verDetalle(comercio)" 
+                                        v-if="comercio.pagos == 0 && comercio.calculados == 0"></i>
+                                    <i class='bx bxs-report bx-md text-primary btn-eliminar' title="Estado de cuenta" 
+                                      @click="imprimirEdoCta(comercio)" 
+                                       v-if="comercio.declaraciones > 0"></i>
+                                    <i class='bx bxs-coin-stack bx-md text-success btn-editar' title="Registrar Pago" 
+                                      @click="pagar(comercio)"
+                                      v-if="comercio.calculados > 0"></i>
+                                    <i class='bx bx-history bx-md text-success btn-editar' title="Historial de Pago" 
+                                      @click="historico(comercio)"
+                                      v-if="comercio.pagos > 0"></i>
                                 </td>
                             </tr>                            
                         </tbody>                  
@@ -445,7 +453,12 @@
                                     <span class="align-middle ml-25">Registrar</span>
                                 </button>
                             </div>
-                            <div class="col-md-3" v-else></div>
+                            <div class="col-md-6" v-else-if="boton == 'solvencia'">
+                                <button type="button" @click="imprimirSolvencia()" name="registro" class="btn btn-primary btn-registrar">                                       
+                                    <span class="align-middle ml-25">Imprimir</span>
+                                </button>
+                            </div>
+                            <div class="col-md-3" v-else> </div>
 
                             <div class="col-md-6 d-flex justify-content-center ">
                                 <i class='bx bx-cancel bx-sm' ></i>
@@ -499,13 +512,10 @@
                         <table class="table table-hover table-striped table-bordered my-5" id="dataTable" width="100%" cellspacing="0">
                             <thead>
                                 <tr class="text-center">                                
-                                    <th width="20%">Número de referencia</th>
-                                    <th width="20%">Fecha</th>                                    
-                                    <th width="20%">Banco</th>
-                                    <th width="20%">Monto</th>                            
-                                    <th width="20%">
-                                        Imprimir
-                                    </th>                            
+                                    <th width="25%">Número de referencia</th>
+                                    <th width="25%">Fecha</th>                                    
+                                    <th width="25%">Banco</th>
+                                    <th width="25%">Monto</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -514,7 +524,7 @@
                                     <td>{{ pago.fecha_pago | formatoFecha }}</td>                                    
                                     <td>{{ pago.banco }}</td>
                                     <td>{{ pago.monto.toFixed(2) }}</td> 
-                                    <td><i class="bx bx-edit bx-md"></i></td>                                                   
+                                    <!-- <td><i class="bx bx-edit bx-md"></i></td> -->
                                 </tr>                            
                             </tbody>                  
                         </table>
@@ -522,7 +532,7 @@
                     
                         <div class="form-row mt-5">                             
                             <div class="col-md-6 d-flex justify-content-center" v-if="boton == 'registro'" >
-                                <button type="button" @click="validarFormulario( 'pagar' )" name="registro" class="btn btn-primary btn-registrar">
+                                <button type="button" @click="imprimirHistorico()" name="registro" class="btn btn-primary btn-registrar">
                                     <span class="align-middle ml-25">Imprimir</span>
                                 </button>
                             </div>
@@ -657,7 +667,7 @@
                 console.log("Response : ", response);
 
                 var respuesta = response.data;                                    
-                me.comercios = respuesta.comercios.data;
+                me.comercios = respuesta.comercios;
 
                 me.tablaComercios();
               })
@@ -874,9 +884,12 @@
                             'Registro!',
                             'Registro exitoso.',
                             'success'
-                        );
+                        );                         
+                        me.idpago = response.data;
+                        console.log("Respuesta : ", me.idpago);
                         me.limpiarCampos();
-                        me.cambiarVista( "listado" );                        
+                        me.boton = "solvencia";
+                        me.cambiarVista( "pagar" );
 
                     }).catch(function (error) {
                     // handle error
@@ -896,11 +909,22 @@
 
             },
 
-            imprimirEdoCta( comercio ) {
-
-                console.log("Comerio : ", comercio.id);
+            imprimirEdoCta( comercio ) {                
 
                 window.open('http://127.0.0.1:8000/edoCtaComercio?idcomercio=' + comercio.id,'_blank');
+
+            },
+
+            imprimirHistorico() {                      
+
+                window.open('http://127.0.0.1:8000/historicoComercio?idcomercio=' + this.comercio.id,'_blank');
+
+            },
+
+            imprimirSolvencia() {                      
+                let me = this;
+
+                window.open('http://127.0.0.1:8000/solvenciaComercio?idpago=' + me.idpago + '&idcomercio=' + me.comercio.id,'_blank');
 
             },
 

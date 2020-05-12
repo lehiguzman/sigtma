@@ -19,11 +19,37 @@ class InmuebleController extends Controller
     {
         //if(!$request->ajax()) return redirect('/');
         
-        $inmuebles = Inmueble::orderBy('ID', 'DESC')->paginate();
+        $inmueblesAll = Inmueble::orderBy('ID', 'DESC')->paginate();
+
+        foreach ($inmueblesAll as $key => $inmueble) {
+            $declaraciones = DeclaracionInmueble::where('idinmueble', '=', $inmueble->id)->count();
+            $calculados = DeclaracionInmueble::where('idinmueble', '=', $inmueble->id)->where("estado", '=', 'calculado')->count();
+            $pagos = DeclaracionInmueble::where('idinmueble', '=', $inmueble->id)->where("estado", '=', 'pagado')->count();
+            $inmuebleDec = [
+                'id' => $inmueble->id,
+                'codigo_catastral' => $inmueble->codigo_catastral,
+                'denominacion' => $inmueble->denominacion,
+                'area_terreno' => $inmueble->area_terreno,
+                'area_construccion' => $inmueble->area_construccion,
+                'numero_inscripcion' => $inmueble->numero_inscripcion,
+                'telefono' => $inmueble->telefono,
+                'rif' => $inmueble->rif,
+                'fecha_inscripcion' => $inmueble->fecha_inscripcion,
+                'direccion' => $inmueble->direccion,
+                'declaraciones' => $declaraciones,
+                'calculados' => $calculados,
+                'pagos' => $pagos
+            ];
+
+            $inmuebleArray[] = $inmuebleDec;
+        } 
+
+        $inmuebles = $inmuebleArray;
 
         if($request->id) {
             $inmuebles = Inmueble::find($request->id);                
         }    
+
         return [ 
             'inmuebles' => $inmuebles
         ];

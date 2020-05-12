@@ -1,8 +1,8 @@
 <template>	
 	<div class="box-container row">
-		<div class="bg-white col-md-5 bg-shadow">  
+		<!--<div class="bg-white col-md-5 bg-shadow">  
 			<div class="mt-5 text-center ml-2">
-		        <VueApexCharts width="350" height="200" type="bar" :options="options" :series="series"></VueApexCharts>    
+		        <VueApexCharts id="exa" width="350" height="200" type="bar" :options="options" :series="series"></VueApexCharts>    
 		    </div>  	  
 		</div>
 		<div class="col-md-1">			
@@ -17,6 +17,16 @@
 			<div class="col-md-12">			
 	        	<VueApexCharts width="800" height="200" type="line" :options="options" :series="series"></VueApexCharts>    
 	    	</div> 
+		</div>-->
+		<div class="bg-white col-md-5 bg-shadow">  
+			<div id="trimestres"></div>
+		</div>
+		<div class="bg-white col-md-5 bg-shadow ml-5">  
+			<div id="tipoContribuyente"></div>
+		</div>
+		<div class="row col-md-1"></div>
+		<div class="bg-white col-md-10 bg-shadow mt-4">  
+			<div id="anual"></div>
 		</div>
 	</div>	
 
@@ -29,36 +39,151 @@
 </style>    
 
 <script type="text/javascript">
-	import VueApexCharts from 'vue-apexcharts'	
+	import ApexCharts from 'apexcharts'
 
     export default {
         data() { 
-        	return {
-		      options: {
-		        chart: {
-		          id: 'vuechart-example'
-		        },
-		        xaxis: {
-		          categories: [1991, 1992, 1993, 1994]
-		        }
-		      },
-		      series: [{
-		        name: 'series-1',
-		        data: [30, 40, 45, 50]
-		      }],
-
-		      	options2: {},
-      			series2: [44, 55, 41, 17, 15]
-		    }
+        	return { 
+        		
+        	}        	
     	},
 
     	components: {
        //     datatable
-          VueApexCharts            
+          ApexCharts            
         },
 
+        methods: {
+        	graficoBarra() {
+        		var options = {
+					chart: {
+							type: 'bar',
+							width: '350',							
+							height: '200',
+						},
+						series: [{
+							name: 'recaudado (Bs.)',
+							data: [89767.23,400787.27,422312.29,52653.76]
+						}],
+						xaxis: {
+							categories: ["ENE-MAR","ABR-JUN","JUL-SEP","OCT-DEC"]
+						},
+						plotOptions: {
+							bar: {
+								dataLabels: {
+							    position: 'top'
+							}
+						}
+					},
+					dataLabels: {
+						enabled: true,
+						style: {
+							colors: ['#333']
+						},
+						offsetY: -20
+					},
+					title: {
+				    text: "Recaudación trimestral",
+				    align: 'left',
+				    margin: 10,
+				    offsetX: 0,
+				    offsetY: 0,
+				    floating: false,
+					    style: {
+					      fontSize:  '14px',
+					      fontWeight:  'bold',
+					      fontFamily:  'arial',
+					      color:  '#263238'
+					    },
+					}
+				}
+
+				var chart = new ApexCharts(document.querySelector("#trimestres"), options);
+
+				chart.render();
+			},
+
+			graficoTorta() {
+				var options = {
+					chart: {
+							type: 'donut',
+							width: '350',							
+							height: '200',
+						},						
+  					series: [44, 55, 13],
+  					/*series: [{
+							name: 'recaudado (Bs.)',
+							data: [100,200,200,400]
+						}],*/
+  					labels: ['Actividad Comercial', 'Inmueble', 'Vehiculo'],  					
+  					title: {
+				    text: "Recaudación por Tipo",
+				    align: 'left',
+				    margin: 10,
+				    offsetX: 0,
+				    offsetY: 0,
+				    floating: false,
+					    style: {
+					      fontSize:  '14px',
+					      fontWeight:  'bold',
+					      fontFamily:  'arial',
+					      color:  '#263238'
+					    },
+					}
+				};				
+					var chart = new ApexCharts(document.querySelector("#tipoContribuyente"), options);
+
+					chart.render();
+			},
+
+				graficoLineal() {
+				var options = {
+					chart: {
+							type: 'line',
+							width: '800',
+							height: '200',
+						},						
+  					stroke: {
+					  curve: 'smooth',					  
+					},
+					series: [{
+							name: 'recaudado (Bs.)',
+							data: [2,3,4,5,6,7,8,9,10,11,12,13]							
+						}],
+					xaxis: {
+							categories: ["Enero","Febrero","Marzo",
+										"Abril","Mayo","Junio",
+										"Julio","Agosto","Septiembre",
+										"Octubre","Noviembre","Diciembre"]
+						},
+					title: {
+				    text: "Recaudación Anual",
+				    align: 'left',
+				    margin: 10,
+				    offsetX: 0,
+				    offsetY: 0,
+				    floating: false,
+					    style: {
+					      fontSize:  '14px',
+					      fontWeight:  'bold',
+					      fontFamily:  'arial',
+					      color:  '#263238'
+					    },
+					}
+
+  					
+				};				
+					var chart = new ApexCharts(document.querySelector("#anual"), options);
+
+					chart.render();
+				},
+			},
+
     	mounted() {        	
-            console.clear();            
+            console.clear();                      
+            this.graficoBarra();
+            this.graficoTorta();
+            this.graficoLineal();
             console.log("data");
         }
 	}

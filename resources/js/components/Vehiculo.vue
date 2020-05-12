@@ -155,7 +155,7 @@
                             <div class="col-md-1"></div>
 
                                 <label for="anio" class="col-md-3 col-form-label-lg">
-                                    anio
+                                    Año
                                 </label> 
 
                             <div class="col-md-4 form-group">
@@ -331,7 +331,7 @@
                 axios.get(url).then(function (response) {
                 // handle success                                      
                 var respuesta = response.data;                                    
-                me.vehiculos = respuesta.vehiculos.data;
+                me.vehiculos = respuesta.vehiculos;
                 
                 if( me.vehiculos.length == 0 ) {
                     me.limpiarCampos();
@@ -482,6 +482,7 @@
                     me.modelo = vehiculo.modelo;
                     me.serial = vehiculo.serial;                    
                     me.rif = vehiculo.rif;
+                    me.anio = vehiculo.anio;
                     me.telefono = vehiculo.telefono;
                     me.direccion = vehiculo.direccion;
                     me.titulo = 'Editar Vehiculo';

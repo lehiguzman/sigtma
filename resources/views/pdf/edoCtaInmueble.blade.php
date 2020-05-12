@@ -86,10 +86,10 @@
             </tr>
             <tr>
                 <td class="bordes" width="25%" style="padding-left: 10px;">
-                    Tributo
+                    Tipo de Vivienda
                 </td>
                 <td class="bordes" width="25%">
-                    {{ $inmuebleTipo->descripcion }}
+                    {{ $inmuebleTipo->regimen }}
                 </td> 
                 <td class="bordes" width="12%" style="text-align: center;">
                     Teléfonos :
@@ -103,13 +103,24 @@
                 <td class="bordes" width="13%">
                     {{ $inmueble->rif }}
                 </td>      
-            </tr>            
+            </tr>
+            <tr>
+                <td class="bordes" width="30%" style="padding-left: 10px;">
+                    Impreso por :
+                </td>
+                <td class="bordes" colspan="3" width="30%">
+                    {{ $nombre }}
+                </td>                              
+            </tr>                        
         </table>
     </div>
     <div style="padding-top: 30px;">
         <table width="100%" style="border-collapse: collapse; font-size: 14px;">            
-            <tr>                
-                <td class="bordes" width="70%" style="text-align: center;">
+            <tr>
+                <td class="bordes" width="15%" style="text-align: center;">
+                    <b>Fecha</b>
+                </td>                
+                <td class="bordes" width="40%" style="text-align: center;">
                     <b>Descripción del Movimiento</b>
                 </td>               
                 <td class="bordes" width="15%" style="text-align: center;">
@@ -123,8 +134,11 @@
                 </td>
             </tr>
             @foreach($declaracionObj as $declaracion)
-            <tr style="font-size: 12px;">                              
-                <td class="bordes" width="70%" style="text-align: center;">
+            <tr style="font-size: 12px;">
+                 <td class="bordes" width="15%" style="text-align: center;">
+                    {{ $declaracion['fecha'] }}
+                </td>                           
+                <td class="bordes" width="40%" style="text-align: center;">
                     Cargo inmueble Año {{ $declaracion['periodo'] }}
                 </td>                
                 <td class="bordes" width="15%" style="text-align: center;">
@@ -136,8 +150,11 @@
                 </td>
             </tr>
             @if( $declaracion['estado'] == "pagado" && $declaracion['periodo'] == "2020")
-            <tr style="font-size: 12px;">                               
-                <td class="bordes" width="70%" style="text-align: center;">
+            <tr style="font-size: 12px;"> 
+                <td class="bordes" width="15%" style="text-align: center;">
+                    {{ $declaracion['fecha'] }}
+                </td>                       
+                <td class="bordes" width="40%" style="text-align: center;">
                     Pago Anualidades Inmuebles Urbanos {{ $declaracion['periodo'] }}
                 </td>                
                 <td class="bordes" width="15%" style="text-align: center;"></td>                
@@ -150,6 +167,14 @@
             </tr>
             @endif
             @endforeach
+            <tr style="font-size: 12px; bottom: 0">                                
+                <td class="bordes" width="85%" colspan="4" style="text-align: right; padding-right: 10px;">
+                    <b>Saldo Final Bs.</b>
+                </td>
+                <td class="bordes" width="15%" style="text-align: center;">
+                    {{ number_format( $saldo, 2 ) }}
+                </td>
+            </tr>
         </table>
     </div> 
 </body>

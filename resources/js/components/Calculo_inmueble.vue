@@ -35,10 +35,18 @@
                                 <td>{{ inmueble.rif }}</td>
                                 <td>{{ inmueble.direccion }}</td>
                                 <td class="text-center">
-                                    <i class='bx bxs-printer bx-md text-success btn-editar' title="Calcular Declaracion" @click="verDetalle(inmueble)"></i>
-                                    <i class='bx bxs-report bx-md text-primary btn-eliminar' title="Estado de cuenta" @click="imprimirEdoCta(inmueble)"></i>
-                                    <i class='bx bxs-coin-stack bx-md text-success btn-editar' title="Registrar Pago" @click="pagar(inmueble)"></i>
-                                    <i class='bx bx-history bx-md text-success btn-editar' title="Registrar Pago" @click="historico(inmueble)"></i>
+                                    <i class='bx bxs-printer bx-md text-success btn-editar' title="Calcular Declaracion" 
+                                        @click="verDetalle(inmueble)"
+                                        v-if="inmueble.pagos == 0 && inmueble.calculados == 0"></i>
+                                    <i class='bx bxs-report bx-md text-primary btn-eliminar' title="Estado de cuenta" 
+                                        @click="imprimirEdoCta(inmueble)"
+                                        v-if="inmueble.declaraciones > 0"></i>
+                                    <i class='bx bxs-coin-stack bx-md text-success btn-editar' title="Registrar Pago" 
+                                        @click="pagar(inmueble)"
+                                        v-if="inmueble.calculados > 0"></i>
+                                    <i class='bx bx-history bx-md text-success btn-editar' title="Histórico de pagos" 
+                                        @click="historico(inmueble)"
+                                        v-if="inmueble.pagos > 0"></i>
                                 </td>
                             </tr>                            
                         </tbody>                  
@@ -415,7 +423,12 @@
                                     <span class="align-middle ml-25">Registrar</span>
                                 </button>
                             </div>
-                            <div class="col-md-3" v-else></div>
+                            <div class="col-md-6" v-else-if="boton == 'solvencia'">
+                                <button type="button" @click="imprimirSolvencia()" name="registro" class="btn btn-primary btn-registrar">                                       
+                                    <span class="align-middle ml-25">Imprimir</span>
+                                </button>
+                            </div>
+                            <div class="col-md-3" v-else> </div>
 
                             <div class="col-md-6 d-flex justify-content-center ">
                                 <i class='bx bx-cancel bx-sm' ></i>
@@ -472,9 +485,7 @@
                                     <th width="20%">Fecha</th>                                    
                                     <th width="20%">Banco</th>
                                     <th width="20%">Monto</th>                            
-                                    <th width="20%">
-                                        Imprimir
-                                    </th>                            
+                                   <!-- <th width="20%">Imprimir</th> -->
                                 </tr>
                             </thead>
                             <tbody>
@@ -483,7 +494,7 @@
                                     <td>{{ pago.fecha_pago | formatoFecha }}</td>                                    
                                     <td>{{ pago.banco }}</td>
                                     <td>{{ pago.monto.toFixed(2) }}</td> 
-                                    <td><i class="bx bx-edit bx-md"></i></td>                                                   
+                                   <!-- <td><i class="bx bx-edit bx-md"></i></td> -->
                                 </tr>                            
                             </tbody>                  
                         </table>
@@ -491,7 +502,7 @@
                     
                         <div class="form-row mt-5">                             
                             <div class="col-md-6 d-flex justify-content-center" v-if="boton == 'registro'" >
-                                <button type="button" @click="validarFormulario( 'pagar' )" name="registro" class="btn btn-primary btn-registrar">
+                                <button type="button" @click="imprimirHistorico()" name="imprimir" class="btn btn-primary btn-registrar">
                                     <span class="align-middle ml-25">Imprimir</span>
                                 </button>
                             </div>
@@ -638,9 +649,10 @@
 
                 axios.get(url).then(function (response) {
                 // handle success                     
+                console.log("response : ", response);
 
                 var respuesta = response.data;                                    
-                me.inmuebles = respuesta.inmuebles.data;
+                me.inmuebles = respuesta.inmuebles;
 
                 me.tablaInmuebles();
               })
@@ -791,7 +803,8 @@
                     me.valor_total = me.valor_mt * me.area_construccion;
                 }
 
-                me.monto_impuesto = me.valor_total * me.valor_fiscal;
+                me.monto_impuesto = me.valor_total * me.valor_fiscal;                       
+
                 me.ultimo = respuesta.ultimo;
                 if( respuesta.ultimo != "N/A") {
                     me.anio++; 
@@ -817,6 +830,7 @@
                 // handle success                                      
                 var respuesta = response.data;                     
                 me.declaracion = respuesta.declaracion;
+
                 me.detalles.push({
                         tipoPago: '',
                         referencia: '',
@@ -851,7 +865,10 @@
                     monto = monto + (parseFloat(this.detalles[i].monto_pago));
                 }
 
-                if( monto != me.declaracion.monto_impuesto ) {
+                console.log("Monto : ", monto );
+                console.log("Declaracion : ", me.declaracion.monto_impuesto );
+
+                if( monto != me.declaracion.monto_impuesto.toFixed(2) ) {
                     alerta.fire(
                             'El monto debe coincidir con monto impuesto!',
                             'Error.',
@@ -871,9 +888,10 @@
                             'Registro exitoso.',
                             'success'
                         );
+                        me.idpago = response.data;
                         me.limpiarCampos();
-                        me.cambiarVista( "listado" );                        
-
+                        me.boton = "solvencia";
+                        me.cambiarVista( "pagar" );                           
                     }).catch(function (error) {
                     // handle error
                     console.log(error);
@@ -885,6 +903,19 @@
                 console.log("Inmueble : ", inmueble.id);
 
                 window.open('http://127.0.0.1:8000/edoCtaInmueble?idinmueble=' + inmueble.id,'_blank');
+
+            },
+
+             imprimirHistorico() {                      
+
+                window.open('http://127.0.0.1:8000/historicoInmueble?idinmueble=' + this.inmueble.id,'_blank');
+
+            },
+
+            imprimirSolvencia() {                      
+                let me = this;
+
+                window.open('http://127.0.0.1:8000/solvenciaInmueble?idpago=' + me.idpago + '&idinmueble=' + me.inmueble.id,'_blank');
 
             },
 

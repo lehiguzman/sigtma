@@ -14,8 +14,10 @@ use App\Vehiculo;
 use App\DeclaracionComercio;
 use App\DeclaracionInmueble;
 use App\DeclaracionVehiculo;
+use App\TipoContribuyenteVehiculo;
 use App\DetallePago;
 use App\Bitacora;
+use App\Regimen;
 
 class PagoController extends Controller
 {
@@ -37,7 +39,75 @@ class PagoController extends Controller
             'pagos' => $pagos
         ];
     }
-    
+
+    /**
+     * Historico de Pagos de un comercio
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function historicoComercio(Request $request) {
+
+        $nombre = Auth::user()->name;
+        $comercio = Comercio::find($request->idcomercio);
+        $pagos = DeclaracionComercio::join("pagos", "declaracion_comercio.idpago", "=", "pagos.id")
+                                    ->join("detalle_pagos", "pagos.id", "=", "detalle_pagos.idpago")
+                                    ->selectRaw('distinct(declaracion_comercio.idpago), detalle_pagos.referencia, detalle_pagos.fecha_pago, detalle_pagos.banco, detalle_pagos.monto, detalle_pagos.tipo_pago')
+                                    ->where('declaracion_comercio.idcomercio', '=', $request->idcomercio)
+                                    ->get();
+
+         //$pdf = \PDF::loadView('pdf.historicoComercio', ['comercio' => $comercio , 'pagos' => $pagos, 'nombre' => $nameUser ]);
+           //         return $pdf->download('historicoComercio.pdf');
+
+        $view =  \View::make('pdf.historicoComercio', compact('comercio', 'pagos', 'nombre'))->render();
+        $pdf = \App::make('dompdf.wrapper');
+        $pdf->loadHTML($view);
+        return $pdf->stream('invoice');
+    }    
+
+    /**
+     * Historico de Pagos de un Inmueble
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function historicoInmueble(Request $request) {
+
+        $nombre = Auth::user()->name;
+        $inmueble = Inmueble::find($request->idinmueble);
+        $pagos = DeclaracionInmueble::join("pagos", "declaracion_inmueble.idpago", "=", "pagos.id")
+                                    ->join("detalle_pagos", "pagos.id", "=", "detalle_pagos.idpago")
+                                    ->selectRaw('distinct(declaracion_inmueble.idpago), detalle_pagos.referencia, detalle_pagos.fecha_pago, detalle_pagos.banco, detalle_pagos.monto, detalle_pagos.tipo_pago')
+                                    ->where('declaracion_inmueble.idinmueble', '=', $request->idinmueble)
+                                    ->get();
+
+        $view =  \View::make('pdf.historicoInmueble', compact('inmueble', 'pagos', 'nombre'))->render();
+        $pdf = \App::make('dompdf.wrapper');
+        $pdf->loadHTML($view);
+        return $pdf->stream('historicoInmueble');
+    }  
+
+    /**
+     * Historico de Pagos de un Inmueble
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function historicoVehiculo(Request $request) {
+
+        $nombre = Auth::user()->name;
+        $vehiculo = Vehiculo::find($request->idvehiculo);
+        $pagos = DeclaracionVehiculo::join("pagos", "declaracion_vehiculo.idpago", "=", "pagos.id")
+                                    ->join("detalle_pagos", "pagos.id", "=", "detalle_pagos.idpago")
+                                    ->selectRaw('distinct(declaracion_vehiculo.idpago), detalle_pagos.referencia, detalle_pagos.fecha_pago, detalle_pagos.banco, detalle_pagos.monto, detalle_pagos.tipo_pago')
+                                    ->where('declaracion_vehiculo.idvehiculo', '=', $request->idvehiculo)
+                                    ->get();
+
+        $view =  \View::make('pdf.historicoVehiculo', compact('vehiculo', 'pagos', 'nombre'))->render();
+        $pdf = \App::make('dompdf.wrapper');
+        $pdf->loadHTML($view);
+        return $pdf->stream('historicoVehiculo');
+    }      
 
     /**
      * Store a newly created resource in storage.
@@ -114,6 +184,8 @@ class PagoController extends Controller
             $pago->user_id = $user_id;
             $pago->save(); 
 
+            $idpago = $pago->id;
+
             foreach ($detalles as $a => $det) {
 
               $fechaPago = new \DateTime($det['fecha_pago']);
@@ -140,6 +212,8 @@ class PagoController extends Controller
 
             DB::rollBack();
         }
+
+        return $idpago;
     } 
 
 
@@ -286,6 +360,111 @@ class PagoController extends Controller
             return $pdf->download('pagos.pdf');
         }
     }
+
+    public function reporteTramites( Request $request ) {
+
+      $fecha_desde = \DateTime::createFromFormat('D M d Y H:i:s e+', $request->fecha_desde);
+      $fecha_hasta = \DateTime::createFromFormat('D M d Y H:i:s e+', $request->fecha_hasta);
+
+      $iduser = Auth::user()->id;  
+
+      if($request->fecha_desde && $request->fecha_hasta) {
+          if( $request->user_id == "todos" ) {            
+            $tramites = Bitacora::whereDate("created_at", '>=', $fecha_desde->format('Y-m-d'))
+              ->whereDate("created_at", '<=', $fecha_hasta->format('Y-m-d'))->orderBY('ID', 'ASC')->get();
+          } else {
+             $tramites = Bitacora::where("user_id", '=', $request->user_id)->whereDate("created_at", '>=', $fecha_desde->format('Y-m-d'))
+              ->whereDate("created_at", '<=', $fecha_hasta->format('Y-m-d'))->orderBY('ID', 'ASC')->get();
+          }
+        } else {
+            $hoy = date('Y-m-d');            
+            if( $request->user_id == "todos" ) {
+              $tramites = Bitacora::whereDate('created_at', '=', $hoy)->orderBY('ID', 'ASC')->get();    
+            } else {
+              $tramites = Bitacora::where("iduser", "=", $iduser)->whereDate("created_at", '<=', $fecha_hasta->format('Y-m-d'))->orderBY('ID', 'ASC')->get();
+            }       
+        }      
+
+      foreach ($tramites as $key => $tramite) {
+        
+        if( $tramite['tipo_contribuyente'] == 'comercio' ) {
+          $res = Comercio::where("rif", "=", $tramite['codigo'])->first();
+          $codigo = $res['rif'];
+        }
+
+        if( $tramite['tipo_contribuyente'] == 'inmueble' ) {
+          $res = Inmueble::where("codigo_catastral", "=", $tramite['codigo'])->first();
+          $codigo = $res['codigo_catastral'];
+        }
+
+        if( $tramite['tipo_contribuyente'] == 'vehiculo' ) {
+          $res = Vehiculo::where("placa", "=", $tramite['codigo'])->first();
+          $codigo = $res['placa'];
+        }
+
+        if($res) {
+          $resultados[] = [
+          'codigo' => $codigo,
+          'denominacion' => $res['denominacion'],
+          'fecha' => $res['created_at'],
+          ];
+        }
+        
+      }
+
+      if($request->accion == "generar") {
+            return  $resultados;        
+        } 
+        else {
+            $user = User::find($request->user_id);
+            $pdf = \PDF::loadView('pdf.tramites', ['resultados' => $resultados, 'user' => $user]);
+            return $pdf->download('tramites.pdf');
+        }
+    }
+
+    public function solvenciaComercio( Request $request ) {
+
+      $nombre = Auth::user()->name;  
+
+      $comercio = Comercio::find( $request->idcomercio );
+
+      $pago = Pago::find($request->idpago);
+
+      $view =  \View::make('pdf.solvenciaComercio', compact('nombre', 'comercio', 'pago'))->render();
+            $pdf = \App::make('dompdf.wrapper');
+            $pdf->loadHTML($view);
+            return $pdf->stream('solvencia');
+    } 
+
+    public function solvenciaInmueble( Request $request ) {
+
+      $nombre = Auth::user()->name;  
+
+      $inmueble = Inmueble::find( $request->idinmueble );
+      $inmuebleTipo = Regimen::find( $inmueble->idregimen );
+
+      $pago = Pago::find($request->idpago);
+
+      $view =  \View::make('pdf.solvenciaInmueble', compact('nombre', 'inmueble', 'pago', 'inmuebleTipo'))->render();
+            $pdf = \App::make('dompdf.wrapper');
+            $pdf->loadHTML($view);
+            return $pdf->stream('solvencia');
+    } 
+
+    public function solvenciaVehiculo( Request $request ) {
+
+      $nombre = Auth::user()->name;  
+
+      $vehiculo = Vehiculo::find( $request->idvehiculo );
+      $tipoVehiculo = TipoContribuyenteVehiculo::find( $vehiculo->idtipocontribuyentevehiculo );
+
+      $pago = Pago::find($request->idpago);
+
+      $view =  \View::make('pdf.solvenciaVehiculo', compact('nombre', 'vehiculo', 'pago', 'tipoVehiculo'))->render();
+            $pdf = \App::make('dompdf.wrapper');
+            $pdf->loadHTML($view);
+            return $pdf->stream('solvencia');
+    } 
 
 
     /**

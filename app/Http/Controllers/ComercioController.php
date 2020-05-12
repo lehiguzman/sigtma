@@ -23,14 +23,34 @@ class ComercioController extends Controller
     {
         $comercios = Comercio::orderBy('ID', 'DESC')->paginate();
 
-        $datos = [
-                'comercios' => $comercios,
+        foreach ($comercios as $key => $comercio) {
+            $declaraciones = DeclaracionComercio::where('idcomercio', '=', $comercio->id)->count();
+            $calculados = DeclaracionComercio::where('idcomercio', '=', $comercio->id)->where("estado", '=', 'calculado')->count();
+            $pagos = DeclaracionComercio::where('idcomercio', '=', $comercio->id)->where("estado", '=', 'pagado')->count();
+            $comercioDec = [
+                'id' => $comercio->id,
+                'licencia' => $comercio->licencia,
+                'denominacion' => $comercio->denominacion,
+                'rif' => $comercio->rif,
+                'fecha_inscripcion' => $comercio->fecha_inscripcion,
+                'direccion' => $comercio->direccion,
+                'declaraciones' => $declaraciones,
+                'calculados' => $calculados,
+                'pagos' => $pagos
             ];
+
+            $comercioArray[] = $comercioDec;
+        }        
+
+        $datos = [
+                'comercios' => $comercioArray                
+            ];
+
         
         if($request->id) {
             $comercio = Comercio::find($request->id);    
             $tipos = Comerciotipo::join('tipo_contribuyente_comercio', 'comercios_tipo.idtipo', '=', 'tipo_contribuyente_comercio.id')
-            ->where('comercios_tipo.idcomercio', '=', $request->id)->get();
+            ->where('comercios_tipo.idcomercio', '=', $request->id)->get();            
             
             $datos = [
                 'comercios' => $comercio,

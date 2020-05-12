@@ -48,7 +48,7 @@
         </template>
         <!-- formulario de Nuevo Contribuyente de actividad comercial-->
         <template v-else-if="vista=='registro'">
-            <div class="p-3 bg-white rounded shadow-container">  
+            <div class="p-3 bg-white rounded">  
                 <div class="col-md-12 mb-0 text-center bg-light">
                     <h4>{{ titulo }}</h4>
                 </div>

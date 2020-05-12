@@ -116,7 +116,7 @@
             </thead>
             <tbody>
                 @foreach ($pagos as $pago)
-                <tr>                    
+                <tr style="text-align: center;">                    
                     <td width="10%">{{$pago['comprobante']}}</td>                    
                     <td width="10%">{{ date('d-m-y', strtotime($pago['fecha'])) }}</td>
                     <td width="10%">{{ date('h:s', strtotime($pago['fecha'])) }}</td>
