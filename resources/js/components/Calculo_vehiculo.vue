@@ -564,6 +564,29 @@
                 });
             }, 
 
+            agregarFila() {
+                //console.log("Detalle : ", detalles);
+                this.detalles.push({
+                        tipoPago: '',
+                        referencia: '',
+                        banco: '',
+                        fecha_pago: '',
+                        monto_pago: ''
+                    }); 
+
+            },
+
+            eliminarFila(index) {
+                let me = this;                
+                me.detalles.splice(index, 1);
+
+                if( me.detalles.length == 0) {
+                    me.boton = "";
+                } else {
+                    me.boton = "registro";
+                }
+            },
+
 ////////////////////////* Registro de contribuyente de actividad económica *////////////////////////////////////////
             
             validarFormulario( accion ) {
@@ -659,12 +682,13 @@
               .finally(function () {
                 // always executed
               }); 
-            },
+            },            
 
             pagar( vehiculo ) {
-                let me = this;
+                let me = this;                
                 
                 this.vista = "pagar";
+                this.vehiculo = vehiculo;
 
                 var url = '/impuesto_vehiculo/'+vehiculo.id;
 

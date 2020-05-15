@@ -145,7 +145,7 @@ class PagoController extends Controller
                     'iduser' => $user_id,            
                 ]);
 
-                $codigo = $comercio->rif.$date->format('dmY');
+                $codigo = $comercio->licencia.$date->format('dmY');
             } 
 
             if($request->tipo_contribuyente == 'inmueble') {
@@ -306,41 +306,47 @@ class PagoController extends Controller
             $result = DeclaracionVehiculo::join("pagos", "declaracion_vehiculo.idpago", "=", "pagos.id")
             ->join('vehiculos', 'declaracion_vehiculo.idvehiculo', '=', 'vehiculos.id')
             ->join('users', 'pagos.user_id', '=', 'users.id')
+            ->join('detalle_pagos', 'pagos.id', '=', 'detalle_pagos.idpago')       
             ->selectRaw('declaracion_vehiculo.created_at as fecha, vehiculos.placa as codigo, 
                          declaracion_vehiculo.tipo_declaracion as tipo_declaracion, 
-                         pagos.id as comprobante, pagos.banco as banco, pagos.referencia as referencia, 
-                         pagos.monto as monto, users.name as usuario')
-            ->where("idpago", "=", $pago["id"])
+                         pagos.id as comprobante, users.name as usuario,
+                         detalle_pagos.referencia, detalle_pagos.banco, detalle_pagos.monto')
+            ->where("declaracion_vehiculo.idpago", "=", $pago["id"])
             ->first();
+            $tipo_contribuyente = "Vehiculo";
           }
 
           if($pago["tipo_contribuyente"] == "inmueble") {
             $result = DeclaracionInmueble::join("pagos", "declaracion_inmueble.idpago", "=", "pagos.id")
             ->join('inmuebles', 'declaracion_inmueble.idinmueble', '=', 'inmuebles.id')
             ->join('users', 'pagos.user_id', '=', 'users.id')
+            ->join('detalle_pagos', 'pagos.id', '=', 'detalle_pagos.idpago')
             ->selectRaw('declaracion_inmueble.created_at as fecha, inmuebles.codigo_catastral as codigo, 
                          declaracion_inmueble.tipo_declaracion as tipo_declaracion, 
-                         pagos.id as comprobante, pagos.banco as banco, pagos.referencia as referencia, 
-                         pagos.monto as monto, users.name as usuario')
-            ->where("idpago", "=", $pago["id"])
+                         pagos.id as comprobante, users.name as usuario,
+                         detalle_pagos.referencia, detalle_pagos.banco, detalle_pagos.monto')
+            ->where("declaracion_inmueble.idpago", "=", $pago["id"])
             ->first();
+            $tipo_contribuyente = "Inmueble";
           }
 
           if($pago["tipo_contribuyente"] == "comercio") {
             $result = DeclaracionComercio::join("pagos", "declaracion_comercio.idpago", "=", "pagos.id")
             ->join('comercios', 'declaracion_comercio.idcomercio', '=', 'comercios.id')
             ->join('users', 'pagos.user_id', '=', 'users.id')
+            ->join('detalle_pagos', 'pagos.id', '=', 'detalle_pagos.idpago')
             ->selectRaw('declaracion_comercio.created_at as fecha, comercios.licencia as codigo, 
                          declaracion_comercio.tipo_declaracion as tipo_declaracion, 
-                         pagos.id as comprobante, pagos.banco as banco, pagos.referencia as referencia, 
-                         pagos.monto as monto, users.name as usuario')
-            ->where("idpago", "=", $pago["id"])
+                         pagos.id as comprobante, users.name as usuario, 
+                         detalle_pagos.referencia, detalle_pagos.banco, detalle_pagos.monto')
+            ->where("declaracion_comercio.idpago", "=", $pago["id"])
             ->first();
+            $tipo_contribuyente = "Actividad Económica";
           }
 
           $pagos[] = [
             "comprobante" => $result->comprobante,
-            "tipo_declaracion" => $result->tipo_declaracion,
+            "tipo_declaracion" => $tipo_contribuyente,
             "usuario" => $result->usuario,
             "codigo" => $result->codigo,
             "fecha" => $result->fecha,
@@ -371,17 +377,25 @@ class PagoController extends Controller
       if($request->fecha_desde && $request->fecha_hasta) {
           if( $request->user_id == "todos" ) {            
             $tramites = Bitacora::whereDate("created_at", '>=', $fecha_desde->format('Y-m-d'))
-              ->whereDate("created_at", '<=', $fecha_hasta->format('Y-m-d'))->orderBY('ID', 'ASC')->get();
+              ->whereDate("created_at", '<=', $fecha_hasta->format('Y-m-d'))
+              ->where('accion', 'like', '%Agrega nuevo%')
+              ->orderBY('ID', 'ASC')->get();
           } else {
              $tramites = Bitacora::where("user_id", '=', $request->user_id)->whereDate("created_at", '>=', $fecha_desde->format('Y-m-d'))
-              ->whereDate("created_at", '<=', $fecha_hasta->format('Y-m-d'))->orderBY('ID', 'ASC')->get();
+              ->where('accion', 'like', '%Agrega nuevo%')
+              ->whereDate("created_at", '<=', $fecha_hasta->format('Y-m-d'))
+              ->orderBY('ID', 'ASC')->get();
           }
         } else {
             $hoy = date('Y-m-d');            
             if( $request->user_id == "todos" ) {
-              $tramites = Bitacora::whereDate('created_at', '=', $hoy)->orderBY('ID', 'ASC')->get();    
+              $tramites = Bitacora::whereDate('created_at', '=', $hoy)
+              ->where('accion', 'like', '%Agrega nuevo%')
+              ->orderBY('ID', 'ASC')->get();    
             } else {
-              $tramites = Bitacora::where("iduser", "=", $iduser)->whereDate("created_at", '<=', $fecha_hasta->format('Y-m-d'))->orderBY('ID', 'ASC')->get();
+              $tramites = Bitacora::where("iduser", "=", $iduser)->whereDate("created_at", '<=', $fecha_hasta->format('Y-m-d'))
+              ->where('accion', 'like', '%Agrega nuevo%')
+              ->orderBY('ID', 'ASC')->get();
             }       
         }      
 

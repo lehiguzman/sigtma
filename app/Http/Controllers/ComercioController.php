@@ -11,6 +11,7 @@ use App\Bitacora;
 use App\DeclaracionComercio;
 use Auth;
 use App\Pago;
+use App\User;
 
 class ComercioController extends Controller
 {
@@ -21,7 +22,11 @@ class ComercioController extends Controller
      */
     public function index(Request $request)
     {
+        $comercioArray = [];
         $comercios = Comercio::orderBy('ID', 'DESC')->paginate();
+
+        $iduser = $iduser = Auth::user()->id;
+        $rol = User::find($iduser)->roles()->first();
 
         foreach ($comercios as $key => $comercio) {
             $declaraciones = DeclaracionComercio::where('idcomercio', '=', $comercio->id)->count();
@@ -36,14 +41,15 @@ class ComercioController extends Controller
                 'direccion' => $comercio->direccion,
                 'declaraciones' => $declaraciones,
                 'calculados' => $calculados,
-                'pagos' => $pagos
+                'pagos' => $pagos                
             ];
 
             $comercioArray[] = $comercioDec;
         }        
 
         $datos = [
-                'comercios' => $comercioArray                
+                'comercios' => $comercioArray,
+                'rol' => $rol              
             ];
 
         
@@ -55,6 +61,7 @@ class ComercioController extends Controller
             $datos = [
                 'comercios' => $comercio,
                 'tipos' => $tipos,
+                'rol' => $rol
             ];
         } 
 

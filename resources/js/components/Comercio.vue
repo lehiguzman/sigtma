@@ -35,7 +35,8 @@
                                 <td>{{ comercio.fecha_inscripcion }}</td>
                                 <td class="text-center">
                                     <i class='bx bxs-edit bx-sm mr-2 text-success btn-editar' title="Editar" @click="editarRegistro(comercio)"></i>
-                                    <i class='bx bxs-trash bx-sm mr-2 text-danger btn-eliminar' title="Eliminar" @click="eliminarRegistro(comercio)"></i>                                    
+                                    <i class='bx bxs-trash bx-sm mr-2 text-danger btn-eliminar' title="Eliminar" @click="eliminarRegistro(comercio)" 
+                                    v-if="rol == 'gerente' "></i> 
                                 </td>
                             </tr>                            
                         </tbody>                  
@@ -376,6 +377,7 @@
                 buscarP: '',
                 tipoAccion: 0,
                 arrayDetalle: [],
+                rol: 0, 
 
                 //Vista de registro de contribuyente de actividad económica
                 id: 0,
@@ -488,7 +490,9 @@
                 // handle success                                      
                 var respuesta = response.data;                                    
                 me.comercios = respuesta.comercios;
-                console.log("Comercios : ", me.comercios);                
+                me.rol = respuesta.rol.rol;
+                console.log("Comercios : ", me.rol); 
+
                 if( me.comercios.length == 0 ) {
                     me.limpiarCampos();
                     me.tablaComercios();

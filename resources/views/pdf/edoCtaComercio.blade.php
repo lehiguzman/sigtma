@@ -166,14 +166,14 @@
                     {{ $declaracion['fecha'] }}
                 </td>                   
                 <td class="bordes" width="40%" style="text-align: center;">
-                    Pago Anualidades Inmuebles Urbanos {{ $declaracion['periodo'] }}
+                    Pago Anualidades Actividades Ecónomicas {{ $declaracion['periodo'] }}
                 </td>                
                 <td class="bordes" width="15%" style="text-align: center;"></td>                
                 <td class="bordes" width="15%" style="text-align: center;">
                     {{ number_format($declaracion['monto_pago'], 2) }}
                 </td>
                 <td class="bordes" width="15%" style="text-align: center;">
-                    0.00
+                    {{ number_format($saldoFinal, 2) }}
                 </td>
             </tr>
             @endif
@@ -183,7 +183,7 @@
                     <b>Saldo Final Bs.</b>
                 </td>
                 <td class="bordes" width="15%" style="text-align: center;">
-                    {{ number_format( $saldo, 2 ) }}
+                    {{ number_format( $saldoFinal, 2 ) }}
                 </td>
             </tr>
         </table>

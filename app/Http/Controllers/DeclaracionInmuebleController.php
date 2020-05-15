@@ -176,6 +176,7 @@ class DeclaracionInmuebleController extends Controller
                                     ->where("declaracion_inmueble.id", "=", $declaracion->id)->first();
 
                     $saldo = $saldo + $declaracionInmueble->monto_impuesto;
+                    $montoPago = $declaracionInmueble->monto_pago;
                     $date = new \DateTime($declaracionInmueble->fecha); 
 
                 $declaracionObj[] = [
@@ -190,8 +191,9 @@ class DeclaracionInmuebleController extends Controller
             }
         }
         
+        $saldoFinal = $saldo - $montoPago;
 
-            $view =  \View::make('pdf.edoCtaInmueble', compact('inmueble', 'declaracionObj', 'inmuebleTipo', 'nombre', 'saldo'))->render();
+            $view =  \View::make('pdf.edoCtaInmueble', compact('inmueble', 'declaracionObj', 'inmuebleTipo', 'nombre', 'saldoFinal'))->render();
             $pdf = \App::make('dompdf.wrapper');
             $pdf->loadHTML($view);
             return $pdf->stream('edoCuentaInmueble');

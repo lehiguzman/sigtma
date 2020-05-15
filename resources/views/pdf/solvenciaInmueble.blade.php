@@ -117,24 +117,30 @@
     <div style="padding-top: 30px;">
         <table width="100%" style="border-collapse: collapse; font-size: 10px;">            
             <tr>                
-                <td class="bordes" width="40%" style="text-align: center;">
+                <td class="bordes" width="30%" style="text-align: center;">
                     <b>Número de comprobante</b>
                 </td>               
-                <td class="bordes" width="25%" style="text-align: center;">
+                <td class="bordes" width="20%" style="text-align: center;">
                     <b>Fecha</b>
-                </td>                
-                <td class="bordes" width="35%" style="text-align: center;">
+                </td>     
+                 <td class="bordes" width="20%" style="text-align: center;">
+                    <b>Hora</b>
+                </td>                     
+                <td class="bordes" width="30%" style="text-align: center;">
                     <b>Monto</b>
                 </td>
             </tr>            
             <tr style="font-size: 12px;">                                
-                <td class="bordes" width="40%" style="text-align: center;">
+                <td class="bordes" width="30%" style="text-align: center;">
                     {{ $pago->comprobante }}
                 </td>                
-                <td class="bordes" width="25%" style="text-align: center;">
-                    {{ $pago->created_at }}
-                </td>                      
-                <td class="bordes" width="15%" style="text-align: center;">
+                <td class="bordes" width="20%" style="text-align: center;">
+                    {{ date('d-m-y', strtotime($pago->created_at)) }}
+                </td> 
+                <td class="bordes" width="20%" style="text-align: center;">
+                    {{ date('h:s', strtotime($pago->created_at)) }}
+                </td>                        
+                <td class="bordes" width="30%" style="text-align: center;">
                     {{ number_format($pago->monto, 2) }}
                 </td>                
             </tr>            

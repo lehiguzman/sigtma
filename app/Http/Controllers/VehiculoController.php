@@ -18,6 +18,8 @@ class VehiculoController extends Controller
     public function index(Request $request)
     {
         //if(!$request->ajax()) return redirect('/');
+
+        $vehiculoArray = [];
         
         $vehiculosAll = Vehiculo::orderBy('ID', 'DESC')->paginate();
 

@@ -134,7 +134,7 @@
                     </thead>
                     <tbody>
                         <tr class="text-center" v-for="pago in pagos">                          
-                            <td>{{ pago.codigo }}</td>      
+                            <td>{{ pago.referencia }}</td>      
                             <td>{{ pago.fecha | formatoFecha }}</td>
                             <td>{{ pago.fecha | formatoHora }}</td>                            
                             <td>{{ pago.banco }}</td>

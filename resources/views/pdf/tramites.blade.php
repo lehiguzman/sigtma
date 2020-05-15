@@ -96,7 +96,7 @@
         <table width="100%">
             <tr>
                 <td style="text-align: center;">
-                   <b><h3>  Lista de Pagos por Usuario</h3></b>
+                   <b><h3>Reporte de Trámites</h3></b>
                 </td>                
             </tr>            
         </table>

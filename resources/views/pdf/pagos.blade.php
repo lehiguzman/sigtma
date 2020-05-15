@@ -119,14 +119,8 @@
                 <tr style="text-align: center;">                    
                     <td width="10%">{{$pago['comprobante']}}</td>                    
                     <td width="10%">{{ date('d-m-y', strtotime($pago['fecha'])) }}</td>
-                    <td width="10%">{{ date('h:s', strtotime($pago['fecha'])) }}</td>
-                    @if($pago['tipo_declaracion'] == 1) {
-                        <td width="20%">Estimada</td>
-                    }
-                    @else {
-                        <td width="20%">Definitiva</td>
-                    }
-                    @endif
+                    <td width="10%">{{ date('h:s', strtotime($pago['fecha'])) }}</td>                    
+                    <td width="20%">{{$pago['tipo_declaracion']}}</td>                    
                     <td width="10%">{{$pago['codigo']}}</td>                     
                     <td width="10%">{{$pago['usuario']}}</td> 
                     <td width="10%">{{$pago['banco']}}</td>

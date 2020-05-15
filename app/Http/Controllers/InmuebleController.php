@@ -18,6 +18,7 @@ class InmuebleController extends Controller
     public function index(Request $request)
     {
         //if(!$request->ajax()) return redirect('/');
+        $inmuebleArray = [];
         
         $inmueblesAll = Inmueble::orderBy('ID', 'DESC')->paginate();
 

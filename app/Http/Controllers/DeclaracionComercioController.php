@@ -267,6 +267,7 @@ class DeclaracionComercioController extends Controller
                                     ->where("declaracion_comercio.id", "=", $declaracion->id)->first();
 
                     $saldo = $saldo + $declaracionComercio->monto_impuesto;
+                    $montoPago = $declaracionComercio->monto_pago;
                     $date = new \DateTime($declaracionComercio->fecha); 
 
                 $declaracionObj[] = [
@@ -282,7 +283,9 @@ class DeclaracionComercioController extends Controller
             }
         }
 
-            $view =  \View::make('pdf.edoCtaComercio', compact('comercio', 'declaracionObj', 'ramas', 'nombre', 'saldo'))->render();
+        $saldoFinal = $saldo - $montoPago;
+
+            $view =  \View::make('pdf.edoCtaComercio', compact('comercio', 'declaracionObj', 'ramas', 'nombre', 'saldoFinal'))->render();
             $pdf = \App::make('dompdf.wrapper');
             $pdf->loadHTML($view);
             return $pdf->stream('edoCtaComercio');
