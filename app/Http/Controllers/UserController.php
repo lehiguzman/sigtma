@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\User;
 use App\Role;
+use Auth;
 
 class UserController extends Controller
 {
@@ -19,6 +20,10 @@ class UserController extends Controller
         $rol = '';
         $users = User::orderBy('ID', 'DESC')->paginate();    
         
+        $iduser = $iduser = Auth::user()->id;
+        $rol = User::find($iduser)->roles()->first();
+        $usuario = User::find($iduser);
+
         if($request->id) {
             $users = User::find($request->id);    
             $rol = User::find($request->id)->roles()->first();
@@ -26,7 +31,8 @@ class UserController extends Controller
 
         return [ 
             'users' => $users,
-            'rol' =>  $rol
+            'rol' =>  $rol,
+            'usuario' => $usuario,
         ];
     }
 
@@ -72,6 +78,24 @@ class UserController extends Controller
         $user->username = $request->username;
         $user->sede = $request->sede;
         $user->status = $request->status;
+
+        $exploded = explode(',', $request->imagen);
+            $decoded = base64_decode($exploded[1]);
+
+            if(str_contains($exploded[0], 'jpeg')) {
+                $extension = 'jpg';
+            } else {
+                $extension = 'png';
+            }
+
+            $filename = str_random().'.'.$extension;
+
+            $path = public_path().'/img/usuario/'.$filename;
+
+            file_put_contents($path, $decoded);
+
+            $user->imagen = $filename;
+
         $user->password = bcrypt( $request->password );
         
         $user->save();
@@ -95,8 +119,38 @@ class UserController extends Controller
         $user->email = $request->email;
         $user->username = $request->username;
         $user->sede = $request->sede;
-        $user->password = bcrypt( $request->password );
-        $user->status = $request->status;      
+        if( $request->password ) {
+            $user->password = bcrypt( $request->password );
+        }        
+        $user->status = $request->status;  
+
+        $currentPhoto = $user->imagen;
+        if($request->imagen != $currentPhoto) {
+
+                $exploded = explode(',', $request->imagen);
+                $decoded = base64_decode($exploded[1]);
+
+                if(str_contains($exploded[0], 'jpeg')) {
+                $extension = 'jpg';
+                } else {
+                $extension = 'png';
+                }
+                 $filename = str_random().'.'.$extension;
+
+                $path = public_path().'/img/usuario/'.$filename;
+
+                file_put_contents($path, $decoded);
+
+                //Eliminar imagen anterior del servidor
+                $usuarioImagen = public_path("/img/usuario/").$currentPhoto;
+                    if (file_exists($usuarioImagen)) {
+                        @unlink($usuarioImagen);
+                    }
+
+                $user->imagen = $filename;
+
+            }
+
         $user->save();
     }
 

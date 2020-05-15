@@ -63,6 +63,7 @@ ul {
   color: #C8C6D2;
   top: 0; /* Stay at the top */
   left: 0;  
+  z-index: 1000;
   overflow-x: hidden; /* Disable horizontal scroll */
   padding-top: 20px;  
 }
@@ -70,7 +71,7 @@ ul {
 .texto-titulo {
   font-size: 1.5rem;
   font-weight: 400;
-  padding-left: 15%;
+  padding-left: 15%;  
   text-align: center;
 }
 
@@ -114,6 +115,7 @@ ul {
   background-color: #f2f4f4 !important;
   box-shadow: all;
   float: right;
+  z-index: 999;
   box-shadow: rgba(25, 42, 70, 0.13) -8px 12px 18px 0px;
 }
 

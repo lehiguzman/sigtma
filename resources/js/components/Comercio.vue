@@ -23,7 +23,7 @@
                                 <th width="25%">Denominación</th>                                
                                 <th width="10%">Rif</th>
                                 <th width="10%">Fecha de Inscripción</th>
-                                <th class="text-center" width="10%">Acción</th>                                  
+                                <th class="text-center" width="10%" v-if="rol == 'gerente' || rol == 'supervisor'">Acción</th>                                  
                             </tr>
                         </thead>
                         <tbody>
@@ -33,10 +33,9 @@
                                 <td>{{ comercio.denominacion }}</td>
                                 <td>{{ comercio.rif }}</td>
                                 <td>{{ comercio.fecha_inscripcion }}</td>
-                                <td class="text-center">
+                                <td class="text-center" v-if="rol == 'gerente' || rol == 'supervisor'">
                                     <i class='bx bxs-edit bx-sm mr-2 text-success btn-editar' title="Editar" @click="editarRegistro(comercio)"></i>
-                                    <i class='bx bxs-trash bx-sm mr-2 text-danger btn-eliminar' title="Eliminar" @click="eliminarRegistro(comercio)" 
-                                    v-if="rol == 'gerente' "></i> 
+                                    <i class='bx bxs-trash bx-sm mr-2 text-danger btn-eliminar' title="Eliminar" @click="eliminarRegistro(comercio)" ></i> 
                                 </td>
                             </tr>                            
                         </tbody>                  
@@ -47,15 +46,15 @@
         <!-- formulario de Nuevo Contribuyente de actividad comercial-->
         <template v-else-if="vista=='registro'">
             <div class="p-3 bg-white rounded">  
-                <div class="col-md-12 mb-0 text-center bg-light">
+                <div class="col-md-12 mb-0 text-center bg-light" style="z-index:-1">
                     <h4>{{ titulo }}</h4>
                 </div>
-                <div class="card-body mt-5">
+                <div class="mt-5" style="z-index:-999">
                     <form class="needs-validation" novalidate>
                         <div class="form-row">
                             <div class="col-md-1"></div>                               
                                                                
-                                <label for="rif" class="col-md-3 col-form-label-lg">
+                                <label for="rif" class="col-md-3 col-form-label-lg" style="z-index:0">
                                     Rif
                                 </label>                                
 

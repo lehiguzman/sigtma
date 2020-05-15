@@ -35,11 +35,11 @@
             <i class="bx bxl-paypal bx-sm mx-3"></i> <span>Registrar Pago</span>            
           </a>
         </li>-->
-        <li>
+        <!--<li>
           <a href="#" @click="menu=2" class="list-group-item list-group-item-action border-0 link-menu">          
             <i class="bx bx-list-plus bx-sm mx-3"></i> <span>Nuevo Código ISAE</span>            
           </a>
-        </li>             
+        </li> -->
       </ul>       
     </div>
     <div>
@@ -83,12 +83,7 @@
           <a href="#" @click="menu=10" class="list-group-item list-group-item-action border-0 link-menu">          
             <i class="bx bx-calculator bx-sm mx-3"></i> <span>Declaración</span>            
           </a>
-        </li> 
-        <li>
-          <a href="#" @click="menu=4" class="list-group-item list-group-item-action border-0 link-menu">          
-            <i class="bx bx-list-plus bx-sm mx-3"></i> <span>Tipo</span>            
-          </a>
-        </li>
+        </li>        
         <!-- <li>
           <a href="#" @click="menu=13" class="list-group-item list-group-item-action border-0 link-menu">          
             <i class="bx bxl-paypal bx-sm mx-3"></i> <span>Registrar Pago</span>  
@@ -103,7 +98,7 @@
         <i class="fa fa-chevron-right fa-md mx-1"></i>           
       </a>
       <ul>
-        <li>
+       <li>
           <a href="#" @click="menu=17" class="list-group-item list-group-item-action border-0 link-menu">          
             <i class="bx bxs-user-detail bx-sm mx-3"></i> <span>Pagos por usuario</span> 
           </a>

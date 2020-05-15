@@ -140,3 +140,5 @@ Route::get('/solvenciaVehiculo', 'PagoController@solvenciaVehiculo');
 //Listado
 Route::get('/tipoComercio/listarTipoComercio', 'TipoComercioController@listarTipoComercio');
 
+//Graficos
+Route::get('/pagados', 'PagoController@pagados');

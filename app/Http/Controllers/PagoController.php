@@ -28,8 +28,7 @@ class PagoController extends Controller
      */
     public function index(Request $request)
     {
-        //if(!$request->ajax()) return redirect('/');
-        
+        //if(!$request->ajax()) return redirect('/');        
         $pagos = Pago::orderBy('ID', 'DESC')->paginate();
 
         if($request->id) {
@@ -38,6 +37,21 @@ class PagoController extends Controller
         return [ 
             'pagos' => $pagos
         ];
+    }
+
+    public function pagados() {
+
+      $iduser = Auth::user()->id;
+      $rol = User::find($iduser)->roles()->first();
+
+      if( $rol->rol == 'agente' ) {
+        $pagados = Pago::where('user_id', '=', $iduser)->orderBy('ID', 'ASC')->paginate();        
+      } else {
+        $pagados = Pago::orderBy('ID', 'ASC')->paginate();  
+      }
+
+      return $pagados;
+
     }
 
     /**
@@ -309,7 +323,7 @@ class PagoController extends Controller
             ->join('detalle_pagos', 'pagos.id', '=', 'detalle_pagos.idpago')       
             ->selectRaw('declaracion_vehiculo.created_at as fecha, vehiculos.placa as codigo, 
                          declaracion_vehiculo.tipo_declaracion as tipo_declaracion, 
-                         pagos.id as comprobante, users.name as usuario,
+                         pagos.comprobante as comprobante, users.name as usuario,
                          detalle_pagos.referencia, detalle_pagos.banco, detalle_pagos.monto')
             ->where("declaracion_vehiculo.idpago", "=", $pago["id"])
             ->first();
@@ -323,7 +337,7 @@ class PagoController extends Controller
             ->join('detalle_pagos', 'pagos.id', '=', 'detalle_pagos.idpago')
             ->selectRaw('declaracion_inmueble.created_at as fecha, inmuebles.codigo_catastral as codigo, 
                          declaracion_inmueble.tipo_declaracion as tipo_declaracion, 
-                         pagos.id as comprobante, users.name as usuario,
+                         pagos.comprobante as comprobante, users.name as usuario,
                          detalle_pagos.referencia, detalle_pagos.banco, detalle_pagos.monto')
             ->where("declaracion_inmueble.idpago", "=", $pago["id"])
             ->first();
@@ -337,7 +351,7 @@ class PagoController extends Controller
             ->join('detalle_pagos', 'pagos.id', '=', 'detalle_pagos.idpago')
             ->selectRaw('declaracion_comercio.created_at as fecha, comercios.licencia as codigo, 
                          declaracion_comercio.tipo_declaracion as tipo_declaracion, 
-                         pagos.id as comprobante, users.name as usuario, 
+                         pagos.comprobante as comprobante, users.name as usuario, 
                          detalle_pagos.referencia, detalle_pagos.banco, detalle_pagos.monto')
             ->where("declaracion_comercio.idpago", "=", $pago["id"])
             ->first();

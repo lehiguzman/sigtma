@@ -25,7 +25,7 @@
                                 <th width="10%">Número de Inscripción</th>
                                 <th width="25%">Dirección</th>
                                 <th width="10%">Teléfono</th>
-                                <th class="text-center" width="10%">Acción</th>                                  
+                                <th class="text-center" width="10%" v-if="rol == 'gerente' || rol == 'supervisor'">Acción</th>                                  
                             </tr>
                         </thead>
                         <tbody>
@@ -37,8 +37,8 @@
                                 <td>{{ inmueble.numero_inscripcion }}</td>
                                 <td>{{ inmueble.direccion }}</td>
                                 <td>{{ inmueble.telefono }}</td>
-                                <td class="text-center">
-                                    <i class='bx bxs-edit bx-sm mr-2 text-success btn-editar' title="Editar" @click="editarRegistro(inmueble)"></i>
+                                <td class="text-center" v-if="rol == 'gerente' || rol == 'supervisor'">
+                                    <i class='bx bxs-edit bx-sm mr-2 text-success btn-editar' title="Editar" @click="editarRegistro(inmueble)" ></i>
                                     <i class='bx bxs-trash bx-sm mr-2 text-danger btn-eliminar' title="Eliminar" @click="eliminarRegistro(inmueble)"></i>                                    
                                 </td>
                             </tr>                            
@@ -415,6 +415,7 @@
                 inmuebles: [],
                 tipos: [],
                 zonas: [],
+                rol: 0, 
                 regimenes: [],
                 mostrarSelectZonas: false,
                 boton: 'registro',                
@@ -473,6 +474,9 @@
                 // handle success                                      
                 var respuesta = response.data;                                    
                 me.inmuebles = respuesta.inmuebles;
+                me.rol = respuesta.rol.rol;
+
+                console.log("Tipo de usuario : ", me.rol);
                 
                 if( me.inmuebles.length == 0 ) {
                     me.limpiarCampos();

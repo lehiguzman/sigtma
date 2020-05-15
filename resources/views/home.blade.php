@@ -46,7 +46,8 @@
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
                         <span class="d-md-down-none user-text"> {{ Auth::user()->name }}</span>
-                        <img src="img/usuario/user.jpg" class="img-avatar" alt="">                        
+                        <!--<img src="img/usuario/user.jpg" class="img-avatar" alt=""> -->
+                         <img src="img/usuario/{{ Auth::user()->imagen }}" class="img-avatar" alt="">
                     </a>
                     <div class="dropdown-menu dropdown-menu-right shadow" style="position: absolute;" aria-labelledby="exampleModalLabel">
                         <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">

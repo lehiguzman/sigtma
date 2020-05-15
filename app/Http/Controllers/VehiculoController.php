@@ -7,6 +7,7 @@ use App\Vehiculo;
 use App\DeclaracionVehiculo;
 use App\Bitacora;
 use Auth;
+use App\User;
 
 class VehiculoController extends Controller
 {
@@ -22,6 +23,9 @@ class VehiculoController extends Controller
         $vehiculoArray = [];
         
         $vehiculosAll = Vehiculo::orderBy('ID', 'DESC')->paginate();
+
+        $iduser = $iduser = Auth::user()->id;
+        $rol = User::find($iduser)->roles()->first();
 
         foreach ($vehiculosAll as $key => $vehiculo) {
             $declaraciones = DeclaracionVehiculo::where('idvehiculo', '=', $vehiculo->id)->count();
@@ -49,7 +53,8 @@ class VehiculoController extends Controller
             $vehiculos = Vehiculo::find($request->id);                
         }    
         return [ 
-            'vehiculos' => $vehiculos
+            'vehiculos' => $vehiculos,
+            'rol' => $rol
         ];
     }
     

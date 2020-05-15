@@ -25,7 +25,8 @@
                                 <th width="10%">Cédula Propietario</th>
                                 <th width="25%">Dirección</th>
                                 <th width="10%">Teléfono</th>
-                                <th class="text-center" width="10%">Acción</th>                                  
+                                <th class="text-center" width="10%" v-if="rol == 'gerente' || rol == 'supervisor'">
+                                Acción</th>                                  
                             </tr>
                         </thead>
                         <tbody>
@@ -37,9 +38,9 @@
                                 <td>{{ vehiculo.rif }}</td>
                                 <td>{{ vehiculo.direccion }}</td>
                                 <td>{{ vehiculo.telefono }}</td>
-                                <td class="text-center">
+                                <td class="text-center" v-if="rol == 'gerente' || rol == 'supervisor'">
                                     <i class='bx bxs-edit bx-sm mr-2 text-success btn-editar' title="Editar" @click="editarRegistro(vehiculo)"></i>
-                                    <i class='bx bxs-trash bx-sm mr-2 text-danger btn-eliminar' title="Eliminar" @click="eliminarRegistro(vehiculo)"></i>
+                                    <i class='bx bxs-trash bx-sm mr-2 text-danger btn-eliminar' title="Eliminar" @click="eliminarRegistro(vehiculo)" ></i>
                                 </td>
                             </tr>                            
                         </tbody>                  
@@ -332,6 +333,7 @@
                 // handle success                                      
                 var respuesta = response.data;                                    
                 me.vehiculos = respuesta.vehiculos;
+                me.rol = respuesta.rol.rol;
                 
                 if( me.vehiculos.length == 0 ) {
                     me.limpiarCampos();

@@ -11,7 +11,7 @@
                 <div class="ml-5 mt-1 mb-2">                    
                     <input type="button" value="Nueva Act. económica" v-on:click="cambiarVista('registro')" class="btn btn-primary btn-nuevo">       
                 </div>                         
-                <div class="float-right mb-0 input-search">
+                <div class="float-right mb-0 input-search" >
                     <span>Buscar : </span>
                     <input type="text" id="mySearchText" class="border" @keyup="buscar()">                
                 </div>

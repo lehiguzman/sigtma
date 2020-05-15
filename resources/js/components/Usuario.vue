@@ -163,7 +163,7 @@
 
                             <div class="col-md-4 form-group">
                                 <div class="position-relative has-icon-left">
-                                    <input type="password" name="password" v-model="password" class="form-control" placeholder="Password" required>
+                                    <input type="password" name="password" v-model="password" class="form-control" placeholder="Password">
                                     <div class="valid-feedback">
                                       <i>¡Correcto!</i>
                                     </div>
@@ -200,6 +200,31 @@
                                         <i class='bx bx-id-card bx-sm' ></i>
                                     </div>                                    
                                 </div>                                    
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-md-2"></div>
+
+                            <label class="col-md-2 col-form-label-lg">
+                                Foto de Perfil
+                            </label> 
+                            
+                            <div class="col-md-4 form-group text-center">
+                              
+                                <!--poniendo :src se llama a la variable imagen que esta declarada en la propiedad data-->
+                                <!--poner this.imagen=""; en cerrarModal para limpiar el campo ya que aparecia la imagen al registrar un registro-->
+                               
+
+                                <div v-if="tipoAccion==1">
+                                    <input type="file" @change="subirImagen" class="form-control" placeholder="">
+                                    <img :src="imagenVista" class="img-responsive" width="100px" height="100px">
+                                </div>
+                                     
+
+                                <div v-if="tipoAccion==2">
+                                    <input type="file" @change="subirImagen" class="form-control" placeholder="">      
+                                    <img :src="imagenVista"  width="100px" height="100px">                         
+                                </div>              
                             </div>
                         </div>
 
@@ -267,6 +292,7 @@
                 boton: 'registro',
                 roles: [],
                 tabla: '',
+                tipoAccion: 1,
 
                 //Vista de registro de usuarios
                 id: 0,
@@ -275,6 +301,8 @@
                 email: '',
                 password: '',  
                 rol: '',
+                imagen: '',
+                imagenVista: '',
                 status: 0,
                 sede: '',
             }            
@@ -412,6 +440,7 @@
                         'sede': me.sede,
                         'password':me.password,
                         'status':me.status,
+                        'imagen':me.imagen,
                         'rol': me.rol
                     }).then(function (response) {                        
                         alerta.fire(
@@ -435,17 +464,21 @@
                 let me=this; 
                 me.id = data.id;               
                 var url = '/user?id='+me.id;
+                me.tipoAccion = 2;
 
                  axios.get(url).then(function (response) {
                     // handle success                            
                     var respuesta = response.data;                     
                     var usuario = respuesta.users;                    
-                    var rol = respuesta.rol;                                 
+                    var rol = respuesta.rol;       
+                    console.log("Usuario : ", usuario);
                     me.name = usuario.name;
                     me.email = usuario.email;
                     me.username = usuario.username;
-                    me.sede = usuario.sede,
+                    me.sede = usuario.sede,                    
                     me.status = usuario.status;
+                    me.imagen = usuario.imagen;
+                    me.imagenVista = "/img/usuario/"+usuario.imagen;
                     me.rol = rol.id;
                     me.titulo = 'Editar Usuario';
                     me.boton = "edicion";
@@ -481,6 +514,7 @@
                         'email': me.email,
                         'sede': me.sede,
                         'password':me.password,
+                        'imagen': me.imagen,
                         'status':me.status,
                         'rol': me.rol
                     }).then(function (response) {                        
@@ -538,6 +572,25 @@
                   ) {                    
                   }
                 })
+            },
+
+            subirImagen(e){
+                
+                let me=this;
+
+                let file = e.target.files[0];
+             
+                //console.log(file);
+
+                let reader = new FileReader();
+
+                reader.onloadend = (file) => {
+                    
+                    //console.log('RESULT', reader.result)
+
+                    me.imagen = reader.result;
+                }
+                reader.readAsDataURL(file);
             },
 
             cancelarRegistro() {

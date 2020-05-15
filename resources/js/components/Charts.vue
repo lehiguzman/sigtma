@@ -44,7 +44,9 @@
     export default {
         data() { 
         	return { 
-        		
+        		montoTrimestre: 0,
+        		monto: 0,
+        		array: [],
         	}        	
     	},
 
@@ -53,8 +55,39 @@
           ApexCharts            
         },
 
+        computed: {
+    		series() {
+        		return this.array;
+    		}
+		},
+
         methods: {
         	graficoBarra() {
+        		
+        		var url = '/pagados';   
+        		let me = this;    		
+
+        		axios.get(url).then(function (response) {
+                // handle success                                      
+                var respuesta = response.data;                                    
+                
+                for (var i = 0; i < respuesta.data.length; i++) {
+                	console.log(respuesta.data[i].monto);
+                	me.montoTrimestre = me.montoTrimestre + respuesta.data[i].monto;
+                }
+                console.log("Monto trimestral : ", me.montoTrimestre );
+                me.monto = me.montoTrimestre.toFixed();
+
+                me.array = [89767.23,me.monto,422312.29,52653.76];
+              })
+              .catch(function (error) {
+                // handle error
+                console.log(error);
+              })
+              .finally(function () {
+                // always executed
+              });
+
         		var options = {
 					chart: {
 							type: 'bar',
@@ -63,7 +96,7 @@
 						},
 						series: [{
 							name: 'recaudado (Bs.)',
-							data: [89767.23,400787.27,422312.29,52653.76]
+							data: this.array
 						}],
 						xaxis: {
 							categories: ["ENE-MAR","ABR-JUN","JUL-SEP","OCT-DEC"]

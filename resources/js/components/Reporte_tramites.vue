@@ -14,8 +14,8 @@
         			<div class="col-md-2 text-center">
         				Usuarios		
         			</div>
-        			<div class="col-md-3 text-center">
-        				<div class="position-relative has-icon-left">
+        			<div class="col-md-3 text-center" v-if="rol == 'supervisor'">
+        				<div class="position-relative has-icon-left" >
 	        				<select class="form-control" v-model="usuario" value="usuario" required @change="asignaUsuario($event)">
                                <option value="todos">Todos</option>
 	                           <option v-for="usuario in usuarios" :key="usuario.id" :value="usuario.id" v-text="usuario.name"></option>
@@ -30,7 +30,29 @@
 	                            <i class='bx bx-user bx-sm'></i>
 	                        </div>
 	                    </div>
-        			</div>			
+        			</div>
+                    <div class="col-md-3 text-center" v-else-if="rol == 'gerente'">
+                        <div class="position-relative has-icon-left">
+                            <select class="form-control" v-model="usuario" value="usuario" required @change="asignaUsuario($event)">
+                               <option value="todos">Todos</option>
+                               <option v-for="usuario in usuarios" :key="usuario.id" :value="usuario.id" v-text="usuario.name"></option>
+                            </select>                                    
+                            <div class="valid-feedback">
+                              <i>¡Correcto!</i>
+                            </div>
+                            <div class="invalid-feedback">
+                              ¡Seleccione Usuario!
+                            </div>
+                            <div class="form-control-position">
+                                <i class='bx bx-user bx-sm'></i>
+                            </div>
+                        </div>
+                    </div>  
+                    <div class="col-md-3 text-center" v-else>
+                        <div class="position-relative">                                                               
+                            <h2><b>{{ userPerm.name }}</b></h2>
+                        </div>
+                    </div>			
         		</div>
         		<div class="form-row mt-5" v-if="usuario">
         			<div class="col-md-3"></div>
@@ -190,6 +212,7 @@
                 fecha_desde: '',
                 fecha_hasta: '',
                 user_id: 'todos',
+                userPerm: '',
                 queryResult: true,
             }            
         },
@@ -232,7 +255,12 @@
                 // handle success                      
                 console.log("Usuaurios : ", response );
                 var respuesta = response.data;
-                me.usuarios = respuesta.users.data;                
+                me.usuarios = respuesta.users.data; 
+                me.rol = respuesta.rol.rol;
+                me.userPerm = respuesta.usuario;  
+                if( me.rol == 'agente') {
+                    me.user_id = respuesta.usuario.id;
+                }               
               })
               .catch(function (error) {
                 // handle error

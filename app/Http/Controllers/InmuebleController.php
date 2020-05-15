@@ -7,6 +7,7 @@ use App\Inmueble;
 use App\Bitacora;
 use App\DeclaracionInmueble;
 use Auth;
+use App\User;
 
 class InmuebleController extends Controller
 {
@@ -21,6 +22,9 @@ class InmuebleController extends Controller
         $inmuebleArray = [];
         
         $inmueblesAll = Inmueble::orderBy('ID', 'DESC')->paginate();
+        $iduser = $iduser = Auth::user()->id;
+        $rol = User::find($iduser)->roles()->first();
+
 
         foreach ($inmueblesAll as $key => $inmueble) {
             $declaraciones = DeclaracionInmueble::where('idinmueble', '=', $inmueble->id)->count();
@@ -52,7 +56,8 @@ class InmuebleController extends Controller
         }    
 
         return [ 
-            'inmuebles' => $inmuebles
+            'inmuebles' => $inmuebles,
+            'rol' => $rol
         ];
     }
     
