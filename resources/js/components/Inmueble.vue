@@ -91,7 +91,7 @@
 
                             <div class="col-md-4 form-group">
                                 <div class="position-relative has-icon-left">
-                                    <input type="text" name="codigo_catastral" v-model="codigo_catastral" class="form-control" placeholder="Código catastral" required >
+                                    <input type="text" name="codigo_catastral" v-model="codigo_catastral" class="form-control" @keydown="formatoNumero( $event )" placeholder="Código catastral" required >
                                     <div class="form-control-position">
                                         <i class='bx bx-id-card bx-sm'></i>
                                     </div>
@@ -114,7 +114,7 @@
 
                             <div class="col-md-4 form-group">
                                 <div class="position-relative has-icon-left">
-                                    <input type="text" name="denominacion" v-model="denominacion" class="form-control" placeholder="Nombre de Propietario" required >
+                                    <input type="text" name="denominacion" v-model="denominacion" class="form-control" placeholder="Nombre de Propietario" v-touppercase required >
                                     <div class="form-control-position">
                                         <i class='bx bx-id-card bx-sm'></i>
                                     </div>
@@ -137,7 +137,7 @@
 
                             <div class="col-md-4 form-group">
                                 <div class="position-relative has-icon-left">
-                                    <input type="text" name="rif" v-model="rif" class="form-control" placeholder="Cédula de Propietario" required >
+                                    <input type="text" name="rif" v-model="rif" class="form-control" @keydown="formatoCedula( $event )" placeholder="Cédula de Propietario" v-touppercase v-format-cedula required >
                                     <div class="form-control-position">
                                         <i class='bx bx-id-card bx-sm'></i>
                                     </div>
@@ -160,7 +160,7 @@
 
                             <div class="col-md-4 form-group">
                                 <div class="position-relative has-icon-left">
-                                    <input type="text" name="numero_civico" v-model="numero_civico" class="form-control" placeholder="Número civico" required>
+                                    <input type="text" name="numero_civico" v-model="numero_civico" class="form-control" @keydown="formatoNumero( $event )" placeholder="Número civico" required>
                                     <div class="valid-feedback">
                                       <i>¡Correcto!</i>
                                     </div>
@@ -274,7 +274,7 @@
 
                             <div class="col-md-4 form-group">
                                 <div class="position-relative has-icon-left">
-                                    <input type="text" name="numero_inscripcion" v-model="numero_inscripcion" class="form-control" placeholder="Número de Inscripción">                                    
+                                    <input type="text" name="numero_inscripcion" v-model="numero_inscripcion" @keydown="formatoNumero( $event )" class="form-control" placeholder="Número de Inscripción">                                    
                                     <div class="form-control-position">
                                         <i class='bx bxs-lock bx-sm' ></i>
                                     </div>
@@ -297,7 +297,7 @@
 
                             <div class="col-md-4 form-group">
                                 <div class="position-relative has-icon-left">
-                                    <input type="text" name="area_terreno" v-model="area_terreno" class="form-control" placeholder="Área de Terreno">                                    
+                                    <input type="text" name="area_terreno" v-model="area_terreno" class="form-control" @keydown="formatoNumero( $event )" placeholder="Área de Terreno">                                    
                                     <div class="form-control-position">
                                         <i class='bx bxs-lock bx-sm' ></i>
                                     </div>
@@ -320,7 +320,7 @@
 
                             <div class="col-md-4 form-group">
                                 <div class="position-relative has-icon-left">
-                                    <input type="text" name="area_construccion" v-model="area_construccion" class="form-control" placeholder="Área de Construcción">                                    
+                                    <input type="text" name="area_construccion" v-model="area_construccion" class="form-control" @keydown="formatoNumero( $event )" placeholder="Área de Construcción">                                    
                                     <div class="form-control-position">
                                         <i class='bx bxs-lock bx-sm' ></i>
                                     </div>
@@ -343,7 +343,7 @@
 
                             <div class="col-md-4 form-group">
                                 <div class="position-relative has-icon-left">
-                                    <input type="text" name="telefono" v-model="telefono" class="form-control" placeholder="Teléfono">                                    
+                                    <input type="text" name="telefono" v-model="telefono" class="form-control" @keydown="formatoTelefono( $event )" placeholder="Teléfono" v-format-telefono>                                    
                                     <div class="form-control-position">
                                         <i class='bx bxs-lock bx-sm' ></i>
                                     </div>
@@ -360,7 +360,7 @@
 
                             <div class="col-md-4 form-group">
                                 <div class="position-relative has-icon-left">
-                                    <input type="text" name="direccion" v-model="direccion" class="form-control" placeholder="Dirección">                                    
+                                    <input type="text" name="direccion" v-model="direccion" class="form-control" placeholder="Dirección" v-touppercase>                                    
                                     <div class="form-control-position">
                                         <i class='bx bxs-lock bx-sm' ></i>
                                     </div>
@@ -447,6 +447,73 @@
         },
 
         methods: {
+
+            formatoNumero( e ){
+                
+                let lengthValue = e.target.value.length;                
+                            console.log("keyCode : ", e.keyCode);
+                if ( (e.keyCode < 48 || e.keyCode > 57) ) {
+                    if( e.keyCode < 8 || e.keyCode > 9 ) {  
+                        if( e.keyCode != 190 && e.keyCode != 37 && e.keyCode != 39 ) {                                                
+                        e.preventDefault()
+                        return
+                        }
+                    }                        
+                }              
+            },
+
+            formatoCedula( e ){
+
+                let maxLength = 9;
+                let lengthValue = e.target.value.length;                
+
+                if( lengthValue == 0 ) {
+                    if (e.keyCode != 86 && e.keyCode != 69 && e.keyCode != 8 && e.keyCode != 9) { 
+                        e.preventDefault()
+                        return
+                    }
+                } 
+
+                if( lengthValue >= 2 ) {
+                    
+                    if ( (e.keyCode < 48 || e.keyCode > 57) ) {
+                        if( e.keyCode < 8 || e.keyCode > 9 ) {                            
+                            e.preventDefault()
+                            return
+                        }                        
+                    }        
+                }                    
+            
+               if (lengthValue > maxLength) {   
+                if( e.keyCode < 8 || e.keyCode > 9 ) {
+                    e.preventDefault()
+                    return   
+                }                               
+               }
+            },
+
+            formatoTelefono( e ){
+
+                let maxLength = 11;
+                let lengthValue = e.target.value.length;   
+
+                console.log("Valor : ", e.keyCode);             
+                    
+                    if ( (e.keyCode < 48 || e.keyCode > 57) ) {
+                        if( e.keyCode < 8 || e.keyCode > 9 ) {                            
+                            e.preventDefault()
+                            return
+                        }                        
+                    }                                    
+            
+               if (lengthValue > maxLength) {   
+                if( e.keyCode < 8 || e.keyCode > 9 ) {
+                    e.preventDefault()
+                    return   
+                }                               
+               }
+            },
+
             cambiarVista( opcion ) {                
                 this.vista = opcion;                
 
@@ -628,7 +695,7 @@
                 
                 axios.post('/inmueble/registrar', {
                         'codigo_catastral': me.codigo_catastral,
-                        'denominacion': me.denominacion,
+                        'denominacion': me.denominacion.toUpperCase(),
                         'numero_civico': me.numero_civico,
                         'idzona': me.zona,                        
                         'tipo_vivienda': me.tipo_vivienda,  
@@ -639,7 +706,7 @@
                         'ultima_declaracion':me.ultima_declaracion,
                         'rif': me.rif,
                         'telefono': me.telefono,
-                        'direccion': me.direccion,
+                        'direccion': me.direccion.toUpperCase(),
                         'tipo': me.tipo
 
                     }).then(function (response) {   
@@ -714,7 +781,7 @@
                         'id': me.id,
                         'tipo': me.tipo,    
                         'codigo_catastral': me.codigo_catastral,                        
-                        'denominacion': me.denominacion,                        
+                        'denominacion': me.denominacion.toUpperCase(),                        
                         'numero_civico': me.numero_civico,
                         'idzona': me.zona,
                         'tipo_vivienda': me.tipo_vivienda,
@@ -723,7 +790,7 @@
                         'area_terreno': me.area_terreno,
                         'area_construccion': me.area_construccion,
                         'rif': me.rif,
-                        'direccion':me.direccion,
+                        'direccion':me.direccion.toUpperCase(),
                         'telefono':me.telefono,
                     }).then(function (response) {                        
                         alerta.fire(

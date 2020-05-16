@@ -64,7 +64,7 @@
 
                             <div class="col-md-4 form-group">
                                 <div class="position-relative has-icon-left">
-                                    <input type="text" name="denominacion" v-model="denominacion" class="form-control" placeholder="Denominación" required >
+                                    <input type="text" name="denominacion" v-model="denominacion" class="form-control" placeholder="Denominación" v-touppercase required >
                                     <div class="form-control-position">
                                         <i class='bx bx-id-card bx-sm'></i>
                                     </div>
@@ -87,7 +87,7 @@
 
                             <div class="col-md-4 form-group">
                                 <div class="position-relative has-icon-left">
-                                    <input type="text" name="codigo" v-model="codigo" class="form-control" placeholder="Código Actividad Comercial" required>
+                                    <input type="text" name="codigo" v-model="codigo" class="form-control" placeholder="Código Actividad Comercial" @keydown="formatoNumero( $event )" required>
                                     <div class="form-control-position">
                                         <i class='bx bx-code bx-sm'></i>
                                     </div>
@@ -111,7 +111,7 @@
 
                             <div class="col-md-4 form-group">
                                 <div class="position-relative has-icon-left">
-                                    <textarea name="descripcion" v-model="descripcion" class="form-control" placeholder="Descripción" required> {{descripcion}} </textarea>
+                                    <textarea name="descripcion" v-model="descripcion" class="form-control" placeholder="Descripción" v-touppercase required> {{descripcion}} </textarea>
                                     <div class="valid-feedback">
                                       <i>¡Correcto!</i>
                                     </div>
@@ -134,7 +134,7 @@
 
                             <div class="col-md-4 form-group">
                                 <div class="position-relative has-icon-left">
-                                    <input type="text" name="alicuota_anual" v-model="alicuota_anual" class="form-control" placeholder="Alicuota anual (%)" required>
+                                    <input type="text" name="alicuota_anual" v-model="alicuota_anual"  class="form-control" placeholder="Alicuota anual (%)" @keydown="formatoNumero( $event )" required>
                                     <div class="valid-feedback">
                                       <i>¡Correcto!</i>
                                     </div>
@@ -157,7 +157,7 @@
 
                             <div class="col-md-4 form-group">
                                 <div class="position-relative has-icon-left">
-                                    <input type="text" name="minimo_tributable" v-model="minimo_tributable" class="form-control" placeholder="Minimo Tributable (U.T.)" required>
+                                    <input type="text" name="minimo_tributable" v-model="minimo_tributable" class="form-control" @keydown="formatoNumero( $event )" placeholder="Minimo Tributable (U.T.)" required>
                                     <div class="valid-feedback">
                                       <i>¡Correcto!</i>
                                     </div>
@@ -235,6 +235,21 @@
         },
 
         methods: {
+
+            formatoNumero( e ){
+                
+                let lengthValue = e.target.value.length;                
+                            console.log("keyCode : ", e.keyCode);
+                if ( (e.keyCode < 48 || e.keyCode > 57) ) {
+                    if( e.keyCode < 8 || e.keyCode > 9 ) {  
+                        if( e.keyCode != 190 && e.keyCode != 37 && e.keyCode != 39 ) {                                                
+                        e.preventDefault()
+                        return
+                        }
+                    }                        
+                }              
+            },
+
             cambiarVista( opcion ) {                
                 this.vista = opcion;
 
@@ -335,8 +350,8 @@
                 
                 axios.post('/tipo_comercio/registrar', {                                                
                         'codigo': me.codigo,
-                        'denominacion': me.denominacion,
-                        'descripcion': me.descripcion,
+                        'denominacion': me.denominacion.toUpperCase(),
+                        'descripcion': me.descripcion.toUpperCase(),
                         'alicuota_anual':me.alicuota_anual,
                         'minimo_tributable':me.minimo_tributable                        
                     }).then(function (response) {                        
@@ -366,8 +381,8 @@
                     var tipo_comercio = respuesta.tipos_comercio;                    
                                                 
                     me.codigo = tipo_comercio.codigo;
-                    me.denominacion = tipo_comercio.denominacion;
-                    me.descripcion = tipo_comercio.descripcion;
+                    me.denominacion = tipo_comercio.denominacion.toUpperCase();
+                    me.descripcion = tipo_comercio.descripcion.toUpperCase();
                     me.alicuota_anual = tipo_comercio.alicuota_anual;
                     me.minimo_tributable = tipo_comercio.minimo_tributable;
                     me.titulo = 'Editar Actividad comercial';
@@ -400,8 +415,8 @@
                 axios.put('/tipo_comercio/actualizar', {
                         'id': me.id,                      
                         'codigo': me.codigo,
-                        'denominacion': me.denominacion,
-                        'descripcion': me.descripcion,
+                        'denominacion': me.denominacion.toUpperCase(),
+                        'descripcion': me.descripcion.toUpperCase(),
                         'alicuota_anual':me.alicuota_anual,
                         'minimo_tributable':me.minimo_tributable,                        
                     }).then(function (response) {                        

@@ -160,7 +160,7 @@
                     {{ number_format($declaracion['saldo'], 2) }}
                 </td>                
             </tr>
-            @if( $declaracion['saldo'] == $declaracion['monto_pago'])
+            @if( $declaracion['saldo'] <= $declaracion['monto_pago'])
             <tr style="font-size: 12px;">  
                 <td class="bordes" width="15%" style="text-align: center;">
                     {{ $declaracion['fecha'] }}

@@ -826,6 +826,8 @@
 
                 var url = '/impuesto_inmueble/'+inmueble.id;
 
+                this.inmueble = inmueble;
+
                 axios.get(url).then(function (response) {                
                 // handle success                                      
                 var respuesta = response.data;                     
@@ -865,12 +867,9 @@
                     monto = monto + (parseFloat(this.detalles[i].monto_pago));
                 }
 
-                console.log("Monto : ", monto );
-                console.log("Declaracion : ", me.declaracion.monto_impuesto );
-
-                if( monto != me.declaracion.monto_impuesto.toFixed(2) ) {
+                if( monto < me.declaracion.monto_impuesto.toFixed(2) ) {
                     alerta.fire(
-                            'El monto debe coincidir con monto impuesto!',
+                            'El monto no puede ser menor a monto impuesto!',
                             'Error.',
                             'error'
                         );

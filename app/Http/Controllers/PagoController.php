@@ -45,13 +45,36 @@ class PagoController extends Controller
       $rol = User::find($iduser)->roles()->first();
 
       if( $rol->rol == 'agente' ) {
-        $pagados = Pago::where('user_id', '=', $iduser)->orderBy('ID', 'ASC')->paginate();        
+        $pagados = Pago::join('detalle_pagos', 'pagos.id', '=', 'detalle_pagos.idpago')->where('user_id', '=', $iduser)
+                  ->orderBy('ID', 'ASC')->paginate();        
       } else {
-        $pagados = Pago::orderBy('ID', 'ASC')->paginate();  
+        $pagados = Pago::join('detalle_pagos', 'pagos.id', '=', 'detalle_pagos.idpago')->orderBy('pagos.id', 'ASC')->paginate();  
       }
 
       return $pagados;
 
+    }
+
+    public function total_contribuyente() {
+
+      $iduser = Auth::user()->id;
+      $rol = User::find($iduser)->roles()->first();
+
+      if( $rol->rol == 'agente' ) {
+        $pagadosInmueble = Pago::where('user_id', '=', $iduser)->where('tipo_contribuyente', '=', 'inmueble')->orderBy('ID', 'ASC')->paginate();
+        $pagadosVehiculo = Pago::where('user_id', '=', $iduser)->where('tipo_contribuyente', '=', 'vehiculo')->orderBy('ID', 'ASC')->paginate();
+        $pagadosComercio = Pago::where('user_id', '=', $iduser)->where('tipo_contribuyente', '=', 'comercio')->orderBy('ID', 'ASC')->paginate();
+      } else {
+        $pagadosInmueble = Pago::where('tipo_contribuyente', '=', 'inmueble')->orderBy('ID', 'ASC')->paginate();
+        $pagadosVehiculo = Pago::where('tipo_contribuyente', '=', 'vehiculo')->orderBy('ID', 'ASC')->paginate();
+        $pagadosComercio = Pago::where('tipo_contribuyente', '=', 'comercio')->orderBy('ID', 'ASC')->paginate();
+      }
+
+      return $pagados = [
+        'pagadosInmueble' => $pagadosInmueble,
+        'pagadosVehiculo' => $pagadosVehiculo,
+        'pagadosComercio' => $pagadosComercio
+      ];
     }
 
     /**

@@ -142,3 +142,4 @@ Route::get('/tipoComercio/listarTipoComercio', 'TipoComercioController@listarTip
 
 //Graficos
 Route::get('/pagados', 'PagoController@pagados');
+Route::get('/total_contribuyente', 'PagoController@total_contribuyente');

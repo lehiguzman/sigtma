@@ -43,9 +43,32 @@
 
     export default {
         data() { 
-        	return { 
-        		montoTrimestre: 0,
-        		monto: 0,
+        	return {  
+        		//Variables por 
+        		//Trimestres       		
+        		montoT1: 0,
+        		montoT2: 0,
+        		montoT3: 0,
+        		montoT4: 0,
+        		//Por tipo de contribuyente
+        		montoInmueble: 0,
+        		montoVehiculo: 0,
+        		montoComercio: 0,
+
+        		//Mensuales
+        		montoM1: 0,
+        		montoM2: 0,
+        		montoM3: 0,
+        		montoM4: 0,
+        		montoM5: 0,
+        		montoM6: 0,
+        		montoM7: 0,
+        		montoM8: 0,
+        		montoM9: 0,
+        		montoM10: 0,
+        		montoM11: 0,
+        		montoM12: 0,
+
         		array: [],
         	}        	
     	},
@@ -62,23 +85,44 @@
 		},
 
         methods: {
-        	graficoBarra() {
-        		
+        	totalPorTrimestre() {        		
         		var url = '/pagados';   
-        		let me = this;    		
+        		let me = this; 
+
+        		var montoTrimestre1 = 0;
+        		var montoTrimestre2 = 0;
+        		var montoTrimestre3 = 0;
+        		var montoTrimestre4 = 0;
 
         		axios.get(url).then(function (response) {
                 // handle success                                      
                 var respuesta = response.data;                                    
-                
+                console.log("Respuesta : ", respuesta.data);
                 for (var i = 0; i < respuesta.data.length; i++) {
                 	console.log(respuesta.data[i].monto);
-                	me.montoTrimestre = me.montoTrimestre + respuesta.data[i].monto;
-                }
-                console.log("Monto trimestral : ", me.montoTrimestre );
-                me.monto = me.montoTrimestre.toFixed();
+                	//Primer Trimestre
+                	if(respuesta.data[i].fecha_pago >= '2020-01-01' && respuesta.data[i].fecha_pago < '2020-04-01') { 
+                		montoTrimestre1 = montoTrimestre1 + respuesta.data[i].monto;	
+                	}
 
-                me.array = [89767.23,me.monto,422312.29,52653.76];
+                	if(respuesta.data[i].fecha_pago >= '2020-04-01' && respuesta.data[i].fecha_pago < '2020-07-01') { 
+                		montoTrimestre2 = montoTrimestre2 + respuesta.data[i].monto;	
+                	}
+
+                	if(respuesta.data[i].fecha_pago >= '2020-07-01' && respuesta.data[i].fecha_pago < '2020-10-01') { 
+                		montoTrimestre3 = montoTrimestre3 + respuesta.data[i].monto;	
+                	}
+
+                	if(respuesta.data[i].fecha_pago >= '2020-10-01' && respuesta.data[i].fecha_pago <= '2020-12-31') { 
+                		montoTrimestre4 = montoTrimestre4 + respuesta.data[i].monto;	
+                	}                	
+                }
+                
+                me.montoT1 = montoTrimestre1.toFixed();
+                me.montoT2 = montoTrimestre2.toFixed();
+                me.montoT3 = montoTrimestre3.toFixed();
+                me.montoT4 = montoTrimestre4.toFixed();
+                me.graficoBarra();
               })
               .catch(function (error) {
                 // handle error
@@ -86,9 +130,14 @@
               })
               .finally(function () {
                 // always executed
-              });
+              });        		
+			},
 
-        		var options = {
+			graficoBarra() {
+				
+				var arrayData = [this.montoT1, this.montoT2, this.montoT3, this.montoT4];
+
+				var options = {
 					chart: {
 							type: 'bar',
 							width: '350',							
@@ -96,7 +145,7 @@
 						},
 						series: [{
 							name: 'recaudado (Bs.)',
-							data: this.array
+							data: arrayData
 						}],
 						xaxis: {
 							categories: ["ENE-MAR","ABR-JUN","JUL-SEP","OCT-DEC"]
@@ -136,14 +185,56 @@
 				chart.render();
 			},
 
+			totalPorTipoContribuyente() {
+				var url = '/total_contribuyente';   
+        		let me = this;    		
+
+        		axios.get(url).then(function (response) {
+                // handle success                                      
+                var respuesta = response.data;                                    
+                //console.log("Respuesta Inmueble: ", respuesta.pagadosInmueble.data);
+                //console.log("Respuesta Vehiculo: ", respuesta.pagadosVehiculo.data);
+                //console.log("Respuesta Comercio: ", respuesta.pagadosComercio.data);
+                var cantidadPagosInm = respuesta.pagadosInmueble.data.length;
+                var cantidadPagosVeh = respuesta.pagadosVehiculo.data.length;
+                var cantidadPagosCom = respuesta.pagadosComercio.data.length;
+
+                for (var i = 0; i < cantidadPagosInm; i++) {
+                	//console.log("Pago inmueble : ", respuesta.pagadosInmueble.data[i].monto);
+                	me.montoInmueble = me.montoInmueble + respuesta.pagadosInmueble.data[i].monto;
+                }
+                for (var i = 0; i < cantidadPagosVeh; i++) {
+                	//console.log("Pago vehiculo : ", respuesta.pagadosVehiculo.data[i].monto);
+                	me.montoVehiculo = me.montoVehiculo + respuesta.pagadosVehiculo.data[i].monto;
+                }
+                for (var i = 0; i < cantidadPagosCom; i++) {
+                	//console.log("Pago Comercio : ", respuesta.pagadosComercio.data[i].monto);
+                	me.montoComercio = me.montoComercio + respuesta.pagadosComercio.data[i].monto;
+                }
+               // console.log("Monto trimestral : ", me.montoTrimestre );
+               // me.monto = me.montoTrimestre.toFixed();
+                me.graficoTorta();
+              })
+              .catch(function (error) {
+                // handle error
+                console.log(error);
+              })
+              .finally(function () {
+                // always executed
+              });        	
+			},
+
 			graficoTorta() {
+
+				var arrayData = [this.montoComercio, this.montoInmueble, this.montoVehiculo];
+
 				var options = {
 					chart: {
 							type: 'donut',
 							width: '350',							
 							height: '200',
 						},						
-  					series: [44, 55, 13],
+  					series: arrayData, //[44, 55, 13],
   					/*series: [{
 							name: 'recaudado (Bs.)',
 							data: [100,200,200,400]
@@ -169,7 +260,108 @@
 					chart.render();
 			},
 
-				graficoLineal() {
+			totalPorMes() {
+				var url = '/pagados';   
+        		let me = this;  
+
+        		var montoMensual1 = 0;  		
+        		var montoMensual2 = 0; 
+        		var montoMensual3 = 0; 
+        		var montoMensual4 = 0; 
+        		var montoMensual5 = 0; 
+        		var montoMensual6 = 0; 
+        		var montoMensual7 = 0; 
+        		var montoMensual8 = 0; 
+        		var montoMensual9 = 0; 
+        		var montoMensual10 = 0; 
+        		var montoMensual11 = 0; 
+        		var montoMensual12 = 0; 
+
+        		axios.get(url).then(function (response) {
+                // handle success                                      
+                var respuesta = response.data;                                    
+                console.log("Respuesta : ", respuesta.data);
+                for (var i = 0; i < respuesta.data.length; i++) {
+                	console.log(respuesta.data[i].monto);
+                	//Primer Trimestre
+                	if(respuesta.data[i].fecha_pago >= '2020-01-01' && respuesta.data[i].fecha_pago < '2020-02-01') { 
+                		montoMensual1 = montoMensual1 + respuesta.data[i].monto;	
+                	}
+
+                	if(respuesta.data[i].fecha_pago >= '2020-02-01' && respuesta.data[i].fecha_pago < '2020-03-01') { 
+                		montoMensual2 = montoMensual2 + respuesta.data[i].monto;	
+                	}
+
+                	if(respuesta.data[i].fecha_pago >= '2020-03-01' && respuesta.data[i].fecha_pago < '2020-04-01') { 
+                		montoMensual3 = montoMensual3 + respuesta.data[i].monto;	
+                	}
+
+                	if(respuesta.data[i].fecha_pago >= '2020-04-01' && respuesta.data[i].fecha_pago <= '2020-05-01') { 
+                		montoMensual4 = montoMensual4 + respuesta.data[i].monto;	
+                	}
+
+                	if(respuesta.data[i].fecha_pago >= '2020-05-01' && respuesta.data[i].fecha_pago < '2020-06-01') { 
+                		montoMensual5 = montoMensual5 + respuesta.data[i].monto;	
+                	}
+
+                	if(respuesta.data[i].fecha_pago >= '2020-06-01' && respuesta.data[i].fecha_pago < '2020-07-01') { 
+                		montoMensual6 = montoMensual6 + respuesta.data[i].monto;	
+                	}
+
+                	if(respuesta.data[i].fecha_pago >= '2020-07-01' && respuesta.data[i].fecha_pago < '2020-08-01') { 
+                		montoMensual7 = montoMensual7 + respuesta.data[i].monto;	
+                	}
+
+                	if(respuesta.data[i].fecha_pago >= '2020-08-01' && respuesta.data[i].fecha_pago <= '2020-09-31') { 
+                		montoMensual8 = montoMensual8 + respuesta.data[i].monto;	
+                	}
+
+                	if(respuesta.data[i].fecha_pago >= '2020-09-01' && respuesta.data[i].fecha_pago < '2020-10-01') { 
+                		montoMensual9 = montoMensual9 + respuesta.data[i].monto;	
+                	}
+
+                	if(respuesta.data[i].fecha_pago >= '2020-10-01' && respuesta.data[i].fecha_pago < '2020-11-01') { 
+                		montoMensual10 = montoMensual10 + respuesta.data[i].monto;	
+                	}
+
+                	if(respuesta.data[i].fecha_pago >= '2020-11-01' && respuesta.data[i].fecha_pago < '2020-12-01') { 
+                		montoMensual11 = montoMensual11 + respuesta.data[i].monto;	
+                	}
+
+                	if(respuesta.data[i].fecha_pago >= '2020-12-01' && respuesta.data[i].fecha_pago <= '2020-12-31') { 
+                		montoMensual12 = montoMensual12 + respuesta.data[i].monto;	
+                	}                	
+                }
+                
+                me.montoM1 = montoMensual1.toFixed();
+                me.montoM2 = montoMensual2.toFixed();
+                me.montoM3 = montoMensual3.toFixed();
+                me.montoM4 = montoMensual4.toFixed();
+                me.montoM5 = montoMensual5.toFixed();
+                me.montoM6 = montoMensual6.toFixed();
+                me.montoM7 = montoMensual7.toFixed();
+                me.montoM8 = montoMensual8.toFixed();
+                me.montoM9 = montoMensual9.toFixed();
+                me.montoM10 = montoMensual10.toFixed();
+                me.montoM11 = montoMensual11.toFixed();
+                me.montoM12 = montoMensual12.toFixed();
+                me.graficoLineal();
+
+              })
+              .catch(function (error) {
+                // handle error
+                console.log(error);
+              })
+              .finally(function () {
+                // always executed
+              });        			
+
+			},
+
+			graficoLineal() {
+
+				var arrayData = [ this.montoM1, this.montoM2, this.montoM3, this.montoM4, this.montoM5, this.montoM6, this.montoM7, this.montoM8, this.montoM9, this.montoM10, this.montoM11, this.montoM12 ]
+
 				var options = {
 					chart: {
 							type: 'line',
@@ -181,7 +373,7 @@
 					},
 					series: [{
 							name: 'recaudado (Bs.)',
-							data: [2,3,4,5,6,7,8,9,10,11,12,13]							
+							data: arrayData,
 						}],
 					xaxis: {
 							categories: ["Enero","Febrero","Marzo",
@@ -214,9 +406,9 @@
 
     	mounted() {        	
             console.clear();                      
-            this.graficoBarra();
-            this.graficoTorta();
-            this.graficoLineal();
+            this.totalPorTrimestre();
+            this.totalPorTipoContribuyente();
+            this.totalPorMes();
             console.log("data");
         }
 	}

@@ -60,7 +60,7 @@
 
                             <div class="col-md-4 form-group">
                                 <div class="position-relative has-icon-left">
-                                    <input type="text" name="rif" v-model="rif" class="form-control" placeholder="Rif" required>
+                                    <input type="text" name="rif" v-model="rif" class="form-control" placeholder="Rif" @keydown="formatoRif( $event )" v-format-rif v-touppercase required>
                                     <div class="valid-feedback">
                                       <i>¡Correcto!</i>
                                     </div>
@@ -83,7 +83,7 @@
 
                             <div class="col-md-4 form-group">
                                 <div class="position-relative has-icon-left">
-                                    <input type="text" name="licencia" v-model="licencia" class="form-control" placeholder="Licencia" required >
+                                    <input type="text" name="licencia" v-model="licencia" class="form-control" placeholder="Licencia" v-touppercase required >
                                     <div class="form-control-position">
                                         <i class='bx bx-id-card bx-sm'></i>
                                     </div>
@@ -106,7 +106,7 @@
 
                             <div class="col-md-4 form-group">
                                 <div class="position-relative has-icon-left">
-                                    <input type="text" name="denominacion" v-model="denominacion" class="form-control" placeholder="Denominación" required >
+                                    <input type="text" name="denominacion" v-model="denominacion" class="form-control" placeholder="Denominación" v-touppercase required >
                                     <div class="form-control-position">
                                         <i class='bx bx-id-card bx-sm'></i>
                                     </div>
@@ -153,7 +153,7 @@
 
                             <div class="col-md-4 form-group">
                                 <div class="position-relative has-icon-left">
-                                    <input type="text" name="cedula" v-model="cedula" class="form-control" placeholder="Cédula de Representante Legal">                                    
+                                    <input type="text" name="cedula" v-model="cedula" class="form-control" placeholder="Cédula de Representante Legal" @keydown="formatoCedula( $event )" v-format-cedula v-touppercase>                                    
                                     <div class="form-control-position">
                                         <i class='bx bxs-lock bx-sm' ></i>
                                     </div>
@@ -170,7 +170,7 @@
 
                             <div class="col-md-4 form-group">
                                 <div class="position-relative has-icon-left">
-                                    <input type="text" name="telefono" v-model="telefono" class="form-control" placeholder="Teléfono">                                    
+                                    <input type="text" name="telefono" v-model="telefono" class="form-control" placeholder="Teléfono" @keydown="formatoTelefono( $event )" v-format-telefono>                                    
                                     <div class="form-control-position">
                                         <i class='bx bxs-lock bx-sm' ></i>
                                     </div>
@@ -187,7 +187,7 @@
 
                             <div class="col-md-4 form-group">
                                 <div class="position-relative has-icon-left">
-                                    <input type="text" name="direccion" v-model="direccion" class="form-control" placeholder="Dirección">                                    
+                                    <input type="text" name="direccion" v-model="direccion" class="form-control" placeholder="Dirección" v-touppercase>                                    
                                     <div class="form-control-position">
                                         <i class='bx bxs-lock bx-sm' ></i>
                                     </div>
@@ -398,6 +398,103 @@
         },
 
         methods: {
+
+            formatoNumero( e ){
+                
+                let lengthValue = e.target.value.length;                
+                            console.log("keyCode : ", e.keyCode);
+                if ( (e.keyCode < 48 || e.keyCode > 57) ) {
+                    if( e.keyCode < 8 || e.keyCode > 9 ) {  
+                        if( e.keyCode != 190 && e.keyCode != 37 && e.keyCode != 39 ) {                                                
+                        e.preventDefault()
+                        return
+                        }
+                    }                        
+                }              
+            },
+
+            formatoRif( e ){
+
+                let maxLength = 11;
+                let lengthValue = e.target.value.length;                
+
+                if( lengthValue == 0 ) {
+                    if (e.keyCode != 86 && e.keyCode != 74 && e.keyCode != 69 && e.keyCode != 8 && e.keyCode != 9) { 
+                        e.preventDefault()
+                        return
+                    }
+                } 
+
+                if( lengthValue >= 2 ) {
+                    
+                    if ( (e.keyCode < 48 || e.keyCode > 57) ) {
+                        if( e.keyCode < 8 || e.keyCode > 9 ) {                            
+                            e.preventDefault()
+                            return
+                        }                        
+                    }        
+                }                    
+            
+               if (lengthValue > maxLength) {   
+                if( e.keyCode < 8 || e.keyCode > 9 ) {
+                    e.preventDefault()
+                    return   
+                }                               
+               }
+            },
+
+            formatoCedula( e ){
+
+                let maxLength = 9;
+                let lengthValue = e.target.value.length;                
+
+                if( lengthValue == 0 ) {
+                    if (e.keyCode != 86 && e.keyCode != 69 && e.keyCode != 8 && e.keyCode != 9) { 
+                        e.preventDefault()
+                        return
+                    }
+                } 
+
+                if( lengthValue >= 2 ) {
+                    
+                    if ( (e.keyCode < 48 || e.keyCode > 57) ) {
+                        if( e.keyCode < 8 || e.keyCode > 9 ) {                            
+                            e.preventDefault()
+                            return
+                        }                        
+                    }        
+                }                    
+            
+               if (lengthValue > maxLength) {   
+                if( e.keyCode < 8 || e.keyCode > 9 ) {
+                    e.preventDefault()
+                    return   
+                }                               
+               }
+            },
+
+            formatoTelefono( e ){
+
+                let maxLength = 11;
+                let lengthValue = e.target.value.length;   
+
+                console.log("Valor : ", e.keyCode);             
+                    
+                    if ( (e.keyCode < 48 || e.keyCode > 57) ) {
+                        if( e.keyCode < 8 || e.keyCode > 9 ) {                            
+                            e.preventDefault()
+                            return
+                        }                        
+                    }                                    
+            
+               if (lengthValue > maxLength) {   
+                if( e.keyCode < 8 || e.keyCode > 9 ) {
+                    e.preventDefault()
+                    return   
+                }                               
+               }
+            },
+
             cambiarVista( opcion ) {                
                 this.vista = opcion;                
 
@@ -602,15 +699,23 @@
                 })                
 
                 let me=this;
-                console.log("Array de tipo ", me.arrayDetalle);               
-                
+                console.log("Array de tipo ", me.arrayDetalle);   
+                if( me.arrayDetalle.length == 0 ) {
+                    alerta.fire(
+                            'Error!',
+                            'Debe agregar tipo de contribuyente.',
+                            'error'
+                        );
+                    return false;
+                }            
+                //console.log("Rif de empresa : ", me.denominacion.toUpperCase());
                 axios.post('/comercio/registrar', {
                         'licencia': me.licencia,
-                        'denominacion': me.denominacion,
+                        'denominacion': me.denominacion.toUpperCase(),
                         'cedula': me.cedula,
                         'fecha_inscripcion': me.fecha_inscripcion,
                         'rif': me.rif,
-                        'direccion':me.direccion,
+                        'direccion':me.direccion.toUpperCase(),
                         'telefono':me.telefono,
                         'tipos': me.arrayDetalle
 
@@ -683,11 +788,11 @@
                 axios.put('/comercio/actualizar', {
                         'id': me.id,                          
                         'licencia': me.licencia,                        
-                        'denominacion': me.denominacion,                        
+                        'denominacion': me.denominacion.toUpperCase(),                        
                         'cedula': me.cedula,
                         'fecha_inscripcion': me.fecha_inscripcion,
                         'rif': me.rif,
-                        'direccion':me.direccion,
+                        'direccion':me.direccion.toUpperCase(),
                         'telefono':me.telefono,
                         'tipos': me.tipoArray
                     }).then(function (response) {

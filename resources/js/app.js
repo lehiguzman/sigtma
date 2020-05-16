@@ -42,6 +42,45 @@ Vue.component('reporte_usuarios', require('./components/Reporte_usuarios.vue').d
 Vue.component('reporte_tramites', require('./components/Reporte_tramites.vue').default);
 Vue.component('bitacora', require('./components/Bitacora.vue').default);
 
+Vue.directive( 'touppercase', {
+    update (el) {
+        el.value = el.value.toUpperCase()
+    },
+});
+
+Vue.directive( 'format-rif', {
+    update (el) {
+    	if( el.value.length == 1) {
+    		el.value = el.value+"-";	    		
+    	}    	
+    	if( el.value.length == 10) {
+    		el.value = el.value+"-";	    		
+    	}
+
+        //el.value = //el.value.toUpperCase()
+    },
+});
+
+Vue.directive( 'format-cedula', {
+    update (el) {
+    	if( el.value.length == 1) {
+    		el.value = el.value+"-";	    		
+    	}    	
+
+        //el.value = //el.value.toUpperCase()
+    },
+});
+
+Vue.directive( 'format-telefono', {
+    update (el) {
+    	if( el.value.length == 4) {
+    		el.value = el.value+"-";	    		
+    	}
+
+        //el.value = //el.value.toUpperCase()
+    },
+});
+
 /**
  * Next, we will create a fresh Vue application instance and attach it to
  * the page. Then, you may begin adding components to this application

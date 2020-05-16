@@ -14,7 +14,7 @@ class UserTableSeeder extends Seeder
     public function run()
     {
         $user = new User();
-        $user->name = 'gerente';
+        $user->name = 'GERENTE';
         $user->username = 'gerente';
         $user->status = 1;
         $user->email = 'gerente@correo.com';
@@ -25,7 +25,7 @@ class UserTableSeeder extends Seeder
         $user->roles()->attach(Role::where('rol', 'gerente')->first());
 
         $user = new User();
-        $user->name = 'Supervisor';
+        $user->name = 'SUPERVISOR';
         $user->username = 'supervisor';
         $user->status = 1;
         $user->email = 'supervisor@correo.com';
@@ -36,7 +36,7 @@ class UserTableSeeder extends Seeder
         $user->roles()->attach(Role::where('rol', 'supervisor')->first());
 
         $user = new User();
-        $user->name = 'agente';
+        $user->name = 'AGENTE';
         $user->username = 'agente';
         $user->status = 1;
         $user->email = 'agente@correo.com';

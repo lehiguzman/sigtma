@@ -823,6 +823,7 @@
                 
                 this.vista = "pagar";
                 this.titulo = 'Agregar Nuevo Pago';
+                this.comercio = comercio;
                
                 var url = '/declaracion/'+comercio.id;
 
@@ -865,9 +866,9 @@
                     monto = monto + (parseFloat(this.detalles[i].monto_pago));
                 }
 
-                if( monto != me.declaracion.monto_impuesto ) {
+                if( monto < me.declaracion.monto_impuesto ) {
                     alerta.fire(
-                            'El monto debe coincidir con monto impuesto!',
+                            'El monto no puede ser menor a monto impuesto!',
                             'Error.',
                             'error'
                         );
@@ -908,6 +909,17 @@
                     }); 
 
             },
+
+            eliminarFila(index) {
+                let me = this;                
+                me.detalles.splice(index, 1);
+
+                if( me.detalles.length == 0) {
+                    me.boton = "";
+                } else {
+                    me.boton = "registro";
+                }
+            },    
 
             imprimirEdoCta( comercio ) {                
 

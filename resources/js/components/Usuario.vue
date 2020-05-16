@@ -94,7 +94,7 @@
 
                             <div class="col-md-4 form-group">
                                 <div class="position-relative has-icon-left">
-                                    <input type="text" name="name" v-model="name" class="form-control" placeholder="Nombre completo" required >
+                                    <input type="text" name="name" v-model="name" class="form-control" placeholder="Nombre completo" required v-touppercase>
                                     <div class="form-control-position">
                                         <i class='bx bx-user bx-sm'></i>
                                     </div>
@@ -117,7 +117,7 @@
 
                             <div class="col-md-4 form-group">
                                 <div class="position-relative has-icon-left">
-                                    <input type="email" name="email" v-model="email" class="form-control" placeholder="Correo Electrónico" required>
+                                    <input type="email" name="email" v-model="email" class="form-control" placeholder="Correo Electrónico" required v-touppercase>
                                     <div class="valid-feedback">
                                       <i>¡Correcto!</i>
                                     </div>
@@ -434,9 +434,9 @@
                 
                 axios.post('/user/registrar', {                        
                         //'imagen': me.imagen
-                        'name': me.name,
+                        'name': me.name.toUpperCase(),
                         'username': me.username,
-                        'email': me.email,
+                        'email': me.email.toUpperCase(),
                         'sede': me.sede,
                         'password':me.password,
                         'status':me.status,
@@ -509,9 +509,9 @@
                 
                 axios.put('/user/actualizar', {
                         'id': me.id,                      
-                        'name': me.name,
+                        'name': me.name.toUpperCase(),
                         'username': me.username,
-                        'email': me.email,
+                        'email': me.email.toUpperCase(),
                         'sede': me.sede,
                         'password':me.password,
                         'imagen': me.imagen,

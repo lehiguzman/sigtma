@@ -161,6 +161,7 @@ class InmuebleController extends Controller
         if(!$request->ajax()) return redirect('/');              
 
         $inmueble = Inmueble::findOrFail($id);   
+        $iduser = Auth::user()->id;
 
         $accion = 'Elimina Contribuyente: '. $inmueble->denominacion;
                 Bitacora::create([

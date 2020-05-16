@@ -59,7 +59,7 @@
 
                             <div class="col-md-4 form-group">
                                 <div class="position-relative has-icon-left">
-                                    <input type="text" name="tipo" v-model="tipo" class="form-control" placeholder="Tipo de Vehiculo" required >
+                                    <input type="text" name="tipo" v-model="tipo" class="form-control" placeholder="Tipo de Vehiculo" v-touppercase required >
                                     <div class="form-control-position">
                                         <i class='bx bx-id-card bx-sm'></i>
                                     </div>
@@ -82,7 +82,7 @@
 
                             <div class="col-md-4 form-group">
                                 <div class="position-relative has-icon-left">
-                                    <textarea name="descripcion" v-model="descripcion" class="form-control" placeholder="Descripción" required> {{descripcion}} </textarea>
+                                    <textarea name="descripcion" v-model="descripcion" class="form-control" v-touppercase placeholder="Descripción" required> {{descripcion}} </textarea>
                                     <div class="valid-feedback">
                                       <i>¡Correcto!</i>
                                     </div>
@@ -105,7 +105,7 @@
 
                             <div class="col-md-4 form-group">
                                 <div class="position-relative has-icon-left">
-                                    <input type="text" name="monto_ut" v-model="monto_ut" class="form-control" placeholder="Monto Unidad Tributaria" required>
+                                    <input type="text" name="monto_ut" v-model="monto_ut" class="form-control" @keydown="formatoNumero( $event )" placeholder="Monto Unidad Tributaria" required>
                                     <div class="form-control-position">
                                         <i class='bx bx-code bx-sm'></i>
                                     </div>
@@ -182,6 +182,21 @@
         },
 
         methods: {
+
+            formatoNumero( e ){
+                
+                let lengthValue = e.target.value.length;                
+                            console.log("keyCode : ", e.keyCode);
+                if ( (e.keyCode < 48 || e.keyCode > 57) ) {
+                    if( e.keyCode < 8 || e.keyCode > 9 ) {  
+                        if( e.keyCode != 190 && e.keyCode != 37 && e.keyCode != 39 ) {                                                
+                        e.preventDefault()
+                        return
+                        }
+                    }                        
+                }              
+            },
+            
             cambiarVista( opcion ) {                
                 this.vista = opcion;
 

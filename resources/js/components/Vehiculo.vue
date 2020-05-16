@@ -92,7 +92,7 @@
 
                             <div class="col-md-4 form-group">
                                 <div class="position-relative has-icon-left">
-                                    <input type="text" name="placa" v-model="placa" class="form-control" placeholder="Placa" required >
+                                    <input type="text" name="placa" v-model="placa" class="form-control" placeholder="Placa" v-touppercase required >
                                     <div class="form-control-position">
                                         <i class='bx bx-id-card bx-sm'></i>
                                     </div>
@@ -115,7 +115,7 @@
 
                             <div class="col-md-4 form-group">
                                 <div class="position-relative has-icon-left">
-                                    <input type="text" name="serial" v-model="serial" class="form-control" placeholder="Serial de Vehiculo" required >
+                                    <input type="text" name="serial" v-model="serial" class="form-control" v-touppercase placeholder="Serial de Vehiculo" required >
                                     <div class="form-control-position">
                                         <i class='bx bx-id-card bx-sm'></i>
                                     </div>
@@ -138,7 +138,7 @@
 
                             <div class="col-md-4 form-group">
                                 <div class="position-relative has-icon-left">
-                                    <input type="text" name="denominacion" v-model="denominacion" class="form-control" placeholder="Nombre de Propietario" required >
+                                    <input type="text" name="denominacion" v-model="denominacion" class="form-control" v-touppercase placeholder="Nombre de Propietario" required >
                                     <div class="form-control-position">
                                         <i class='bx bx-id-card bx-sm'></i>
                                     </div>
@@ -187,7 +187,7 @@
 
                             <div class="col-md-4 form-group">
                                 <div class="position-relative has-icon-left">
-                                    <input type="text" name="rif" v-model="rif" class="form-control" placeholder="Cédula de Propietario" required >
+                                    <input type="text" name="rif" v-model="rif" class="form-control" @keydown="formatoCedula( $event )" placeholder="Cédula de Propietario" v-format-cedula v-touppercase required >
                                     <div class="form-control-position">
                                         <i class='bx bx-id-card bx-sm'></i>
                                     </div>
@@ -210,7 +210,7 @@
 
                             <div class="col-md-4 form-group">
                                 <div class="position-relative has-icon-left">
-                                    <input type="text" name="telefono" v-model="telefono" class="form-control" placeholder="Teléfono">                                    
+                                    <input type="text" name="telefono" v-model="telefono" class="form-control" v-format-telefono @keydown="formatoTelefono( $event )" placeholder="Teléfono">                                    
                                     <div class="form-control-position">
                                         <i class='bx bxs-lock bx-sm' ></i>
                                     </div>
@@ -227,7 +227,7 @@
 
                             <div class="col-md-4 form-group">
                                 <div class="position-relative has-icon-left">
-                                    <input type="text" name="direccion" v-model="direccion" class="form-control" placeholder="Dirección">                                    
+                                    <input type="text" name="direccion" v-model="direccion" class="form-control" v-touppercase placeholder="Dirección">                                    
                                     <div class="form-control-position">
                                         <i class='bx bxs-lock bx-sm' ></i>
                                     </div>
@@ -306,6 +306,59 @@
         },
 
         methods: {
+
+             formatoCedula( e ){
+
+                let maxLength = 9;
+                let lengthValue = e.target.value.length;                
+
+                if( lengthValue == 0 ) {
+                    if (e.keyCode != 86 && e.keyCode != 69 && e.keyCode != 8 && e.keyCode != 9) { 
+                        e.preventDefault()
+                        return
+                    }
+                } 
+
+                if( lengthValue >= 2 ) {
+                    
+                    if ( (e.keyCode < 48 || e.keyCode > 57) ) {
+                        if( e.keyCode < 8 || e.keyCode > 9 ) {                            
+                            e.preventDefault()
+                            return
+                        }                        
+                    }        
+                }                    
+            
+               if (lengthValue > maxLength) {   
+                if( e.keyCode < 8 || e.keyCode > 9 ) {
+                    e.preventDefault()
+                    return   
+                }                               
+               }
+            },
+
+             formatoTelefono( e ){
+
+                let maxLength = 11;
+                let lengthValue = e.target.value.length;   
+
+                console.log("Valor : ", e.keyCode);             
+                    
+                    if ( (e.keyCode < 48 || e.keyCode > 57) ) {
+                        if( e.keyCode < 8 || e.keyCode > 9 ) {                            
+                            e.preventDefault()
+                            return
+                        }                        
+                    }                                    
+            
+               if (lengthValue > maxLength) {   
+                if( e.keyCode < 8 || e.keyCode > 9 ) {
+                    e.preventDefault()
+                    return   
+                }                               
+               }
+            },
+
             cambiarVista( opcion ) {                
                 this.vista = opcion;                
 
@@ -443,14 +496,14 @@
                 let me=this;                               
                 
                 axios.post('/vehiculo/registrar', {
-                        'placa': me.placa,
-                        'denominacion': me.denominacion,
+                        'placa': me.placa.toUpperCase(),
+                        'denominacion': me.denominacion.toUpperCase(),
                         'modelo': me.modelo,
-                        'serial': me.serial,                        
+                        'serial': me.serial.toUpperCase(),               
                         'rif': me.rif,
                         'anio': me.anio,
                         'telefono': me.telefono,
-                        'direccion': me.direccion,
+                        'direccion': me.direccion.toUpperCase(),
                         'tipo': me.tipo
                     }).then(function (response) {                           
                         alerta.fire(
@@ -515,13 +568,13 @@
                 
                 axios.put('/vehiculo/actualizar', {
                         'id': me.id,
-                        'placa': me.placa,
-                        'denominacion': me.denominacion,
-                        'modelo': me.modelo,
+                        'placa': me.placa.toUpperCase(),
+                        'denominacion': me.denominacion.toUpperCase(),
+                        'modelo': me.modelo.toUpperCase(),
                         'serial': me.serial,                        
                         'rif': me.rif,
                         'telefono': me.telefono,
-                        'direccion': me.direccion,
+                        'direccion': me.direccion.toUpperCase(),
                         'tipo': me.tipo
                     }).then(function (response) {                        
                         alerta.fire(
