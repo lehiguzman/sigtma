@@ -48,9 +48,9 @@
                             </div>
                         </div>
                     </div>  
-                    <div class="col-md-3 text-center" v-else>
+                    <div class="col-md-6 text-center" v-else>
                         <div class="position-relative">                                                               
-                            <h2><b>{{ userPerm.name }}</b></h2>
+                            <h4><b>{{ userPerm.name }}</b></h4>
                         </div>
                     </div>			
         		</div>

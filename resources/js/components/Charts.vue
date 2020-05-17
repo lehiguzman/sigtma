@@ -97,9 +97,8 @@
         		axios.get(url).then(function (response) {
                 // handle success                                      
                 var respuesta = response.data;                                    
-                console.log("Respuesta : ", respuesta.data);
-                for (var i = 0; i < respuesta.data.length; i++) {
-                	console.log(respuesta.data[i].monto);
+                //console.log("Respuesta : ", respuesta.data);
+                for (var i = 0; i < respuesta.data.length; i++) {                	
                 	//Primer Trimestre
                 	if(respuesta.data[i].fecha_pago >= '2020-01-01' && respuesta.data[i].fecha_pago < '2020-04-01') { 
                 		montoTrimestre1 = montoTrimestre1 + respuesta.data[i].monto;	
@@ -279,10 +278,9 @@
 
         		axios.get(url).then(function (response) {
                 // handle success                                      
-                var respuesta = response.data;                                    
-                console.log("Respuesta : ", respuesta.data);
+                var respuesta = response.data;                                                    
                 for (var i = 0; i < respuesta.data.length; i++) {
-                	console.log(respuesta.data[i].monto);
+                	//console.log(respuesta.data[i].monto);
                 	//Primer Trimestre
                 	if(respuesta.data[i].fecha_pago >= '2020-01-01' && respuesta.data[i].fecha_pago < '2020-02-01') { 
                 		montoMensual1 = montoMensual1 + respuesta.data[i].monto;	
@@ -409,7 +407,7 @@
             this.totalPorTrimestre();
             this.totalPorTipoContribuyente();
             this.totalPorMes();
-            console.log("data");
+            //console.log("data");
         }
 	}
 </script>

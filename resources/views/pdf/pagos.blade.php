@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Reporte de Ausencias</title>
+    <title>Pagos por Usuario</title>
     <style>
         body {
             margin: 0;
@@ -103,29 +103,29 @@
         <table class="table table-bordered table-striped table-sm" width="100%">
             <thead>
                 <tr>
-                    <th width="10%">Comprobante</th>                    
-                    <th width="10%">Fecha</th>
-                    <th width="10%">Hora</th>
-                    <th width="20%">Tipo de impuesto</th>                                        
+                    <th width="15%">Comprobante</th>                    
+                    <th width="8%">Fecha</th>
+                    <th width="5%">Hora</th>
+                    <th width="15%">Tipo de impuesto</th>                                        
                     <th width="10%">Contribuyente</th>                    
-                    <th width="10%">Usuario</th>           
-                    <th width="10%">Banco</th>
+                    <th width="15%">Usuario</th>           
+                    <th width="7%">Banco</th>
                     <th width="10%">Referencia</th>
-                    <th width="10%">Monto</th>                    
+                    <th width="15%">Monto</th>                    
                 </tr>
             </thead>
             <tbody>
                 @foreach ($pagos as $pago)
-                <tr style="text-align: center;">                    
-                    <td width="10%">{{$pago['comprobante']}}</td>                    
-                    <td width="10%">{{ date('d-m-y', strtotime($pago['fecha'])) }}</td>
-                    <td width="10%">{{ date('h:s', strtotime($pago['fecha'])) }}</td>                    
-                    <td width="20%">{{$pago['tipo_declaracion']}}</td>                    
+                <tr style="text-align: center; font-size: 12px;">                    
+                    <td width="15%">{{$pago['comprobante']}}</td>                    
+                    <td width="8%">{{ date('d-m-y', strtotime($pago['fecha'])) }}</td>
+                    <td width="5%">{{ date('h:s', strtotime($pago['fecha'])) }}</td>                    
+                    <td width="15%">{{$pago['tipo_declaracion']}}</td>                    
                     <td width="10%">{{$pago['codigo']}}</td>                     
-                    <td width="10%">{{$pago['usuario']}}</td> 
-                    <td width="10%">{{$pago['banco']}}</td>
+                    <td width="15%">{{$pago['usuario']}}</td> 
+                    <td width="7%">{{$pago['banco']}}</td>
                     <td width="10%">{{$pago['referencia']}}</td>                     
-                    <td width="10%">{{ number_format($pago['monto']) }}</td>                    
+                    <td width="15%">{{ number_format($pago['monto']) }}</td>                    
                 </tr>
                 @endforeach                               
             </tbody>

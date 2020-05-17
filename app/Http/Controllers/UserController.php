@@ -16,18 +16,23 @@ class UserController extends Controller
      */
     public function index(Request $request)
     {
-        //if(!$request->ajax()) return redirect('/');
-        $rol = '';
-        $users = User::orderBy('ID', 'DESC')->paginate();    
+        //if(!$request->ajax()) return redirect('/');        
         
-        $iduser = $iduser = Auth::user()->id;
+        $iduser = Auth::user()->id;
         $rol = User::find($iduser)->roles()->first();
-        $usuario = User::find($iduser);
+            
+        if($rol->rol == "agente") {
+            $users = User::where("id", "=", $iduser)->orderBy('ID', 'DESC')->paginate();
+            $usuario = User::find($iduser);            
+        } else {
+            $users = User::orderBy('ID', 'DESC')->paginate();            
+            $usuario = User::find($iduser);
+        }
 
         if($request->id) {
             $users = User::find($request->id);    
-            $rol = User::find($request->id)->roles()->first();
-        }        
+            //$rol = User::find($request->id)->roles()->first();
+        }
 
         return [ 
             'users' => $users,

@@ -288,8 +288,7 @@
                 id: 0,
                 tipo: '',
                 denominacion: '',
-                placa: '',           
-                modelo: '',                
+                placa: '',                
                 serial: '',                
                 rif:'',                
                 direccion: '',
@@ -497,8 +496,7 @@
                 
                 axios.post('/vehiculo/registrar', {
                         'placa': me.placa.toUpperCase(),
-                        'denominacion': me.denominacion.toUpperCase(),
-                        'modelo': me.modelo,
+                        'denominacion': me.denominacion.toUpperCase(),                        
                         'serial': me.serial.toUpperCase(),               
                         'rif': me.rif,
                         'anio': me.anio,
@@ -534,7 +532,6 @@
                     me.tipo = vehiculo.idtipocontribuyentevehiculo;
                     me.placa = vehiculo.placa;
                     me.denominacion = vehiculo.denominacion;                    
-                    me.modelo = vehiculo.modelo;
                     me.serial = vehiculo.serial;                    
                     me.rif = vehiculo.rif;
                     me.anio = vehiculo.anio;
@@ -569,8 +566,7 @@
                 axios.put('/vehiculo/actualizar', {
                         'id': me.id,
                         'placa': me.placa.toUpperCase(),
-                        'denominacion': me.denominacion.toUpperCase(),
-                        'modelo': me.modelo.toUpperCase(),
+                        'denominacion': me.denominacion.toUpperCase(),                        
                         'serial': me.serial,                        
                         'rif': me.rif,
                         'telefono': me.telefono,
@@ -644,8 +640,7 @@
                 this.tipo = '';
                 this.denominacion = '';
                 this.placa = '';
-                this.serial='';
-                this.modelo = '';               
+                this.serial='';                
                 this.rif = '';                
                 this.direccion = '';
                 this.telefono = '';

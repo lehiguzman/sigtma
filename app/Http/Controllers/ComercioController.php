@@ -111,7 +111,7 @@ class ComercioController extends Controller
             $accion = 'Agrega Nuevo Contribuyente';
                 Bitacora::create([
                     'accion' => $accion,
-                    'codigo' => $request->rif,
+                    'codigo' => $request->licencia,
                     'tipo_contribuyente' => 'comercio',
                     'iduser' => $iduser,            
                 ]);    
@@ -181,7 +181,7 @@ class ComercioController extends Controller
             $accion = 'Actualiza Contribuyente: '. $request->denominacion;
                 Bitacora::create([
                     'accion' => $accion,
-                    'codigo' => $request->rif,
+                    'codigo' => $request->licencia,
                     'tipo_contribuyente' => 'comercio',
                     'iduser' => $iduser,            
                 ]);  

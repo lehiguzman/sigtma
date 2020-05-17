@@ -82,28 +82,48 @@
     </div>    
     <div style="padding-top: 30px;">
         <table width="100%" style="border-collapse: collapse; font-size: 10px;">            
-            <tr>                
-                <td class="bordes" width="40%" style="text-align: center;">
-                    <b>Número de comprobante</b>
+            <tr>
+                <td class="bordes" width="20%" style="text-align: center;">
+                    <b>Tipo de pago</b>
                 </td>               
-                <td class="bordes" width="25%" style="text-align: center;">
+                <td class="bordes" width="20%" style="text-align: center;">
+                    <b>Referencia</b>
+                </td>               
+                <td class="bordes" width="20%" style="text-align: center;">
                     <b>Fecha</b>
-                </td>                
-                <td class="bordes" width="35%" style="text-align: center;">
+                </td>                           
+                <td class="bordes" width="20%" style="text-align: center;">
+                    <b>banco</b>
+                </td> 
+                <td class="bordes" width="20%" style="text-align: center;">
                     <b>Monto</b>
                 </td>
-            </tr>            
-            <tr style="font-size: 12px;">                                
-                <td class="bordes" width="40%" style="text-align: center;">
-                    {{ $pago->comprobante }}
+            </tr>   
+            @foreach($pagos as $pago)         
+            <tr style="font-size: 12px;">
+                @if($pago->tipo_pago == 1)
+                <td class="bordes" width="20%" style="text-align: center;">                    
+                    Deposito
+                </td>
+                @else
+                <td class="bordes" width="20%" style="text-align: center;">                    
+                    Punto de venta 
+                </td>
+                @endif                               
+                <td class="bordes" width="20%" style="text-align: center;">
+                    {{ $pago->referencia }}
                 </td>                
-                <td class="bordes" width="25%" style="text-align: center;">
-                    {{ $pago->created_at }}
+                <td class="bordes" width="20%" style="text-align: center;">
+                    {{ date('d-m-y', strtotime($pago->fecha_pago)) }}
+                </td>                 
+                <td class="bordes" width="20%" style="text-align: center;">
+                    {{ $pago->banco }}
                 </td>                      
-                <td class="bordes" width="15%" style="text-align: center;">
+                <td class="bordes" width="20%" style="text-align: center;">
                     {{ number_format($pago->monto, 2) }}
                 </td>                
-            </tr>            
+            </tr>
+            @endforeach      
         </table>
     </div>
 </body>

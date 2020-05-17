@@ -416,16 +416,18 @@
                             </div>
                         </div>                                             
                     </div>
-                        <div class="form-row mt-5">                            
+                        <div class="form-row mt-5"> 
+                            <div class="col-md-2">                                
+                            </div>                            
                             
-                            <div class="col-md-6 d-flex justify-content-center" v-if="boton == 'registro'" >
+                            <div class="col-md-3 d-flex justify-content-center" v-if="boton == 'registro'" >
                                 <button type="button" @click="validarFormulario( 'pagar' )" name="registro" class="btn btn-primary btn-registrar">                                       
                                     <span class="align-middle ml-25">Registrar</span>
                                 </button>
                             </div>
-                            <div class="col-md-6" v-else-if="boton == 'solvencia'">
+                            <div class="col-md-3" v-else-if="boton == 'solvencia'">
                                 <button type="button" @click="imprimirSolvencia()" name="registro" class="btn btn-primary btn-registrar">                                       
-                                    <span class="align-middle ml-25">Imprimir</span>
+                                    <span class="align-middle ml-25">Solvencia</span>
                                 </button>
                             </div>
                             <div class="col-md-3" v-else> </div>

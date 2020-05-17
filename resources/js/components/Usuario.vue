@@ -7,7 +7,7 @@
         </div>   
         <template v-if="vista=='listado'">    
             <div class="p-5 bg-white rounded">        
-                <div class="ml-5 mb-5">                    
+                <div class="ml-5 mb-5" v-if="rol != 'agente' ">                    
                     <input type="button" value="Nuevo Usuario" v-on:click="cambiarVista('registro')" class="btn btn-primary btn-nuevo">                
                 </div>                         
                 <div class="float-right mb-0 input-search">
@@ -40,9 +40,12 @@
                                 <td v-if="usuario.status == 0" class="inactivo">
                                     Inactivo
                                 </td>
-                                <td class="text-center">
-                                    <i class='bx bxs-edit bx-sm mr-4 text-success btn-editar' title="Editar" @click="editarRegistro(usuario)"></i>
-                                    <i class='bx bxs-trash bx-sm text-danger btn-eliminar' title="Eliminar" @click="eliminarRegistro(usuario)"></i>
+                                <td class="text-center" v-if="rol == 'agente'">
+                                    <i class='bx bxs-edit bx-sm text-success btn-editar' title="Editar" @click="editarRegistro(usuario)"></i>                                                                     
+                                </td>
+                                <td class="text-center" v-else>
+                                    <i class='bx bxs-edit bx-sm mr-4 text-success btn-editar' title="Editar" @click="editarRegistro(usuario)"></i>   
+                                   <i class='bx bxs-trash bx-sm text-danger btn-eliminar' title="Eliminar" @click="eliminarRegistro(usuario)"></i>    
                                 </td>
                             </tr>                            
                         </tbody>                  
@@ -68,9 +71,13 @@
 
                             <div class="col-md-4 form-group">
                                 <div class="position-relative has-icon-left">
-                                    <select class="form-control" v-model="sede" value="sede" required>
+                                    <select disabled v-if="rolName == 'agente'" class="form-control" v-model="sede" value="sede">
                                        <option value="" selected="selected">Seleccione Sede</option>
-                                       <option value="Samat">Samat</option>                                       
+                                       <option value="Samat">Samat1</option>                                       
+                                    </select> 
+                                    <select class="form-control" v-model="sede" value="sede" required v-else>
+                                       <option value="" selected="selected">Seleccione Sede</option>
+                                       <option value="Samat">Samat2</option>                                       
                                     </select>                                    
                                     <div class="valid-feedback">
                                       <i>¡Correcto!</i>
@@ -94,7 +101,9 @@
 
                             <div class="col-md-4 form-group">
                                 <div class="position-relative has-icon-left">
-                                    <input type="text" name="name" v-model="name" class="form-control" placeholder="Nombre completo" required v-touppercase>
+                                    <input type="text" disabled name="name" v-model="name" class="form-control" placeholder="Nombre completo"
+                                    v-if="rolName == 'agente'">
+                                    <input type="text" name="name" v-model="name" class="form-control" placeholder="Nombre completo" required v-touppercase v-else>
                                     <div class="form-control-position">
                                         <i class='bx bx-user bx-sm'></i>
                                     </div>
@@ -117,7 +126,8 @@
 
                             <div class="col-md-4 form-group">
                                 <div class="position-relative has-icon-left">
-                                    <input type="email" name="email" v-model="email" class="form-control" placeholder="Correo Electrónico" required v-touppercase>
+                                    <input disabled type="email" name="email" v-model="email" class="form-control" placeholder="Correo Electrónico" v-touppercase v-if="rolName == 'agente'">
+                                    <input type="email" name="email" v-model="email" class="form-control" placeholder="Correo Electrónico" required v-touppercase v-else >
                                     <div class="valid-feedback">
                                       <i>¡Correcto!</i>
                                     </div>
@@ -140,7 +150,8 @@
 
                             <div class="col-md-4 form-group">
                                 <div class="position-relative has-icon-left">
-                                    <input type="text" name="username" v-model="username" class="form-control" placeholder="Usuario" required>
+                                    <input disabled type="text" name="username" v-model="username" class="form-control" placeholder="Usuario" v-if="rolName == 'agente'">
+                                    <input type="text" name="username" v-model="username" class="form-control" placeholder="Usuario" required v-else>
                                     <div class="valid-feedback">
                                       <i>¡Correcto!</i>
                                     </div>
@@ -186,7 +197,11 @@
 
                             <div class="col-md-4 form-group">
                                 <div class="position-relative has-icon-left">
-                                    <select class="form-control" v-model="rol" value="rol" @change="asignaRol( $event )" required>
+                                    <select disabled class="form-control" v-model="rol" value="rol" @change="asignaRol( $event )" v-if="rolName == 'agente'">
+                                       <option value="" selected="selected">Seleccione Rol</option>
+                                       <option v-for="rol in roles" :key="rol.id" :value="rol.id" v-text="rol.rol"></option>
+                                    </select> 
+                                    <select class="form-control" v-model="rol" value="rol" @change="asignaRol( $event )" required v-else>
                                        <option value="" selected="selected">Seleccione Rol</option>
                                        <option v-for="rol in roles" :key="rol.id" :value="rol.id" v-text="rol.rol"></option>
                                     </select>                                    
@@ -202,7 +217,7 @@
                                 </div>                                    
                             </div>
                         </div>
-                        <div class="form-group row">
+                        <div class="form-group row" v-if="rolName != 'agente'">
                             <div class="col-md-2"></div>
 
                             <label class="col-md-2 col-form-label-lg">
@@ -237,7 +252,8 @@
 
                             <div class="col-md-4 form-group text-center">
                                 <label class="switch">
-                                  <input type="checkbox" v-model="status">
+                                  <input type="checkbox" disabled v-model="status" v-if="rolName == 'agente'">
+                                  <input type="checkbox" v-model="status" v-else>
                                   <span class="slider round"></span>
                                 </label>                        
                             </div>
@@ -293,6 +309,7 @@
                 roles: [],
                 tabla: '',
                 tipoAccion: 1,
+                rolName: '',
 
                 //Vista de registro de usuarios
                 id: 0,
@@ -333,8 +350,10 @@
 
                 axios.get(url).then(function (response) {
                 // handle success                      
-                var respuesta = response.data;                                    
+                var respuesta = response.data;
+                console.log("Respuesta : ", respuesta);
                 me.usuarios = respuesta.users.data;
+                me.rol = respuesta.rol.rol;
                 me.tablaUsuarios();
               })
               .catch(function (error) {
@@ -470,8 +489,8 @@
                     // handle success                            
                     var respuesta = response.data;                     
                     var usuario = respuesta.users;                    
-                    var rol = respuesta.rol;       
-                    console.log("Usuario : ", usuario);
+                    var rol = respuesta.rol;                           
+                    
                     me.name = usuario.name;
                     me.email = usuario.email;
                     me.username = usuario.username;
@@ -480,6 +499,7 @@
                     me.imagen = usuario.imagen;
                     me.imagenVista = "/img/usuario/"+usuario.imagen;
                     me.rol = rol.id;
+                    me.rolName = rol.rol;
                     me.titulo = 'Editar Usuario';
                     me.boton = "edicion";
                   })

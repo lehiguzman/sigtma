@@ -18,7 +18,7 @@
             <td width="30%" style="text-align: center;" >
                 <img src="./img/logo-alcaldia.png" style="height: 80px;">            
             </td>
-            <td width="40%" style="text-align: center;"><b>Estado de Cuenta Actividad Económica</b></td>
+            <td width="40%" style="text-align: center;"><b>Reporte por trámites</b></td>
             <td width="30%" style="text-align: center;">
                 <img src="./img/samat.png" style="margin-top:40px; height: 100px; width: 140px;">
             </td>

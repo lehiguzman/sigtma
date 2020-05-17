@@ -46,7 +46,7 @@ class PagoController extends Controller
 
       if( $rol->rol == 'agente' ) {
         $pagados = Pago::join('detalle_pagos', 'pagos.id', '=', 'detalle_pagos.idpago')->where('user_id', '=', $iduser)
-                  ->orderBy('ID', 'ASC')->paginate();        
+                  ->orderBy('pagos.id', 'ASC')->paginate();        
       } else {
         $pagados = Pago::join('detalle_pagos', 'pagos.id', '=', 'detalle_pagos.idpago')->orderBy('pagos.id', 'ASC')->paginate();  
       }
@@ -398,9 +398,14 @@ class PagoController extends Controller
             return  $pagos;        
         } 
         else {
-            $user = User::find($request->user_id);
-            $pdf = \PDF::loadView('pdf.pagos', ['pagos' => $pagos, 'user' => $user])->setPaper('a4', 'landscape');
-            return $pdf->download('pagos.pdf');
+            
+            //$pdf = \PDF::loadView('pdf.pagos', ['pagos' => $pagos, 'user' => $user])->setPaper('a4', 'landscape');
+            //return $pdf->download('pagos.pdf');
+        $user = User::find($request->user_id);
+        $view =  \View::make('pdf.pagos', compact('pagos', 'user'))->render();
+        $pdf = \App::make('dompdf.wrapper');
+        $pdf->loadHTML($view)->setPaper('a4', 'landscape');
+        return $pdf->stream('pagos_usuario');
         }
     }
 
@@ -418,7 +423,7 @@ class PagoController extends Controller
               ->where('accion', 'like', '%Agrega nuevo%')
               ->orderBY('ID', 'ASC')->get();
           } else {
-             $tramites = Bitacora::where("user_id", '=', $request->user_id)->whereDate("created_at", '>=', $fecha_desde->format('Y-m-d'))
+             $tramites = Bitacora::where("iduser", '=', $request->user_id)->whereDate("created_at", '>=', $fecha_desde->format('Y-m-d'))
               ->where('accion', 'like', '%Agrega nuevo%')
               ->whereDate("created_at", '<=', $fecha_hasta->format('Y-m-d'))
               ->orderBY('ID', 'ASC')->get();
@@ -430,7 +435,7 @@ class PagoController extends Controller
               ->where('accion', 'like', '%Agrega nuevo%')
               ->orderBY('ID', 'ASC')->get();    
             } else {
-              $tramites = Bitacora::where("iduser", "=", $iduser)->whereDate("created_at", '<=', $fecha_hasta->format('Y-m-d'))
+              $tramites = Bitacora::where("iduser", "=", $iduser)->whereDate('created_at', '=', $hoy)
               ->where('accion', 'like', '%Agrega nuevo%')
               ->orderBY('ID', 'ASC')->get();
             }       
@@ -468,8 +473,12 @@ class PagoController extends Controller
         } 
         else {
             $user = User::find($request->user_id);
-            $pdf = \PDF::loadView('pdf.tramites', ['resultados' => $resultados, 'user' => $user]);
-            return $pdf->download('tramites.pdf');
+            //$pdf = \PDF::loadView('pdf.tramites', ['resultados' => $resultados, 'user' => $user]);
+            //return $pdf->download('tramites.pdf');
+            $view =  \View::make('pdf.tramites', compact('resultados', 'user'))->render();
+            $pdf = \App::make('dompdf.wrapper');
+            $pdf->loadHTML($view);
+            return $pdf->stream('bitacora');
         }
     }
 
@@ -479,9 +488,9 @@ class PagoController extends Controller
 
       $comercio = Comercio::find( $request->idcomercio );
 
-      $pago = Pago::find($request->idpago);
+      $pagos = DetallePago::where('idpago', '=', $request->idpago)->get();
 
-      $view =  \View::make('pdf.solvenciaComercio', compact('nombre', 'comercio', 'pago'))->render();
+      $view =  \View::make('pdf.solvenciaComercio', compact('nombre', 'comercio', 'pagos'))->render();
             $pdf = \App::make('dompdf.wrapper');
             $pdf->loadHTML($view);
             return $pdf->stream('solvencia');
@@ -494,9 +503,9 @@ class PagoController extends Controller
       $inmueble = Inmueble::find( $request->idinmueble );
       $inmuebleTipo = Regimen::find( $inmueble->idregimen );
 
-      $pago = Pago::find($request->idpago);
+      $pagos = DetallePago::where('idpago', '=', $request->idpago)->get();
 
-      $view =  \View::make('pdf.solvenciaInmueble', compact('nombre', 'inmueble', 'pago', 'inmuebleTipo'))->render();
+      $view =  \View::make('pdf.solvenciaInmueble', compact('nombre', 'inmueble', 'pagos', 'inmuebleTipo'))->render();
             $pdf = \App::make('dompdf.wrapper');
             $pdf->loadHTML($view);
             return $pdf->stream('solvencia');
@@ -509,9 +518,9 @@ class PagoController extends Controller
       $vehiculo = Vehiculo::find( $request->idvehiculo );
       $tipoVehiculo = TipoContribuyenteVehiculo::find( $vehiculo->idtipocontribuyentevehiculo );
 
-      $pago = Pago::find($request->idpago);
+      $pagos = DetallePago::where('idpago', '=', $request->idpago)->get();
 
-      $view =  \View::make('pdf.solvenciaVehiculo', compact('nombre', 'vehiculo', 'pago', 'tipoVehiculo'))->render();
+      $view =  \View::make('pdf.solvenciaVehiculo', compact('nombre', 'vehiculo', 'pagos', 'tipoVehiculo'))->render();
             $pdf = \App::make('dompdf.wrapper');
             $pdf->loadHTML($view);
             return $pdf->stream('solvencia');

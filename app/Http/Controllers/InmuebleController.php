@@ -109,8 +109,7 @@ class InmuebleController extends Controller
     {
         //if(!$request->ajax()) return redirect('/');
 
-        $inmueble = Inmueble::findOrFail($request->id);        
-        $inmueble->idtipocontribuyenteinmueble = $request->tipo;
+        $inmueble = Inmueble::findOrFail($request->id);                
         $inmueble->denominacion = $request->denominacion;
         $inmueble->codigo_catastral = $request->codigo_catastral;
         $inmueble->numero_civico = $request->numero_civico;
