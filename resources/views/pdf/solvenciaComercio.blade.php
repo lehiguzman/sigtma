@@ -103,7 +103,7 @@
             <tr style="font-size: 12px;">
                 @if($pago->tipo_pago == 1)
                 <td class="bordes" width="20%" style="text-align: center;">                    
-                    Deposito
+                    Depósito
                 </td>
                 @else
                 <td class="bordes" width="20%" style="text-align: center;">                    

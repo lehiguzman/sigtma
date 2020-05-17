@@ -482,7 +482,8 @@
                         
                         <table class="table table-hover table-striped table-bordered my-5" id="dataTable" width="100%" cellspacing="0">
                             <thead>
-                                <tr class="text-center">                                
+                                <tr class="text-center">
+                                    <th width="20%">Tipo de pago</th>                           
                                     <th width="20%">Número de referencia</th>
                                     <th width="20%">Fecha</th>                                    
                                     <th width="20%">Banco</th>
@@ -491,7 +492,9 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr class="text-center" v-for="pago in pagos">                          
+                                <tr class="text-center" v-for="pago in pagos"> 
+                                    <td v-if="pago.tipo_pago == 1">Depósito</td>      
+                                    <td v-else>Punto de Venta</td>            
                                     <td>{{ pago.referencia }}</td>      
                                     <td>{{ pago.fecha_pago | formatoFecha }}</td>                                    
                                     <td>{{ pago.banco }}</td>
