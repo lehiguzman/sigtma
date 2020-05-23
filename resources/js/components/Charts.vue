@@ -363,7 +363,7 @@
 				var options = {
 					chart: {
 							type: 'line',
-							width: '800',
+							width: '750',
 							height: '200',
 						},						
   					stroke: {
