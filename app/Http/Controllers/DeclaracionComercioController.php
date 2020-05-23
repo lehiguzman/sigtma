@@ -226,6 +226,8 @@ class DeclaracionComercioController extends Controller
         $saldo = 0;
         $declaracionObj = [];
         $montoPago = 0;
+        $fechaPago = "";
+        $estado = "";
         $nombre = Auth::user()->name;        
         $comercio = Comercio::find($request->idcomercio);
         $tipos = Comerciotipo::where("idcomercio", "=", $request->idcomercio)->get();
@@ -240,12 +242,13 @@ class DeclaracionComercioController extends Controller
             if( $declaracion->estado == "calculado") {
                 $declaracionComercio = DeclaracionComercio::join('periodos', 'declaracion_comercio.idperiodo', '=', 'periodos.id')
                                     ->join('comercios', 'declaracion_comercio.idcomercio', '=', 'comercios.id')
-                                    ->selectRaw('periodos.periodo as periodo, comercios.id as idcomercio, comercios.rif, comercios.denominacion, comercios.direccion, comercios.licencia, declaracion_comercio.idcomercio, declaracion_comercio.estado, declaracion_comercio.tipo_declaracion, declaracion_comercio.monto_impuesto as monto_impuesto, declaracion_comercio.created_at as fecha')
+                                    ->selectRaw('periodos.periodo as periodo, comercios.id as idcomercio, comercios.rif, comercios.denominacion, comercios.direccion, comercios.licencia, declaracion_comercio.idcomercio, declaracion_comercio.estado, declaracion_comercio.tipo_declaracion, sum(declaracion_comercio.monto_impuesto) as monto_impuesto')
+                                    ->groupBy('periodos.periodo', 'comercios.id', 'comercios.rif', 'comercios.denominacion', 'comercios.direccion', 'comercios.licencia', 'declaracion_comercio.idcomercio', 'declaracion_comercio.estado', 'declaracion_comercio.tipo_declaracion')
                                     ->where("declaracion_comercio.id", "=", $declaracion->id)
                                     ->first();
 
                     $saldo = $saldo + $declaracionComercio->monto_impuesto;
-                    $date = new \DateTime($declaracionComercio->fecha); 
+                    $date = new \DateTime($declaracion->fecha); 
 
                     //$declaracionObj = $declaracionComercio;
 
@@ -258,7 +261,6 @@ class DeclaracionComercioController extends Controller
                     "monto_pago" => 0,                    
                     "monto_impuesto" => $declaracionComercio->monto_impuesto,
                     "fecha" => $date->format('d/m/Y'),
-
                 ];
             } elseif($declaracion->estado == "pagado") {
 
@@ -273,6 +275,7 @@ class DeclaracionComercioController extends Controller
                     $date = new \DateTime($declaracionComercio->fecha); 
                     $fechaPago = $date->format('d/m/Y');
                     $montoPago = $declaracionComercio->monto_pago;
+                    $estado = "pagado";
 
                 $declaracionObj[] = [
                     "periodo" => $declaracionComercio->periodo,
@@ -284,12 +287,13 @@ class DeclaracionComercioController extends Controller
                     "monto_pago" => $declaracionComercio->monto_pago,
                     "fecha" => $date->format('d/m/Y'),
                 ];
+
             }
         }
 
         $saldoFinal = $saldo - $montoPago;
 
-            $view =  \View::make('pdf.edoCtaComercio', compact('comercio', 'declaracionObj', 'ramas', 'nombre', 'saldoFinal', 'fechaPago', 'montoPago'))->render();
+            $view =  \View::make('pdf.edoCtaComercio', compact('comercio', 'declaracionObj', 'ramas', 'nombre', 'saldoFinal', 'fechaPago', 'montoPago', 'estado'))->render();
             $pdf = \App::make('dompdf.wrapper');
             $pdf->loadHTML($view);
             return $pdf->stream('edoCtaComercio');

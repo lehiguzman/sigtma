@@ -720,19 +720,19 @@
                 // Loop over them and prevent submission
                 var validation = Array.prototype.filter.call(forms, function(form) {
                     //form.addEventListener('submit', function(event) { 
-                        for (var i = 0; i < me.codigos.length; i++) {
+                        /*for (var i = 0; i < me.codigos.length; i++) {
                             if( me.codigos[i].monto == 0) { 
                                 vacio = true;
                             }                                              
-                        }
+                        }*/
 
                         if (form.checkValidity() === false) {
                           event.preventDefault();
                           event.stopPropagation(); 
                           form.classList.add('was-validated');                          
-                        } else if( vacio ) {
-                            form.classList.remove('was-validated');                          
-                            me.esCero = true;
+                        //} else if( vacio ) {
+                          //  form.classList.remove('was-validated');                          
+                          //  me.esCero = true;
                         } 
                         else {
                            if( accion == 'registro' ) {                                 

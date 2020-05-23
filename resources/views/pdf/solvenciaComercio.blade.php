@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Solvencia de pago</title>
+    <title>Solvencia de pago</title>    
     <style>
         .bordes {
             border: 0.5px solid;           
@@ -74,8 +74,14 @@
                 <td class="bordes" width="30%" style="padding-left: 10px;">
                     Impreso por :
                 </td>
-                <td class="bordes" colspan="3" width="30%">
+                <td class="bordes"  width="30%">
                     {{ $nombre }}
+                </td> 
+                <td class="bordes" width="30%" style="padding-left: 10px;">
+                    Nro Comprobante :
+                </td>
+                <td class="bordes"  width="30%">
+                    {{ $pago->comprobante }}
                 </td>                              
             </tr>
         </table>

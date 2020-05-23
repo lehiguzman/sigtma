@@ -822,7 +822,7 @@
                 })
 
                 alerta.fire({
-                  title: '¿Estás seguro de eliminar el Objetivo?',
+                  title: '¿Estás seguro de eliminar el contribuyente?',
                   text: '',                  
                   showCancelButton: true,
                   confirmButtonText: '<i class="fa fa-check fa-2x"></i>Aceptar',
