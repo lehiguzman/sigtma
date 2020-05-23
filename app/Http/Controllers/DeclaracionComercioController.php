@@ -225,6 +225,7 @@ class DeclaracionComercioController extends Controller
 
         $saldo = 0;
         $declaracionObj = [];
+        $montoPago = 0;
         $nombre = Auth::user()->name;        
         $comercio = Comercio::find($request->idcomercio);
         $tipos = Comerciotipo::where("idcomercio", "=", $request->idcomercio)->get();
@@ -254,6 +255,7 @@ class DeclaracionComercioController extends Controller
                     "tipo_declaracion" => $declaracion->tipo_declaracion,
                     "tipo" => "abono",
                     "saldo" => $saldo,
+                    "monto_pago" => 0,                    
                     "monto_impuesto" => $declaracionComercio->monto_impuesto,
                     "fecha" => $date->format('d/m/Y'),
 
@@ -269,6 +271,8 @@ class DeclaracionComercioController extends Controller
                     $saldo = $saldo + $declaracionComercio->monto_impuesto;
                     $montoPago = $declaracionComercio->monto_pago;
                     $date = new \DateTime($declaracionComercio->fecha); 
+                    $fechaPago = $date->format('d/m/Y');
+                    $montoPago = $declaracionComercio->monto_pago;
 
                 $declaracionObj[] = [
                     "periodo" => $declaracionComercio->periodo,
@@ -285,7 +289,7 @@ class DeclaracionComercioController extends Controller
 
         $saldoFinal = $saldo - $montoPago;
 
-            $view =  \View::make('pdf.edoCtaComercio', compact('comercio', 'declaracionObj', 'ramas', 'nombre', 'saldoFinal'))->render();
+            $view =  \View::make('pdf.edoCtaComercio', compact('comercio', 'declaracionObj', 'ramas', 'nombre', 'saldoFinal', 'fechaPago', 'montoPago'))->render();
             $pdf = \App::make('dompdf.wrapper');
             $pdf->loadHTML($view);
             return $pdf->stream('edoCtaComercio');

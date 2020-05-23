@@ -25,7 +25,7 @@
 			<div id="tipoContribuyente"></div>
 		</div>
 		<div class="row col-md-1"></div>
-		<div class="bg-white col-md-10 bg-shadow mt-4">  
+		<div class="bg-white col-md-6 bg-shadow mt-4">  
 			<div id="anual"></div>
 		</div>
 	</div>	
