@@ -160,24 +160,24 @@
                     {{ number_format($declaracion['saldo'], 2) }}
                 </td>                
             </tr>
-            @if( $declaracion['saldo'] <= $declaracion['monto_pago'])
+            @endforeach
+            
             <tr style="font-size: 12px;">  
                 <td class="bordes" width="15%" style="text-align: center;">
-                    {{ $declaracion['fecha'] }}
+                    {{ $fechaPago }}
                 </td>                   
                 <td class="bordes" width="40%" style="text-align: center;">
-                    Pago Anualidades Actividades Ecónomicas {{ $declaracion['periodo'] }}
+                    Pago Anualidades Actividades Ecónomicas 2020
                 </td>                
                 <td class="bordes" width="15%" style="text-align: center;"></td>                
                 <td class="bordes" width="15%" style="text-align: center;">
-                    {{ number_format($declaracion['monto_pago'], 2) }}
+                    {{ number_format($montoPago, 2) }}
                 </td>
                 <td class="bordes" width="15%" style="text-align: center;">
                     {{ number_format($saldoFinal, 2) }}
                 </td>
-            </tr>
-            @endif
-            @endforeach
+            </tr>            
+            
             <tr style="font-size: 12px; bottom: 0">                                
                 <td class="bordes" width="85%" colspan="4" style="text-align: right; padding-right: 10px;">
                     <b>Saldo Final Bs.</b>
