@@ -161,7 +161,7 @@
                 </td>                
             </tr>
             @endforeach
-            
+            @if( $estado == "pagado") 
             <tr style="font-size: 12px;">  
                 <td class="bordes" width="15%" style="text-align: center;">
                     {{ $fechaPago }}
@@ -176,7 +176,8 @@
                 <td class="bordes" width="15%" style="text-align: center;">
                     {{ number_format($saldoFinal, 2) }}
                 </td>
-            </tr>            
+            </tr>   
+            @endif         
             
             <tr style="font-size: 12px; bottom: 0">                                
                 <td class="bordes" width="85%" colspan="4" style="text-align: right; padding-right: 10px;">

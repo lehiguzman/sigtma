@@ -150,6 +150,7 @@ class VehiculoController extends Controller
         if(!$request->ajax()) return redirect('/');              
 
         $vehiculo = Vehiculo::findOrFail($id); 
+        $iduser = Auth::user()->id;
 
         $accion = 'Elimina Contribuyente: '. $vehiculo->denominacion;
                 Bitacora::create([

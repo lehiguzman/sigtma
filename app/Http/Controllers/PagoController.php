@@ -490,7 +490,9 @@ class PagoController extends Controller
 
       $pagos = DetallePago::where('idpago', '=', $request->idpago)->get();
 
-      $view =  \View::make('pdf.solvenciaComercio', compact('nombre', 'comercio', 'pagos'))->render();
+      $pago = Pago::find($request->idpago);
+
+      $view =  \View::make('pdf.solvenciaComercio', compact('nombre', 'comercio', 'pagos', 'pago'))->render();
             $pdf = \App::make('dompdf.wrapper');
             $pdf->loadHTML($view);
             return $pdf->stream('solvencia');
