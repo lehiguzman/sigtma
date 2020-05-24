@@ -82,7 +82,7 @@ class VehiculoController extends Controller
         $vehiculo->save();
 
         $iduser = Auth::user()->id;
-        $accion = 'Agrega Nuevo Contribuyente';
+        $accion = 'Agrega Contribuyente';
                 Bitacora::create([
                     'accion' => $accion,
                     'codigo' => $vehiculo->placa,

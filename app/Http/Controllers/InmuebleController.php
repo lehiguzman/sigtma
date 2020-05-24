@@ -89,7 +89,7 @@ class InmuebleController extends Controller
         $inmueble->save();   
 
         $iduser = Auth::user()->id;
-        $accion = 'Agrega Nuevo Contribuyente';
+        $accion = 'Agrega Contribuyente';
                 Bitacora::create([
                     'accion' => $accion,
                     'codigo' => $inmueble->codigo_catastral,

@@ -141,7 +141,7 @@
             @foreach($declaracionObj as $declaracion)
             <tr style="font-size: 12px;">
                 <td class="bordes" width="15%" style="text-align: center;">
-                    {{ $declaracion['fecha'] }}
+                    {{ date('d/m/y', strtotime($declaracion['fecha'])) }} 
                 </td>              
                 @if($declaracion['tipo_declaracion'] == 1)                
                 <td class="bordes" width="40%" style="text-align: center;">
@@ -161,23 +161,24 @@
                 </td>                
             </tr>
             @endforeach
-            @if( $estado == "pagado") 
-            <tr style="font-size: 12px;">  
+
+            @if($estado == "pagado")            
+           <tr style="font-size: 12px;">  
                 <td class="bordes" width="15%" style="text-align: center;">
-                    {{ $fechaPago }}
+                    {{  date('d/m/y', strtotime($pago['created_at']))}}
                 </td>                   
                 <td class="bordes" width="40%" style="text-align: center;">
                     Pago Anualidades Actividades Ecónomicas 2020
                 </td>                
                 <td class="bordes" width="15%" style="text-align: center;"></td>                
                 <td class="bordes" width="15%" style="text-align: center;">
-                    {{ number_format($montoPago, 2) }}
+                    {{ number_format($pago['monto'], 2) }}
                 </td>
                 <td class="bordes" width="15%" style="text-align: center;">
-                    {{ number_format($saldoFinal, 2) }}
+                    0.00
                 </td>
-            </tr>   
-            @endif         
+            </tr>
+            @endif            
             
             <tr style="font-size: 12px; bottom: 0">                                
                 <td class="bordes" width="85%" colspan="4" style="text-align: right; padding-right: 10px;">

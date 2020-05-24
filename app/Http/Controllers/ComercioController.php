@@ -108,7 +108,7 @@ class ComercioController extends Controller
                 $comercioTipo->save();
             }
 
-            $accion = 'Agrega Nuevo Contribuyente';
+            $accion = 'Agrega Contribuyente';
                 Bitacora::create([
                     'accion' => $accion,
                     'codigo' => $request->licencia,

@@ -416,15 +416,17 @@ class PagoController extends Controller
 
       $iduser = Auth::user()->id;  
 
+      $resultados = [];
+
       if($request->fecha_desde && $request->fecha_hasta) {
           if( $request->user_id == "todos" ) {            
             $tramites = Bitacora::whereDate("created_at", '>=', $fecha_desde->format('Y-m-d'))
               ->whereDate("created_at", '<=', $fecha_hasta->format('Y-m-d'))
-              ->where('accion', 'like', '%Agrega nuevo%')
+              ->where('accion', 'like', 'Agrega Contribuyente')
               ->orderBY('ID', 'ASC')->get();
           } else {
              $tramites = Bitacora::where("iduser", '=', $request->user_id)->whereDate("created_at", '>=', $fecha_desde->format('Y-m-d'))
-              ->where('accion', 'like', '%Agrega nuevo%')
+              ->where('accion', 'like', 'Agrega Contribuyente')
               ->whereDate("created_at", '<=', $fecha_hasta->format('Y-m-d'))
               ->orderBY('ID', 'ASC')->get();
           }
@@ -432,11 +434,11 @@ class PagoController extends Controller
             $hoy = date('Y-m-d');            
             if( $request->user_id == "todos" ) {
               $tramites = Bitacora::whereDate('created_at', '=', $hoy)
-              ->where('accion', 'like', '%Agrega nuevo%')
+              ->where('accion', 'like', 'Agrega Contribuyente')
               ->orderBY('ID', 'ASC')->get();    
             } else {
               $tramites = Bitacora::where("iduser", "=", $iduser)->whereDate('created_at', '=', $hoy)
-              ->where('accion', 'like', '%Agrega nuevo%')
+              ->where('accion', 'like', 'Agrega Contribuyente')
               ->orderBY('ID', 'ASC')->get();
             }       
         }      
@@ -444,8 +446,8 @@ class PagoController extends Controller
       foreach ($tramites as $key => $tramite) {
         
         if( $tramite['tipo_contribuyente'] == 'comercio' ) {
-          $res = Comercio::where("rif", "=", $tramite['codigo'])->first();
-          $codigo = $res['rif'];
+          $res = Comercio::where("licencia", "=", $tramite['codigo'])->first();
+          $codigo = $res['licencia'];
         }
 
         if( $tramite['tipo_contribuyente'] == 'inmueble' ) {

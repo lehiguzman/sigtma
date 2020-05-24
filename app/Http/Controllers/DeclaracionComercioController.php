@@ -9,6 +9,7 @@ use App\Comercio;
 use App\Comerciotipo;
 use App\TipoContribuyenteComercio;
 use App\Bitacora;
+use App\Pago;
 use Auth;
 
 class DeclaracionComercioController extends Controller
@@ -219,84 +220,62 @@ class DeclaracionComercioController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function edoCtaComercio(Request $request)
-    {        
-        //if(!$request->ajax()) return redirect('/');
-
-
-        $saldo = 0;
-        $declaracionObj = [];
-        $montoPago = 0;
-        $fechaPago = "";
+    {           
+        
+        $comercio = Comercio::find($request->idcomercio);  
+        $saldo = 0;  
+        $saldoFinal = 0;
+        $montoPago = 0;    
         $estado = "";
-        $nombre = Auth::user()->name;        
-        $comercio = Comercio::find($request->idcomercio);
-        $tipos = Comerciotipo::where("idcomercio", "=", $request->idcomercio)->get();
+        $pago = [];  
+        $ramas = Comerciotipo::join("tipo_contribuyente_comercio", "comercios_tipo.idtipo", "=", "tipo_contribuyente_comercio.id")
+        ->where("idcomercio", "=", $request->idcomercio)
+        ->get();
 
-        foreach ($tipos as $key => $tipo) {
-                    $ramas[] = tipoContribuyenteComercio::find($tipo->idtipo);
-                }        
+        $anios_declarados = DeclaracionComercio::where('idcomercio', '=', $request->idcomercio)
+        ->groupBy('idperiodo', 'tipo_declaracion', 'estado')
+        ->selectRaw('idperiodo, tipo_declaracion, estado')
+        ->get();
+        
+        foreach ($anios_declarados as $key => $anios) {            
+                $declaracion = DeclaracionComercio::where('idcomercio', '=', $request->idcomercio)
+                                                  ->where("idperiodo", "=", $anios->idperiodo)
+                                                  ->where("tipo_declaracion", "=", $anios->tipo_declaracion)
+                                                  ->groupBy('idperiodo', 'tipo_declaracion', 'created_at', 'idpago')
+                                                  ->selectRaw('tipo_declaracion ,sum(monto_impuesto) as monto_impuesto, created_at as fecha, idpago')
+                                                  ->first(); 
+                                                  //print($declaracion->monto); exit();              
 
-        $declaracionEstatus = DeclaracionComercio::where("idcomercio", "=", $request->idcomercio)->get();
+                $periodo = Periodo::find($anios->idperiodo);
 
-        foreach ($declaracionEstatus as $key => $declaracion) {
-            if( $declaracion->estado == "calculado") {
-                $declaracionComercio = DeclaracionComercio::join('periodos', 'declaracion_comercio.idperiodo', '=', 'periodos.id')
-                                    ->join('comercios', 'declaracion_comercio.idcomercio', '=', 'comercios.id')
-                                    ->selectRaw('periodos.periodo as periodo, comercios.id as idcomercio, comercios.rif, comercios.denominacion, comercios.direccion, comercios.licencia, declaracion_comercio.idcomercio, declaracion_comercio.estado, declaracion_comercio.tipo_declaracion, sum(declaracion_comercio.monto_impuesto) as monto_impuesto')
-                                    ->groupBy('periodos.periodo', 'comercios.id', 'comercios.rif', 'comercios.denominacion', 'comercios.direccion', 'comercios.licencia', 'declaracion_comercio.idcomercio', 'declaracion_comercio.estado', 'declaracion_comercio.tipo_declaracion')
-                                    ->where("declaracion_comercio.id", "=", $declaracion->id)
-                                    ->first();
+                //print($periodo);
 
-                    $saldo = $saldo + $declaracionComercio->monto_impuesto;
-                    $date = new \DateTime($declaracion->fecha); 
-
-                    //$declaracionObj = $declaracionComercio;
-
-                $declaracionObj[] = [
-                    "periodo" => $declaracionComercio->periodo,
-                    "estado" => $declaracion->estado,
-                    "tipo_declaracion" => $declaracion->tipo_declaracion,
-                    "tipo" => "abono",
-                    "saldo" => $saldo,
-                    "monto_pago" => 0,                    
-                    "monto_impuesto" => $declaracionComercio->monto_impuesto,
-                    "fecha" => $date->format('d/m/Y'),
-                ];
-            } elseif($declaracion->estado == "pagado") {
-
-                $declaracionComercio = DeclaracionComercio::join('periodos', 'declaracion_comercio.idperiodo', '=', 'periodos.id')
-                                    ->join('pagos', 'declaracion_comercio.idpago', '=', 'pagos.id')
-                                    ->join('comercios', 'declaracion_comercio.idcomercio', '=', 'comercios.id')
-                                    ->selectRaw('periodos.periodo, comercios.id as idcomercio, comercios.rif, comercios.denominacion, comercios.direccion, comercios.licencia, declaracion_comercio.estado, declaracion_comercio.tipo_declaracion, declaracion_comercio.monto_impuesto as monto_impuesto, pagos.created_at as fecha, pagos.monto as monto_pago')
-                                    ->where("declaracion_comercio.id", "=", $declaracion->id)->first();
-
-                    $saldo = $saldo + $declaracionComercio->monto_impuesto;
-                    $montoPago = $declaracionComercio->monto_pago;
-                    $date = new \DateTime($declaracionComercio->fecha); 
-                    $fechaPago = $date->format('d/m/Y');
-                    $montoPago = $declaracionComercio->monto_pago;
+                if($anios->estado == "pagado") {
+                    $pago = Pago::find($declaracion->idpago);
+                    $montoPago = $pago->monto;
                     $estado = "pagado";
+                }
+
+                $saldo = $saldo + $declaracion->monto_impuesto;
 
                 $declaracionObj[] = [
-                    "periodo" => $declaracionComercio->periodo,
-                    "estado" => $declaracion->estado,
-                    "tipo_declaracion" => $declaracion->tipo_declaracion,
-                    "tipo" => "abono",
-                    "saldo" => $saldo,                    
-                    "monto_impuesto" => $declaracionComercio->monto_impuesto,
-                    "monto_pago" => $declaracionComercio->monto_pago,
-                    "fecha" => $date->format('d/m/Y'),
+                    'fecha' => $declaracion->fecha,
+                    'periodo' => $periodo->periodo,
+                    'tipo_declaracion' => $declaracion->tipo_declaracion,
+                    'monto_impuesto' => $declaracion->monto_impuesto,
+                    'saldo' => $saldo,                    
                 ];
+        }        
 
-            }
-        }
-
+        $nombre = Auth::user()->name;  
         $saldoFinal = $saldo - $montoPago;
 
-            $view =  \View::make('pdf.edoCtaComercio', compact('comercio', 'declaracionObj', 'ramas', 'nombre', 'saldoFinal', 'fechaPago', 'montoPago', 'estado'))->render();
-            $pdf = \App::make('dompdf.wrapper');
-            $pdf->loadHTML($view);
-            return $pdf->stream('edoCtaComercio');
+        //print( $montoPago ); exit();
+
+        $view =  \View::make('pdf.edoCtaComercio', compact('comercio', 'ramas', 'nombre', 'declaracionObj', 'pago', 'saldoFinal', 'estado'))->render();
+        $pdf = \App::make('dompdf.wrapper');
+        $pdf->loadHTML($view);
+        return $pdf->stream('edoCtacomercio'); 
         
     }
 
