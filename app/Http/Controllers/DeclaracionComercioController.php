@@ -112,7 +112,7 @@ class DeclaracionComercioController extends Controller
             $accion = 'Agrega Nueva Declaracion de Comercio';
                 Bitacora::create([
                     'accion' => $accion,
-                    'codigo' => $request->rif,
+                    'codigo' => $request->licencia,
                     'tipo_contribuyente' => 'comercio',
                     'iduser' => $iduser,            
                 ]);

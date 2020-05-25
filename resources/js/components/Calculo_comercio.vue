@@ -763,6 +763,7 @@
                         'idperiodo': me.periodo.id, 
                         'tipo_declaracion': me.tipoDeclaracion,
                         'rif': me.comercio.rif,
+                        'licencia': me.comercio.licencia,
                         'codigos': me.codigos
                     }).then(function (response) {          
                         console.log("response : ", response);
