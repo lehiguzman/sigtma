@@ -71,12 +71,18 @@
                 </td>             
             </tr>
             <tr>
-                <td class="bordes" width="30%" style="padding-left: 10px;">
+                <td class="bordes" width="25%" style="padding-left: 10px;">
                     Impreso por :
                 </td>
-                <td class="bordes" colspan="3" width="30%">
+                <td class="bordes" width="25%">
                     {{ $nombre }}
-                </td>                              
+                </td>
+                <td class="bordes" width="25%" style="padding-left: 10px;">
+                    Nro Comprobante :
+                </td>
+                <td class="bordes"  width="25%">
+                    {{ $pago->comprobante }}
+                </td>                           
             </tr>
         </table>
     </div>    

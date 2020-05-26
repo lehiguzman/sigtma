@@ -141,7 +141,8 @@ class DeclaracionInmuebleController extends Controller
 
         $saldo = 0;
         $declaracionObj = [];
-        $nombre = Auth::user()->name;        
+        $nombre = Auth::user()->name;     
+        $montoPago = 0;   
 
         $inmueble = Inmueble::join('zonas', 'inmuebles.idzona', '=', 'zonas.id')->selectRaw('inmuebles.denominacion, inmuebles.direccion, inmuebles.codigo_catastral, inmuebles.numero_civico, inmuebles.idregimen, inmuebles.numero_inscripcion, inmuebles.area_terreno, inmuebles.area_construccion, zonas.nombre, inmuebles.telefono, inmuebles.rif')
         ->find($request->idinmueble);

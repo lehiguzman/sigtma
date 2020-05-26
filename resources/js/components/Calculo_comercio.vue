@@ -243,9 +243,9 @@
                                 </div>
                             </div>
                             <div class="col-md-3 form-group">                                
-                                <label v-if="(codigo.alicuota_anual * codigo.monto)>(unidad_tributaria * codigo.minimo_tributable)">
+                                <label v-if="((codigo.alicuota_anual * codigo.monto)/100)>(unidad_tributaria * codigo.minimo_tributable)">
                                     <strong>
-                                        {{ codigo.monto_impuesto=(codigo.alicuota_anual * codigo.monto).toFixed(2) }}
+                                        {{ codigo.monto_impuesto=((codigo.alicuota_anual * codigo.monto)/100).toFixed(2) }}
                                     </strong>
                                 </label>                                
                                 <label v-else>
@@ -636,8 +636,8 @@
                     if( !this.codigos[i].monto ) {                        
                         monto = this.unidad_tributaria * this.codigos[i].minimo_tributable;                         
                     } else {
-                        monto = this.codigos[i].monto*this.codigos[i].alicuota_anual;
-                    }
+                        monto = ((this.codigos[i].monto*this.codigos[i].alicuota_anual)/100);
+                    }                   
                     resultado = resultado+(monto);                    
                 }
                 return resultado;

@@ -104,7 +104,8 @@ class DeclaracionVehiculoController extends Controller
         //if(!$request->ajax()) return redirect('/');
         $saldo = 0;
         $declaracionObj = [];
-        $nombre = Auth::user()->name;        
+        $nombre = Auth::user()->name; 
+        $montoPago = 0;       
 
         $vehiculo = Vehiculo::find($request->idvehiculo);
         $tipoVehiculo = TipoContribuyenteVehiculo::find($vehiculo->idtipocontribuyentevehiculo);

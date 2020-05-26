@@ -30,7 +30,7 @@
                 <td class="bordes" width="30%" style="height: 30px;">
                     Nombre Propietario
                 </td>
-                <td class="bordes" width="70%" colspan="5" style="height: 30px;">
+                <td class="bordes" width="70%" colspan="3" style="height: 30px;">
                     {{ $inmueble->denominacion }}
                 </td>            
             </tr>
@@ -38,7 +38,7 @@
                 <td class="bordes" style="height: 40px;" width="30%">
                     Dirección
                 </td>
-                <td class="bordes" style="height: 40px;" width="70%" colspan="5">
+                <td class="bordes" style="height: 40px;" width="70%" colspan="3">
                     {{ $inmueble->direccion }}
                 </td>            
             </tr>
@@ -52,21 +52,21 @@
                  <td class="bordes" width="25%" style="text-align: center;">
                     Número Civico
                 </td>
-                <td class="bordes" width="25%" colspan="3">
+                <td class="bordes" width="25%">
                     {{ $inmueble->numero_civico }}
                 </td>             
             </tr>
             <tr>
                 <td class="bordes" width="25%" style="padding-left: 10px;">
-                    Zona
+                    Teléfono
                 </td>
                 <td class="bordes" width="25%">
-                    {{ $inmueble->nombre }}
+                    {{ $inmueble->telefono }}
                 </td> 
                  <td class="bordes" width="25%" style="text-align: center;">
                     Número Inscripción
                 </td>
-                <td class="bordes" width="25%" colspan="3">
+                <td class="bordes" width="25%" >
                     {{ $inmueble->numero_inscripcion }}
                 </td>             
             </tr>
@@ -80,7 +80,7 @@
                  <td class="bordes" width="25%" style="text-align: center;">
                     Área Construcción :
                 </td>
-                <td class="bordes" width="25%" colspan="3">
+                <td class="bordes" width="25%">
                     {{ $inmueble->area_construccion }}
                 </td>             
             </tr>
@@ -90,27 +90,27 @@
                 </td>
                 <td class="bordes" width="25%">
                     {{ $inmuebleTipo->regimen }}
-                </td> 
-                <td class="bordes" width="12%" style="text-align: center;">
-                    Teléfonos :
-                </td>
-                <td class="bordes" width="13%">
-                    {{ $inmueble->telefono }}
-                </td>
-                <td class="bordes" width="12%" style="text-align: center;">
+                </td>                
+                <td class="bordes" width="25%" style="text-align: center;">
                     Cédula :
                 </td>
-                <td class="bordes" width="13%">
+                <td class="bordes" width="25%">
                     {{ $inmueble->rif }}
                 </td>      
             </tr>
             <tr>
-                <td class="bordes" width="30%" style="padding-left: 10px;">
+                <td class="bordes" width="25%" style="padding-left: 10px;">
                     Impreso por :
                 </td>
-                <td class="bordes" colspan="5" width="30%">
+                <td class="bordes" width="25%">
                     {{ $nombre }}
-                </td>                              
+                </td>
+                <td class="bordes" width="25%" style="padding-left: 10px;">
+                    Nro Comprobante :
+                </td>
+                <td class="bordes" width="25%">
+                    {{ $pago->comprobante }}
+                </td>                           
             </tr>
         </table>
     </div>    

@@ -92,11 +92,15 @@ class PagoController extends Controller
                                     ->selectRaw('distinct(declaracion_comercio.idpago), detalle_pagos.referencia, detalle_pagos.fecha_pago, detalle_pagos.banco, detalle_pagos.monto, detalle_pagos.tipo_pago')
                                     ->where('declaracion_comercio.idcomercio', '=', $request->idcomercio)
                                     ->get();
+        foreach ($pagos as $key => $pagoA) {
+          $pago = Pago::find($pagoA->idpago);
+        }
+        
 
          //$pdf = \PDF::loadView('pdf.historicoComercio', ['comercio' => $comercio , 'pagos' => $pagos, 'nombre' => $nameUser ]);
            //         return $pdf->download('historicoComercio.pdf');
 
-        $view =  \View::make('pdf.historicoComercio', compact('comercio', 'pagos', 'nombre'))->render();
+        $view =  \View::make('pdf.historicoComercio', compact('comercio', 'pagos', 'nombre', 'pago'))->render();
         $pdf = \App::make('dompdf.wrapper');
         $pdf->loadHTML($view);
         return $pdf->stream('invoice');
@@ -117,8 +121,11 @@ class PagoController extends Controller
                                     ->selectRaw('distinct(declaracion_inmueble.idpago), detalle_pagos.referencia, detalle_pagos.fecha_pago, detalle_pagos.banco, detalle_pagos.monto, detalle_pagos.tipo_pago')
                                     ->where('declaracion_inmueble.idinmueble', '=', $request->idinmueble)
                                     ->get();
+         foreach ($pagos as $key => $pagoA) {
+          $pago = Pago::find($pagoA->idpago);
+        }
 
-        $view =  \View::make('pdf.historicoInmueble', compact('inmueble', 'pagos', 'nombre'))->render();
+        $view =  \View::make('pdf.historicoInmueble', compact('inmueble', 'pagos', 'nombre', 'pago'))->render();
         $pdf = \App::make('dompdf.wrapper');
         $pdf->loadHTML($view);
         return $pdf->stream('historicoInmueble');
@@ -139,8 +146,11 @@ class PagoController extends Controller
                                     ->selectRaw('distinct(declaracion_vehiculo.idpago), detalle_pagos.referencia, detalle_pagos.fecha_pago, detalle_pagos.banco, detalle_pagos.monto, detalle_pagos.tipo_pago')
                                     ->where('declaracion_vehiculo.idvehiculo', '=', $request->idvehiculo)
                                     ->get();
+         foreach ($pagos as $key => $pagoA) {
+          $pago = Pago::find($pagoA->idpago);
+          }
 
-        $view =  \View::make('pdf.historicoVehiculo', compact('vehiculo', 'pagos', 'nombre'))->render();
+        $view =  \View::make('pdf.historicoVehiculo', compact('vehiculo', 'pagos', 'nombre', 'pago'))->render();
         $pdf = \App::make('dompdf.wrapper');
         $pdf->loadHTML($view);
         return $pdf->stream('historicoVehiculo');
@@ -509,7 +519,9 @@ class PagoController extends Controller
 
       $pagos = DetallePago::where('idpago', '=', $request->idpago)->get();
 
-      $view =  \View::make('pdf.solvenciaInmueble', compact('nombre', 'inmueble', 'pagos', 'inmuebleTipo'))->render();
+      $pago = Pago::find($request->idpago);
+
+      $view =  \View::make('pdf.solvenciaInmueble', compact('nombre', 'inmueble', 'pagos', 'inmuebleTipo', 'pago'))->render();
             $pdf = \App::make('dompdf.wrapper');
             $pdf->loadHTML($view);
             return $pdf->stream('solvencia');
@@ -524,7 +536,9 @@ class PagoController extends Controller
 
       $pagos = DetallePago::where('idpago', '=', $request->idpago)->get();
 
-      $view =  \View::make('pdf.solvenciaVehiculo', compact('nombre', 'vehiculo', 'pagos', 'tipoVehiculo'))->render();
+      $pago = Pago::find($request->idpago);
+
+      $view =  \View::make('pdf.solvenciaVehiculo', compact('nombre', 'vehiculo', 'pagos', 'tipoVehiculo', 'pago'))->render();
             $pdf = \App::make('dompdf.wrapper');
             $pdf->loadHTML($view);
             return $pdf->stream('solvencia');
