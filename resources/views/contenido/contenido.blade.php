@@ -70,4 +70,23 @@
 		<reporte_tramites></reporte_tramites>
 	</template>
 
+	<template v-if="menu==20">
+		<sumas></sumas>
+	</template>
+	<template v-if="menu==21">
+		<restas></restas>
+	</template>
+	<template v-if="menu==22">
+		<multiplica></multiplica>
+	</template>
+	<template v-if="menu==23">
+		<comparacion></comparacion>
+	</template>
+	<template v-if="menu==24">
+		<serie></serie>
+	</template>
+	<template v-if="menu==25">
+		<registro></registro>
+	</template>
+
 @endsection

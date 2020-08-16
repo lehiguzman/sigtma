@@ -12,7 +12,7 @@
 */
 
 Route::get('/', function () {
-    return view('auth.login');
+    return view('auth.login');    
 });
 
 Auth::routes();
@@ -23,6 +23,24 @@ Route::get('/main', function () {
 	})->name('main');
 
 Route::get('/home', 'HomeController@index')->name('home');
+
+//Registro de alumno
+Route::get('/alumno', 'RegistroController@index');
+Route::get('/alumno/select/{id}', 'RegistroController@select');
+Route::post('/registrar', 'RegistroController@store');
+Route::post('/suma/registrar', 'SumaController@store');
+
+//Resta 
+Route::post('/resta/registrar', 'RestaController@store');
+
+//Multiplica
+Route::post('/multiplica/registrar', 'MultiplicaController@store');
+
+//Compracion 
+Route::post('/comparacion/registrar', 'ComparacionController@store');
+
+//Serie
+Route::post('/serie/registrar', 'SerieController@store');
 
 //Rol
 Route::get('/rol', 'RolController@index');

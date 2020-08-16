@@ -25,10 +25,10 @@
 <body>
     <div id="app">
         <header class="app-header border-bottom-0 navbar menu-superior">             
-            <ul class="nav navbar-nav col-md-10 texto-titulo">
+            <ul class="nav navbar-nav col-md-10 titulo">
                 <li class="nav-item" style="font-family: arial;">
-                    <span class="" href="#"><b>Sistema Integral de Gestion Tributaria Municipal Avanzada</b></span> <br>
-                    <span class="" href="#"><b>(SIGTMA)</b></span>
+                    <span class="texto-titulo" href="#"><b>Software Educativo de Matemática</b></span> <br>
+                    <span class="texto-subtitulo" href="#">(Colegio San Agustín el marqués)</span>
                 </li>           
             </ul>
             <ul class="nav navbar-nav">
@@ -45,9 +45,8 @@
             <ul class="nav navbar-nav ml-auto mr-5">
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
-                        <span class="d-md-down-none user-text"> {{ Auth::user()->name }}</span>
-                        <!--<img src="img/usuario/user.jpg" class="img-avatar" alt=""> -->
-                         <img src="img/usuario/{{ Auth::user()->imagen }}" class="img-avatar" alt="">
+                        <span class="d-md-down-none user-text">Usuario</span>
+                        <img src="img/usuario/user.jpg" class="img-avatar" alt="">
                     </a>
                     <div class="dropdown-menu dropdown-menu-right shadow" style="position: absolute;" aria-labelledby="exampleModalLabel">
                         <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">
@@ -82,16 +81,7 @@
     
         <div class="app-body">
 
-        @if(Auth::user()->roles->first()->rol == 'gerente')
-            @include('plantilla.sidebarAdministrador')
-        @endif
-        @if(Auth::user()->roles->first()->rol == 'supervisor')
-            @include('plantilla.sidebarGerente')
-        @endif
-        @if(Auth::user()->roles->first()->rol == 'agente')
-            @include('plantilla.sidebarAgente')
-        @endif
-        <!-- Contenido Principal -->
+        @include('plantilla.sidebarEscuela')
 
         <div>        
             <main class="py-4">

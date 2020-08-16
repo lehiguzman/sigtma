@@ -31,5 +31,6 @@ $(document).ready( function() {
 			$(this).children('ul').slideDown();
 			$(this).children('a').children('i').removeClass('fa-chevron-right').addClass('fa-chevron-down');			
 		}
-	});	
+	});
+
 });

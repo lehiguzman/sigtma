@@ -42,6 +42,13 @@ Vue.component('reporte_usuarios', require('./components/Reporte_usuarios.vue').d
 Vue.component('reporte_tramites', require('./components/Reporte_tramites.vue').default);
 Vue.component('bitacora', require('./components/Bitacora.vue').default);
 
+Vue.component('sumas', require('./components/Sumas.vue').default);
+Vue.component('restas', require('./components/Restas.vue').default);
+Vue.component('multiplica', require('./components/Multiplica.vue').default);
+Vue.component('comparacion', require('./components/Comparacion.vue').default);
+Vue.component('serie', require('./components/Series.vue').default);
+Vue.component('registro', require('./components/Registro.vue').default);
+
 Vue.directive( 'touppercase', {
     update (el) {
         el.value = el.value.toUpperCase()

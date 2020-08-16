@@ -15,7 +15,7 @@ ul {
 #sidebar-wrapper {
   min-height: 100vh;
   margin-left: -15rem;
-  background-color: #f2f4f4;
+  background-color: #D1E8FE;
   -webkit-transition: margin .25s ease-out;
   -moz-transition: margin .25s ease-out;
   -o-transition: margin .25s ease-out;
@@ -60,7 +60,8 @@ ul {
   width: 18rem; /* Set the width of the sidebar */
   position: fixed; /* Fixed Sidebar (stay in place on scroll) */  
   border-right: 1px solid #E1E2E3;
-  color: #C8C6D2;
+  color: black;
+  font-weight: 700;
   top: 0; /* Stay at the top */
   left: 0;  
   z-index: 1000;
@@ -68,11 +69,18 @@ ul {
   padding-top: 20px;  
 }
 
-.texto-titulo {
-  font-size: 1.5rem;
-  font-weight: 400;
+.titulo {
   padding-left: 15%;  
   text-align: center;
+}
+
+.texto-titulo {
+  font-size: 2rem;
+  font-weight: 800;  
+}
+
+.texto-subtitulo {
+  font-size: 1.5rem;  
 }
 
 .bg-link {
@@ -110,9 +118,9 @@ ul {
 
 .menu-superior {
   position: fixed;
-  height: 5rem !important;
+  height: 7rem !important;
   width: 100%;   
-  background-color: #f2f4f4 !important;
+  background-color: #D1E8FE !important;
   box-shadow: all;
   float: right;
   z-index: 999;
