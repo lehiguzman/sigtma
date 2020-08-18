@@ -1,9 +1,15 @@
 <?php
 
 namespace App\Http\Controllers;
-use App\Registro;
 
 use Illuminate\Http\Request;
+
+use App\Registro;
+use App\Suma;
+use App\Resta;
+use App\Multiplica;
+use App\Comparacion;
+use App\Serie;
 
 
 class RegistroController extends Controller
@@ -52,4 +58,32 @@ class RegistroController extends Controller
         
         return $alumno;
     }
+
+     /**
+     * Select the specified resource from storage.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function reporte(Request $request, $alumno, $ejercicio)
+    {        
+        //if(!$request->ajax()) return redirect('/');              
+
+        //$reporte = Registro::findOrFail($alumno);   
+
+        if( $ejercicio == 1 ) {
+            $respuesta = Suma::where('idregistro', '=', $alumno)->get();
+        } else if ( $ejercicio == 2 ) {
+            $respuesta = Resta::where('idregistro', '=', $alumno)->get();
+        } else if ( $ejercicio == 3 ) {
+            $respuesta = Multiplica::where('idregistro', '=', $alumno)->get();
+        } else if ( $ejercicio == 4 ) {
+            $respuesta = Comparacion::where('idregistro', '=', $alumno)->get();
+        } else if ( $ejercicio == 5 ) {
+            $respuesta = Serie::where('idregistro', '=', $alumno)->get();
+        }
+        
+        return $respuesta;
+    }
+
 }

@@ -88,5 +88,8 @@
 	<template v-if="menu==25">
 		<registro></registro>
 	</template>
+	<template v-if="menu==26">
+		<resultado></resultado>
+	</template>
 
 @endsection

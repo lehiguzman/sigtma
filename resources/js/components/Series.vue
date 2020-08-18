@@ -6,17 +6,14 @@
             </div>     
         </div>  
 
-        <template> 
+        <template v-if="mostrar=='ejercicios'"> 
             <div class="col-md-10 mb-0 text-center bg-light">
                 <h2><b>Ejercicios de Matemáticas</b></h2>
             </div>
             <div class="col-md-10 mt-4 text-center bg-light">
                 <h2><b>Series númericas</b></h2>
-            </div>
-            <div class="col-md-10 mt-4 text-center bg-light">
-                <h4><i>{{ ejercicio }} de 20</i></h4>
-            </div>
-            <div class="form-row">
+            </div>            
+            <div class="form-row mt-5">
                 <div class="col-md-1"></div>
                 <div class="col-md-2 text-center">
                     Usuarios        
@@ -118,6 +115,75 @@
                 </form>
             </div>
         </template>
+        <template v-if="mostrar=='resultados'">
+            <div class="col-md-12 mb-0 text-center bg-light">
+                <h2><b>Ejercicios de Matemáticas</b></h2>
+            </div>
+            <div class="col-md-12 mt-4 text-center bg-light">
+                <h2><b>Sumas básicas</b></h2>
+            </div>
+            <div class="col-md-12 mt-4 text-center bg-light">
+                <h4><i>Resultados</i></h4>
+            </div>
+            <div class="form-row">
+                <div class="col-md-1"></div>
+                <div class="col-md-2 text-center" style="font-size: 26px; text-align:center;">
+                    <b>Alumno : </b>
+                </div>
+                <div class="col-md-3 text-center">
+                    <div class="position-relative has-icon-left" style="font-size: 26px; text-align:center;" >                        
+                        <b>{{ nombre }}</b>                                             
+                    </div>
+                </div>
+            </div>
+            <div class="card-body mt-5">
+                <div class="form-row bg-light ">
+                    <div class="col-md-1"></div>                       
+
+                    <div class="col-md-1"  style="font-size: 16px; text-align:center;"></div>
+
+                    <div class="col-md-5 text-center" style="font-size: 16px; text-align:center;" >
+                        <b>Serie</b>
+                    </div>                      
+
+                    <div class="col-md-3" style="font-size: 16px; text-align:center;"></div>
+                </div> <br>
+                <form v-for="resultado in ejerciciosFinal">
+                    
+                    <div class="form-row">
+                        <div class="col-md-1"></div>                       
+
+                        <div class="col-md-1"  style="font-size: 26px; text-align:center;" ></div>
+
+                        <div class="col-md-1 text-center" style="font-size: 26px; text-align:center;" >
+                            <b>{{ resultado.valor1 }}</b>
+                        </div>
+
+                        <div class="col-md-1 text-center" style="font-size: 26px; text-align:center; color:red;" >
+                            <b>{{ resultado.valor2 }}</b>
+                        </div>
+                        <div class="col-md-1 text-center" style="font-size: 26px; text-align:center; color:red;" >
+                            <b>{{ resultado.valor2 }}</b>
+                        </div>
+
+                        <div class="col-md-1 text-center" style="font-size: 26px; text-align:center;" >
+                            <b>{{ resultado.valor3 }}</b>
+                        </div>
+
+                        <div class="col-md-1 text-center" style="font-size: 26px; text-align:center; color:red;" >
+                            <b>{{ resultado.valor4 }}</b>
+                        </div>
+
+                        <div class="col-md-1 text-center" style="font-size: 26px; text-align:center;" >
+                            <b>{{ resultado.valor5 }}</b>
+                        </div>
+
+                        <div class="col-md-3" style="font-size: 26px; text-align:center;" ></div>
+
+                    </div>
+                </form>
+            </div>
+        </template>
 
     </div>       
 </template>
@@ -146,6 +212,8 @@
                 error3: false,  
                 error4: false,  
                 error5: false,
+                mostrar: "ejercicios",
+                nombre: null,
                 alumnos: [],
                 ejercicios: [],
                 ejercicios2: [],
@@ -178,42 +246,35 @@
             },
 
             corregir() {                
-                this.error1 = this.corrigeEjercicio( this.ejercicios );                
-                console.log("Error 1 : ", this.error1);
-                this.error2 = this.corrigeEjercicio( this.ejercicios2 );                
-                console.log("Error 2 : ", this.error2);
-                this.error3 = this.corrigeEjercicio( this.ejercicios3 );
+                this.error1 = this.corrigeEjercicio( this.ejercicios, 0 );                
+                //console.log("Error 1 : ", this.error1);
+                this.error2 = this.corrigeEjercicio( this.ejercicios2, 1 );                
+                //console.log("Error 2 : ", this.error2);
+                this.error3 = this.corrigeEjercicio( this.ejercicios3, 2 );
 
-                this.error4 = this.corrigeEjercicio( this.ejercicios4 );                
+                this.error4 = this.corrigeEjercicio( this.ejercicios4, 3 );                
                 
-                this.error5 = this.corrigeEjercicio( this.ejercicios5 );   
+                this.error5 = this.corrigeEjercicio( this.ejercicios5, 4 );   
 
                 if( !this.error1 && !this.error2 && !this.error3 && !this.error4 && !this.error5 ) {
+                    console.log("Valores de Arreglo de ejercicios : ", this.ejerciciosFinal);
                     this.guardarRegistro();
                 }
             },
 
-            corrigeEjercicio( ejercicios ) {
+            corrigeEjercicio( ejercicios, pos ) {
                 var index = 0;
-                var index2 = 0;
 
-                ejercicios.forEach( element => {       
-                console.log("Ejercicios : ", element);             
+                ejercicios.forEach( element => {                
                     if( element.res ) {          
                         index++;
                         if( index == 1 ) {
-                            element.resultado1 = element.res;    
+                            this.ejerciciosFinal[pos].resultado1 = element.res;    
                         } else if( index == 2 ) { 
-                            element.resultado2 = element.res;
-                        }
-                        
-                        if( element.res == element.valor ) {
-                            console.log("!!!!!!!!!!!!!!!!!! CORRECTO !!!!!!!!!!!!!!!!!!!!!!!");
-                        } else {                                                        
-                            console.error("!!!!!!!!!!!!!!!!!! ERROR !!!!!!!!!!!!!!!!!!!!!!!");
-                        }
+                            this.ejerciciosFinal[pos].resultado2 = element.res;
+                        }                        
                     }
-                });                
+                });                 
 
                 if( index < 2 ) {                    
                     return true;
@@ -247,7 +308,8 @@
 
                     let ejercicio = {
                         tipo: tipo,
-                        valor: numero,                        
+                        valor: numero,
+                        tag: 1,                   
                     }
                     this.ejercicios.push( ejercicio ); 
 
@@ -261,11 +323,10 @@
                             valor2: valor2,
                             valor3: valor3,
                             valor4: valor4,
-                            valor5: valor5,
-                            ejercicio: 1
+                            valor5: valor5,                            
                         }
                         this.ejerciciosFinal.push( elemento );
-                        console.log("Resultados : ", this.ejerciciosFinal);
+                        //console.log("Resultados : ", this.ejerciciosFinal);
                     }
                 }              
                 
@@ -293,7 +354,7 @@
                             ejercicio: 2
                         }
                         this.ejerciciosFinal.push( elemento );
-                        console.log("Resultados : ", this.ejerciciosFinal);
+                        //console.log("Resultados : ", this.ejerciciosFinal);
                     } 
                 }
 
@@ -320,7 +381,7 @@
                             ejercicio: 3
                         }
                         this.ejerciciosFinal.push( elemento );
-                        console.log("Resultados : ", this.ejerciciosFinal);
+                        //console.log("Resultados : ", this.ejerciciosFinal);
                     }
                 }
 
@@ -347,7 +408,7 @@
                             ejercicio: 4
                         }
                         this.ejerciciosFinal.push( elemento );
-                        console.log("Resultados : ", this.ejerciciosFinal);
+                        //console.log("Resultados : ", this.ejerciciosFinal);
                     }
                 }
 
@@ -374,32 +435,16 @@
                             ejercicio: 5
                         }
                         this.ejerciciosFinal.push( elemento );
-                        console.log("Resultados : ", this.ejerciciosFinal);
+                        //console.log("Resultados : ", this.ejerciciosFinal);
                     }    
                 }
             },
 
             guardarRegistro() {
 
-                console.log("Valor Correcto : ", this.ejerciciosFinal);
-
-                /*var resultado = {
-                    ejercicio: this.ejercicio,
-                    valor1: this.valor1,
-                    valor2: this.valor2,
-                    valor3: this.valor3,
-                    valor4: this.valor4,
-                    valor5: this.valor5,
-                    resultado1: this.resultado1,
-                    resultado2: this.resultado2,                    
-                }
-
-                console.log("Resultado : ", resultado);*/
-
-                //this.ejerciciosFinal.push( resultado );
-
-                //console.log("Resultado : ", this.ejercicios);
-                //me.mostrarResultados();
+                let me=this;  
+                let index = 0;     
+                let lonArray = this.ejerciciosFinal.length;
 
                 const alerta = Swal.mixin({
                   customClass: {
@@ -407,40 +452,34 @@
                     cancelButton: 'btn btn-danger'
                   },
                  buttonsStyling: false,
-                })                
-
-                //let me=this;                
+                });                 
                 
-                /*axios.post('/serie/registrar', {                                                
+                this.ejerciciosFinal.forEach( element => {
+                    axios.post('/serie/registrar', {                                                
                         'idregistro': me.id,
-                        'valor1': me.valor1,
-                        'valor2': me.valor2,
-                        'valor3': me.valor3,
-                        'valor4': me.valor4,
-                        'valor5': me.valor5,
-                        'resultado1': me.resultado1,
-                        'resultado2': me.resultado2,
-                    }).then(function (response) {                        
-                        if( me.ejercicio == 2 ) {
+                        'valor1': element.valor1,
+                        'valor2': element.valor2,
+                        'valor3': element.valor3,
+                        'valor4': element.valor4,
+                        'valor5': element.valor5,
+                        'resultado1': element.resultado1,
+                        'resultado2': element.resultado2,
+                    }).then(function (response) {
+                        index++;                   
+                        if( lonArray == index ) {
                             alerta.fire(
                                     'Grandioso!',
                                     'Ejercicios finalizados.',
                                     'success'
                             );                            
-                            //me.mostrarResultados();
-                        } else {
-                            me.ejercicio++;                            
-                            alerta.fire(
-                            'Correcto!',
-                            'Pasa al siguiente ejercicio!.',
-                            'success'
-                            );
-                            this.inicializarEjercicio();
-                        }                        
+                            me.mostrarResultados();
+                        }               
                     }).catch(function (error) {
                     // handle error
                     console.log(error);
-                    });*/
+                    });
+                });
+                
             },
 
             mostrarResultados() {

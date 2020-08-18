@@ -127,7 +127,7 @@
                         </div>
 
                         <div class="col-sm-1 text-center">
-                            <b style="font-size: 26px;">-</b>
+                            <b style="font-size: 26px;">X</b>
                         </div>
 
                         <div class="col-md-1 text-center" style="font-size: 26px; text-align:center;" >

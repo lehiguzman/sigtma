@@ -48,6 +48,7 @@ Vue.component('multiplica', require('./components/Multiplica.vue').default);
 Vue.component('comparacion', require('./components/Comparacion.vue').default);
 Vue.component('serie', require('./components/Series.vue').default);
 Vue.component('registro', require('./components/Registro.vue').default);
+Vue.component('resultado', require('./components/Resultados.vue').default);
 
 Vue.directive( 'touppercase', {
     update (el) {

@@ -30,13 +30,15 @@ Route::get('/alumno/select/{id}', 'RegistroController@select');
 Route::post('/registrar', 'RegistroController@store');
 Route::post('/suma/registrar', 'SumaController@store');
 
+Route::get('/reporte/{alumno}/{ejercicio}', 'RegistroController@reporte');
+
 //Resta 
 Route::post('/resta/registrar', 'RestaController@store');
 
 //Multiplica
 Route::post('/multiplica/registrar', 'MultiplicaController@store');
 
-//Compracion 
+//Comparacion 
 Route::post('/comparacion/registrar', 'ComparacionController@store');
 
 //Serie

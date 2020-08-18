@@ -56,5 +56,20 @@
         </li> 
       </ul>       
     </div>
+    <div>
+      <a href="#" class="d-flex list-group-item list-group-item-action border-0 link-menu bg-link">
+      <!-- <i class="fa fa-user fa-lg mx-3 my-2"></i> -->
+        <i class="bx bx-building bx-sm mx-3"></i> 
+          <span class="flex-grow-1">Reporte</span>
+        <i class="fa fa-chevron-right fa-md mx-1"></i>    
+      </a>
+      <ul class="ml-3">        
+        <li>
+          <a href="#" @click="menu=26" class="list-group-item list-group-item-action border-0 link-menu">          
+            <i class="bx bxs-factory bx-sm mx-3"></i> <span>Resultados</span>            
+          </a>
+        </li>        
+      </ul>       
+    </div>
   </div>  
 </nav>

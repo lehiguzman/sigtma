@@ -5,10 +5,10 @@
     <div class="row justify-content-center">
         <div class="col-md-12">
             <div class="card-img">
-                <img src="{{ asset('img/logo-alcaldia.png') }}" class="img-style">        
+        
             </div>
             <div class="card-img-2">
-                <img src="{{ asset('img/samat.png') }}" class="img-style-2">        
+        
             </div>
         </div>      
         <div class="col-md-12">
