@@ -3,7 +3,7 @@
 @section('contenido')
 
 	<template v-if="menu==0">
-		<chart></chart>
+		<registro></registro>
 	</template>
 	<template v-if="menu==1">
 		<usuario></usuario>
