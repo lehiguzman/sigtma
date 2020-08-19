@@ -14,12 +14,12 @@ class UserTableSeeder extends Seeder
     public function run()
     {
         $user = new User();
-        $user->name = 'GERENTE';
-        $user->username = 'gerente';
+        $user->name = 'EDWIN PERNIA';
+        $user->username = 'epernia';
         $user->status = 1;
-        $user->email = 'gerente@correo.com';
+        $user->email = 'epernia@correo.com';
         $user->sede = 'Samat';
-		$user->password = bcrypt('gerente');
+		$user->password = bcrypt('pernia123');
         $user->save();
 
         $user->roles()->attach(Role::where('rol', 'gerente')->first());
