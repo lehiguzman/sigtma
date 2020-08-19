@@ -14,7 +14,7 @@
                 <h2><b>Sumas básicas</b></h2>
             </div>
             <div class="col-md-12 mt-4 text-center bg-light">
-                <h4><i>{{ ejercicio }} de 20</i></h4>
+                <h4><i>{{ ejercicio }} de 10</i></h4>
             </div>
 
             <div class="form-row">
@@ -70,7 +70,7 @@
 
                             <div class="col-md-8 d-flex justify-content-center">
                                 <i class='bx bx-cancel bx-sm' ></i>
-                                <input type="button" name="sumar" @click="sumar()" class="btn btn-success" value="sumar">
+                                <input type="button" name="sumar" @click="sumar()" class="btn btn-success" value="Sumar">
                             </div>
 
                             <div class="col-md-2"></div>
@@ -266,7 +266,7 @@
                         'resultado': me.resultado,
                         'intentos': me.intentos,
                     }).then(function (response) {      
-                        if( me.ejercicio == 2 ) {
+                        if( me.ejercicio == 10 ) {
                             alerta.fire(
                                     'Grandioso!',
                                     'Ejercicios finalizados.',
@@ -300,11 +300,11 @@
                 console.log("Numero de intentos : ", this.ejercicio);               
 
                 this.valor2 = null;
-                this.valor1 = Math.floor(Math.random() * 100);
+                this.valor1 = Math.floor(Math.random() * 50);
                 if( this.valor1 == 0 ) {
                     this.inicializarEjercicio();
                 }
-                this.resultado = this.valor1 + Math.floor(Math.random() * 100);                
+                this.resultado = this.valor1 + Math.floor(Math.random() * 50);                
             },
 
             mostrarResultados() {

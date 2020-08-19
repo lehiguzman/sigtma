@@ -11,10 +11,7 @@
             </div>
             <div class="col-md-12 mt-4 text-center bg-light">
                 <h2><b>Multiplicaciones</b></h2>
-            </div>           
-            <div class="col-md-12 mt-4 text-left bg-light">
-                <h4><i>Arrastre la opción correcta a la casilla correspondiente</i></h4>
-            </div>
+            </div>                       
             <div class="form-row">
                 <div class="col-md-1"></div>
                 <div class="col-md-2 text-center">
@@ -32,7 +29,13 @@
                     </div>
                 </div>
             </div>
-            <div class="card-body mt-5">
+            <div class="form-row">
+                <div class="col-md-2"></div>
+                <div class="col-md-8 mt-4 mb-1 text-left bg-light">
+                    <h4><i>* Arrastre la opción correcta a la casilla correspondiente</i></h4>
+                </div>
+            </div>
+            <div class="card-body mt-1">
                 <form>
                 	<div class="form-row" v-for="ejercicio in ejercicios" style="height: 100px;">
                 		<div class="col-md-2"></div>
@@ -68,7 +71,7 @@
                 <h2><b>Ejercicios de Matemáticas</b></h2>
             </div>
             <div class="col-md-12 mt-4 text-center bg-light">
-                <h2><b>Sumas básicas</b></h2>
+                <h2><b>Multiplicaciones</b></h2>
             </div>
             <div class="col-md-12 mt-4 text-center bg-light">
                 <h4><i>Resultados</i></h4>
@@ -329,9 +332,18 @@
             console.log("longitud de array : ", longitud);
             var index = 0;
 
+            if( this.id == 0 ) {
+                alerta.fire(
+                        'Error!',
+                        'Debe seleccionar un alumno.',
+                        'error'
+                    );
+                return false;
+            }
+
             this.respuestas.forEach( element => {                
                 axios.post('/multiplica/registrar', {                                                
-                    'idregistro': element.id,
+                    'idregistro': me.id,
                     'valor1': element.valor1,
                     'valor2': element.valor2,
                     'resultado': element.respuesta,                        

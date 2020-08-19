@@ -2,7 +2,7 @@
     <div class="shadow-container">
         <div class="card-body">       
             <div class="card-header">                    
-                <h4 class="card-text">Sumas</h4>
+                <h4 class="card-text">Comparaciones numéricas</h4>
             </div>     
         </div>  
 
@@ -11,11 +11,11 @@
                 <h2><b>Ejercicios de Matemáticas</b></h2>
             </div>
             <div class="col-md-12 mt-4 text-center bg-light">
-                <h2><b>Sumas básicas</b></h2>
+                <h2><b>Comparaciones numéricas</b></h2>
             </div>
             <div class="col-md-12 mt-4 text-center bg-light">
                 <h4><i>{{ ejercicio }} de 20</i></h4>
-            </div>
+            </div>            
             <div class="form-row">
                 <div class="col-md-1"></div>
                 <div class="col-md-2 text-center">
@@ -33,6 +33,37 @@
                     </div>
                 </div>
             </div>
+            <div class="form-row mt-5">                
+                <div class="col-md-8 text-center mt-2">
+                    <div class="position-relative has-icon-left">                                          
+                        <h4><b><i>* Selecciona la opción correcta en la compración de los 2 números </i></b></h4>                    
+                    </div>
+                </div>
+            </div>   
+            <div class="form-row">
+                <div class="col-md-1"></div>                
+                <div class="col-md-8 text-left">
+                    <div class="position-relative has-icon-left">                                          
+                        <h5><b><i> ">" : si el primer número es mayor que el segundo</i></b></h5>                    
+                    </div>
+                </div>
+            </div>   
+            <div class="form-row ">
+                <div class="col-md-1"></div>                                
+                <div class="col-md-8 text-left">
+                    <div class="position-relative has-icon-left">                                          
+                        <h5><b><i> "=" : si los 2 números son iguales</i></b></h5>                    
+                    </div>
+                </div>
+            </div>      
+            <div class="form-row">   
+                <div class="col-md-1"></div>             
+                <div class="col-md-8 text-left">
+                    <div class="position-relative has-icon-left">                                          
+                        <h5><b><i> "<" : si el primer número es menor que el primero</i></b></h5>                    
+                    </div>
+                </div>
+            </div>   
             <div class="card-body mt-5">
                 <form>
                     <div class="form-row">
@@ -96,7 +127,7 @@
                 <h2><b>Ejercicios de Matemáticas</b></h2>
             </div>
             <div class="col-md-12 mt-4 text-center bg-light">
-                <h2><b>Sumas básicas</b></h2>
+                <h2><b>Comparaciones numéricas</b></h2>
             </div>
             <div class="col-md-12 mt-4 text-center bg-light">
                 <h4><i>Resultados</i></h4>
@@ -224,12 +255,12 @@
             },
 
             comparar( valor ) {                
-                console.log("Valor : ", valor);   
-
+                console.log("Valor : ", valor); 
+               
                 this.intentos++;
 
                 if( valor == 1 && this.comparacion != 'mayor' ) {
-                    this.error1 = true;
+                    this.error1 = true;                     
                 } else if( valor == 1 && this.comparacion == 'mayor' ) { 
                     this.correcto1 = true;
                     this.valorCorrecto = valor;                    
@@ -251,17 +282,36 @@
             },
 
             validarSeleccion() {
+                const alerta = Swal.mixin({
+                  customClass: {
+                    confirmButton: 'btn btn-success',
+                    cancelButton: 'btn btn-danger'
+                  },
+                 buttonsStyling: false,
+                });
+
                 if( this.correcto1 || this.correcto2 || this.correcto3 ) {
                     this.guardarRegistro();
                     this.inicializarEjercicio();
                 } else {
+                    alerta.fire(
+                            'Error!',
+                            'Seleccion errada.',
+                            'error'
+                        );
                     return false;
                 }
             },
 
             guardarRegistro() {
 
-                console.log("Valor Correcto : ", this.valorCorrecto);
+                const alerta = Swal.mixin({
+                  customClass: {
+                    confirmButton: 'btn btn-success',
+                    cancelButton: 'btn btn-danger'
+                  },
+                 buttonsStyling: false,
+                });
 
                 var resultado = {
                     ejercicio: this.ejercicio,
@@ -271,17 +321,16 @@
                     intentos: this.intentos,
                 }
 
-                console.log("Resultado : ", resultado);
+                if( this.id == 0 ) {
+                    alerta.fire(
+                            'Error!',
+                            'Debe seleccionar un alumno.',
+                            'error'
+                        );
+                    return false;
+                }                
 
-                this.resultadosMostrar.push( resultado );
-
-                const alerta = Swal.mixin({
-                  customClass: {
-                    confirmButton: 'btn btn-success',
-                    cancelButton: 'btn btn-danger'
-                  },
-                 buttonsStyling: false,
-                })                
+                this.resultadosMostrar.push( resultado );                               
 
                 let me=this;                
                 
@@ -292,7 +341,7 @@
                         'resultado': me.valorCorrecto,
                         'intentos': me.intentos,
                     }).then(function (response) {                        
-                        if( me.ejercicio == 2 ) {
+                        if( me.ejercicio == 20 ) {
                             alerta.fire(
                                     'Grandioso!',
                                     'Ejercicios finalizados.',

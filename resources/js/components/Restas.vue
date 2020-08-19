@@ -2,7 +2,7 @@
     <div class="shadow-container">
         <div class="card-body">       
             <div class="card-header">                    
-                <h4 class="card-text">Sumas</h4>
+                <h4 class="card-text">Restas</h4>
             </div>     
         </div>  
 
@@ -14,7 +14,7 @@
                 <h2><b>Restas básicas</b></h2>
             </div>
             <div class="col-md-12 mt-4 text-center bg-light">
-                <h4><i>{{ ejercicio }} de 20</i></h4>
+                <h4><i>{{ ejercicio }} de 10</i></h4>
             </div>
 
             <div class="form-row">
@@ -71,7 +71,7 @@
 
                         <div class="col-md-8 d-flex justify-content-center">
                             <i class='bx bx-cancel bx-sm' ></i>
-                            <input type="button" name="sumar" @click="sumar()" class="btn btn-success" value="sumar">
+                            <input type="button" name="sumar" @click="sumar()" class="btn btn-success" value="Restar">
                         </div>
 
                         <div class="col-md-2"></div>
@@ -84,7 +84,7 @@
                 <h2><b>Ejercicios de Matemáticas</b></h2>
             </div>
             <div class="col-md-12 mt-4 text-center bg-light">
-                <h2><b>Sumas básicas</b></h2>
+                <h2><b>Restas básicas</b></h2>
             </div>
             <div class="col-md-12 mt-4 text-center bg-light">
                 <h4><i>Resultados</i></h4>
@@ -267,7 +267,7 @@
                         'resultado': me.resultado,
                         'intentos': me.intentos,
                     }).then(function (response) {      
-                        if( me.ejercicio == 2 ) {
+                        if( me.ejercicio == 10 ) {
                             alerta.fire(
                                     'Grandioso!',
                                     'Ejercicios finalizados.',

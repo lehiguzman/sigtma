@@ -2,7 +2,7 @@
     <div class="shadow-container">
         <div class="card-body">       
             <div class="card-header">                    
-                <h4 class="card-text">Sumas</h4>
+                <h4 class="card-text">Series numéricas</h4>
             </div>     
         </div>  
 
@@ -28,6 +28,13 @@
                             <i class='bx bx-user bx-sm'></i>
                         </div>
                     </div>
+                </div>                
+            </div>
+            <div class="form-row mt-5">                
+                <div class="col-md-8 text-center mt-2 mb-2">
+                    <div class="position-relative has-icon-left">                                          
+                        <h4><b><i>* Ingresa los números en el lugar correcto para completar la serie </i></b></h4>                    
+                    </div>
                 </div>
             </div>
             <div class="card-body mt-5">
@@ -36,9 +43,14 @@
                         <div class="col-md-2"></div>                        
                         <div class="col-md-1 text-center" v-for="ejercicio in ejercicios" style="margin-left: 10px;">
                             <p v-if="ejercicio.tipo == 'texto'" style="font-size: 24px;">
-                                {{ ejercicio.valor }}    
+                                {{ ejercicio.valor }}
                             </p>
-                            <input type="text" name="ejercicio.valor" v-model="ejercicio.res" size="4" v-if="ejercicio.tipo == 'input'" class="text-center" style="font-size: 24px;">
+                            <div class="position-relative has-icon-left" v-if="ejercicio.tipo == 'input'" >
+                                <input type="text" name="ejercicio.valor"  v-model="ejercicio.res" size="4" class="text-center" style="font-size: 24px;">
+                                <div class="form-control-position">
+                                    <i class='bx bx-right-arrow-alt bx-sm' ></i>
+                                </div> 
+                            </div>
                         </div>
                         <div class="col-md-2" v-if="error1">
                             <p style="color: red;">
@@ -46,13 +58,19 @@
                             </p>
                         </div>
                     </div>
+                    <hr>
                     <div class="form-row">
                         <div class="col-md-2"></div>                        
                         <div class="col-md-1 text-center" v-for="ejercicio in ejercicios2" style="margin-left: 10px;">
                             <p v-if="ejercicio.tipo == 'texto'" style="font-size: 24px;">
-                                {{ ejercicio.valor }}    
+                                {{ ejercicio.valor }}
                             </p>
-                            <input type="text" name="ejercicio.valor"  v-model="ejercicio.res" size="4" v-if="ejercicio.tipo == 'input'" class="text-center" style="font-size: 24px;">
+                            <div class="position-relative has-icon-left" v-if="ejercicio.tipo == 'input'" >
+                                <input type="text" name="ejercicio.valor"  v-model="ejercicio.res" size="4" class="text-center" style="font-size: 24px;">
+                                <div class="form-control-position">
+                                    <i class='bx bx-right-arrow-alt bx-sm' ></i>
+                                </div> 
+                            </div>
                         </div>
                         <div class="col-md-2">
                             <p style="color: red;" v-if="error2">
@@ -60,13 +78,19 @@
                             </p>
                         </div>
                     </div>   
+                    <hr>
                     <div class="form-row">
                         <div class="col-md-2"></div>                        
                         <div class="col-md-1 text-center" v-for="ejercicio in ejercicios3" style="margin-left: 10px;">
                             <p v-if="ejercicio.tipo == 'texto'" style="font-size: 24px;">
-                                {{ ejercicio.valor }}    
+                                {{ ejercicio.valor }} 
                             </p>
-                            <input type="text" name="ejercicio.valor"  v-model="ejercicio.res" size="4" v-if="ejercicio.tipo == 'input'" class="text-center" style="font-size: 24px;">
+                            <div class="position-relative has-icon-left" v-if="ejercicio.tipo == 'input'">
+                                <input type="text" name="ejercicio.valor"  v-model="ejercicio.res" size="4"  class="text-center" style="font-size: 24px;">
+                                <div class="form-control-position">
+                                    <i class='bx bx-right-arrow-alt bx-sm' ></i>
+                                </div> 
+                            </div>
                         </div>
                         <div class="col-md-2" >
                             <p style="color: red;" v-if="error3">
@@ -74,27 +98,39 @@
                             </p>
                         </div>
                     </div>  
+                    <hr>
                     <div class="form-row">
                         <div class="col-md-2"></div>                        
                         <div class="col-md-1 text-center" v-for="ejercicio in ejercicios4" style="margin-left: 10px;">
                             <p v-if="ejercicio.tipo == 'texto'" style="font-size: 24px;">
                                 {{ ejercicio.valor }}    
                             </p>
-                            <input type="text" name="ejercicio.valor" v-model="ejercicio.res" size="4" v-if="ejercicio.tipo == 'input'" class="text-center" style="font-size: 24px;">
+                            <div class="position-relative has-icon-left" v-if="ejercicio.tipo == 'input'">
+                                <input type="text" name="ejercicio.valor"  v-model="ejercicio.res" size="4" v-if="ejercicio.tipo == 'input'" class="text-center" style="font-size: 24px;">
+                                <div class="form-control-position">
+                                    <i class='bx bx-right-arrow-alt bx-sm' ></i>
+                                </div> 
+                            </div>
                         </div>
                         <div class="col-md-2">
                             <p style="color: red;" v-if="error4">
                                 LLene los campos
                             </p>
                         </div>
-                    </div>   
+                    </div> 
+                    <hr>  
                     <div class="form-row">
                         <div class="col-md-2"></div>                        
                         <div class="col-md-1 text-center" v-for="ejercicio in ejercicios5" style="margin-left: 10px;">
                             <p v-if="ejercicio.tipo == 'texto'" style="font-size: 24px;">
                                 {{ ejercicio.valor }}    
                             </p>
-                            <input type="text" name="ejercicio.valor" v-model="ejercicio.res" size="4" v-if="ejercicio.tipo == 'input'" class="text-center" style="font-size: 24px;">
+                            <div class="position-relative has-icon-left" v-if="ejercicio.tipo == 'input'">
+                                <input type="text" name="ejercicio.valor"  v-model="ejercicio.res" size="4" class="text-center" style="font-size: 24px;">
+                                <div class="form-control-position">
+                                    <i class='bx bx-right-arrow-alt bx-sm' ></i>
+                                </div> 
+                            </div>
                         </div>
                         <div class="col-md-2">
                             <p style="color: red;" v-if="error5">
@@ -120,7 +156,7 @@
                 <h2><b>Ejercicios de Matemáticas</b></h2>
             </div>
             <div class="col-md-12 mt-4 text-center bg-light">
-                <h2><b>Sumas básicas</b></h2>
+                <h2><b>Series numéricas</b></h2>
             </div>
             <div class="col-md-12 mt-4 text-center bg-light">
                 <h4><i>Resultados</i></h4>
@@ -136,7 +172,14 @@
                     </div>
                 </div>
             </div>
-            <div class="card-body mt-5">
+            <div class="form-row mt-3">
+                <div class="col-md-2"></div>
+                <div class="col-md-6 text-left" style="font-size: 14px; text-align:center;">
+                    <b style="color: red;">* Valores errados </b> <br>
+                    <b style="color: blue;">* Valores correctos</b>
+                </div>
+            </div>
+            <div class="card-body mt-1">
                 <div class="form-row bg-light ">
                     <div class="col-md-1"></div>                       
 
@@ -159,19 +202,22 @@
                             <b>{{ resultado.valor1 }}</b>
                         </div>
 
-                        <div class="col-md-1 text-center" style="font-size: 26px; text-align:center; color:red;" >
+                        <div class="col-md-1 text-center" v-if="(resultado.valor3/2) == resultado.resultado1"style="font-size: 26px; text-align:center; color:blue;" >
                             <b>{{ resultado.valor2 }}</b>
                         </div>
-                        <div class="col-md-1 text-center" style="font-size: 26px; text-align:center; color:red;" >
-                            <b>{{ resultado.valor2 }}</b>
+                        <div class="col-md-1 text-center" v-else style="font-size: 26px; text-align:center; color:red;" >
+                            <b>{{ resultado.resultado1 }}</b>
                         </div>
 
                         <div class="col-md-1 text-center" style="font-size: 26px; text-align:center;" >
                             <b>{{ resultado.valor3 }}</b>
                         </div>
 
-                        <div class="col-md-1 text-center" style="font-size: 26px; text-align:center; color:red;" >
+                        <div class="col-md-1 text-center" v-if="((resultado.valor5+resultado.valor3)/2) == resultado.resultado2"style="font-size: 26px; text-align:center; color:blue;" >
                             <b>{{ resultado.valor4 }}</b>
+                        </div>
+                        <div class="col-md-1 text-center" v-else style="font-size: 26px; text-align:center; color:red;" >
+                            <b>{{ resultado.resultado2 }}</b>
                         </div>
 
                         <div class="col-md-1 text-center" style="font-size: 26px; text-align:center;" >
@@ -452,7 +498,16 @@
                     cancelButton: 'btn btn-danger'
                   },
                  buttonsStyling: false,
-                });                 
+                }); 
+
+                if( this.id == 0 ) {
+                    alerta.fire(
+                            'Error!',
+                            'Debe seleccionar un alumno.',
+                            'error'
+                        );
+                    return false;
+                }                     
                 
                 this.ejerciciosFinal.forEach( element => {
                     axios.post('/serie/registrar', {                                                
